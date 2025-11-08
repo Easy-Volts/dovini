@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 import { products } from '../data/products';
 import { categories } from '../data/categories';
-import ProductCard from '../components/ProductCard';
+import ProCard from '../components/ProCard';
 import {
   Filter,
   SortAsc,
@@ -277,7 +277,7 @@ const Products = () => {
                 <SlidersHorizontal className="w-4 h-4" />
                 <span>Filters</span>
                 {(priceRange[0] > 0 || priceRange[1] < 1000000 || selectedBrands.length > 0 || selectedRatings.length > 0) && (
-                  <span className="bg-red-600 text-white text-xs rounded-full px-2 py-1">
+                  <span className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white text-xs rounded-full px-2 py-1">
                     {(priceRange[0] > 0 ? 1 : 0) + (priceRange[1] < 1000000 ? 1 : 0) + selectedBrands.length + selectedRatings.length}
                   </span>
                 )}
@@ -316,13 +316,13 @@ const Products = () => {
               <div className="flex items-center border border-gray-200 rounded-lg">
                 <button
                   onClick={() => updateSearchParams('view', 'grid')}
-                  className={`p-2 ${viewMode === 'grid' ? 'bg-red-600 text-white' : 'text-gray-600 hover:bg-gray-100'} transition-colors`}
+                  className={`p-2 ${viewMode === 'grid' ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white' : 'text-gray-600 hover:bg-gray-100'} transition-colors`}
                 >
                   <Grid3X3 className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => updateSearchParams('view', 'list')}
-                  className={`p-2 ${viewMode === 'list' ? 'bg-red-600 text-white' : 'text-gray-600 hover:bg-gray-100'} transition-colors`}
+                  className={`p-2 ${viewMode === 'list' ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white' : 'text-gray-600 hover:bg-gray-100'} transition-colors`}
                 >
                   <List className="w-4 h-4" />
                 </button>
@@ -476,15 +476,15 @@ const Products = () => {
             {paginatedProducts.length > 0 ? (
               <>
                 <motion.div
-                  className={`grid gap-4 sm:gap-6 mb-8 ${
-                    viewMode === 'grid'
-                      ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-                      : 'grid-cols-1'
-                  }`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                >
+className={`grid gap-4 sm:gap-6 mb-8 ${
+viewMode === 'grid'
+ ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5' // This line is changed
+ : 'grid-cols-3'
+ }`}
+ initial={{ opacity: 0 }}
+ animate={{ opacity: 1 }}
+ transition={{ duration: 0.5 }}
+>
                   {paginatedProducts.map((product, index) => (
                     <motion.div
                       key={product.id}
@@ -492,7 +492,7 @@ const Products = () => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1, duration: 0.5 }}
                     >
-                      <ProductCard product={product} />
+                      <ProCard product={product} />
                     </motion.div>
                   ))}
                 </motion.div>
@@ -519,7 +519,7 @@ const Products = () => {
                         onClick={() => setCurrentPage(i + 1)}
                         className={`px-4 py-2 border flex items-center justify-center rounded-lg ${
                           currentPage === i + 1
-                            ? 'bg-red-600 text-white border-red-600'
+                            ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white border-red-600'
                             : 'border-gray-300 hover:bg-gray-50'
                         }`}
                       >

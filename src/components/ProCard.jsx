@@ -19,7 +19,7 @@ import {
   Shield
 } from 'lucide-react';
 
-const ProductCard = ({ product, index = 0 }) => {
+const ProCard = ({ product, index = 0 }) => {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { showSuccess } = useToast();
@@ -58,7 +58,7 @@ const ProductCard = ({ product, index = 0 }) => {
     );
   };
 
- 
+  
 
   return (
     <motion.div
@@ -76,9 +76,8 @@ const ProductCard = ({ product, index = 0 }) => {
       onHoverEnd={() => setIsHovered(false)}
       style={{ perspective: "1000px", touchAction: "manipulation" }}
     >
-      <div className="bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-red-200">
-        {/* Product Badges */}
-        <div className="absolute top-4 left-4 z-20 flex flex-col space-y-2">
+      <div className="bg-white h-64 sm:h-full rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-red-200">
+        <div className="absolute top-2 left-2 z-20 flex flex-col space-y-1 sm:space-y-2 hidden md:flex">
           <AnimatePresence>
             {isNew && (
               <motion.div
@@ -86,10 +85,10 @@ const ProductCard = ({ product, index = 0 }) => {
                 initial={{ scale: 0, rotate: -45 }}
                 animate={{ scale: 1, rotate: 0 }}
                 exit={{ scale: 0, rotate: -45 }}
-                className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-1.5 rounded-full text-xs font-bold flex items-center space-x-1 shadow-lg"
+                className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center space-x-0.5 sm:space-x-1 shadow-lg"
               >
-                <Zap className="w-3 h-3" />
-                <span>NEW</span>
+                <Zap className="w-2.5 h-2.5" />
+                <span className='hidden sm:inline'>NEW</span>
               </motion.div>
             )}
             {isBestseller && (
@@ -99,10 +98,10 @@ const ProductCard = ({ product, index = 0 }) => {
                 animate={{ scale: 1, rotate: 0 }}
                 exit={{ scale: 0, rotate: -45 }}
                 transition={{ delay: 0.1 }}
-                className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-3 py-1.5 rounded-full text-xs font-bold flex items-center space-x-1 shadow-lg"
+                className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center space-x-0.5 sm:space-x-1 shadow-lg"
               >
-                <Award className="w-3 h-3" />
-                <span>BESTSELLER</span>
+                <Award className="w-2.5 h-2.5" />
+                <span className='hidden sm:inline'>BESTSELLER</span>
               </motion.div>
             )}
             {isOnSale && (
@@ -112,19 +111,18 @@ const ProductCard = ({ product, index = 0 }) => {
                 animate={{ scale: 1, rotate: 0 }}
                 exit={{ scale: 0, rotate: -45 }}
                 transition={{ delay: 0.2 }}
-                className="bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1.5 rounded-full text-xs font-bold flex items-center space-x-1 shadow-lg"
+                className="bg-gradient-to-r from-red-500 to-red-600 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center space-x-0.5 sm:space-x-1 shadow-lg"
               >
-                <TrendingUp className="w-3 h-3" />
+                <TrendingUp className="w-2.5 h-2.5" />
                 <span>-{discount}%</span>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* Image Section - Clickable */}
         <Link to={`/product/${product.id}`} className="block">
           <div className="relative overflow-hidden cursor-pointer">
-            <div className="aspect-[3/2] sm:aspect-[4/3] overflow-hidden">
+            <div className="aspect-[4/3] overflow-hidden">
               <LazyImage
                 src={product.image}
                 alt={product.name}
@@ -132,10 +130,8 @@ const ProductCard = ({ product, index = 0 }) => {
               />
             </div>
 
-            {/* Dynamic Overlay */}
             <div className="absolute inset-0 bg-gradient-to-br from-red-600/10 via-transparent to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-            {/* Shimmer Effect */}
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100"
               animate={isHovered ? { x: ["-100%", "100%"] } : {}}
@@ -144,20 +140,19 @@ const ProductCard = ({ product, index = 0 }) => {
           </div>
         </Link>
 
-        {/* Action Buttons - Outside Link */}
         <div className="relative">
           {/* Action Buttons */}
           <div
-            className="absolute top-4 right-4 flex flex-col space-y-3 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto z-10"
+            className="absolute top-2 right-2 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto z-10"
           >
             <motion.button
               onClick={handleWishlistToggle}
-              className="bg-white/90 backdrop-blur-md rounded-full p-3 shadow-lg hover:bg-white transition-all duration-200 cursor-pointer"
+              className="bg-white/90 backdrop-blur-md rounded-full p-2 shadow-lg hover:bg-white transition-all duration-200 cursor-pointer"
               whileHover={{ scale: 1.1, rotate: 5 }}
               whileTap={{ scale: 0.9 }}
             >
               <Heart
-                className={`w-5 h-5 transition-colors ${
+                className={`w-4 h-4 transition-colors ${
                   isInWishlist(product.id)
                     ? 'text-red-600 fill-red-600'
                     : 'text-gray-700 hover:text-red-600'
@@ -166,16 +161,15 @@ const ProductCard = ({ product, index = 0 }) => {
             </motion.button>
           </div>
 
-          {/* Quick Add to Cart Overlay */}
           <motion.div
-            className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10"
+            className="absolute bottom-2 left-2 right-2 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 hidden sm:block"
             initial={{ y: 20 }}
             whileHover={{ y: 0 }}
           >
             <motion.button
               onClick={handleAddToCart}
               disabled={isAddingToCart}
-              className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white py-3 px-4 rounded-xl font-semibold hover:bg-red-700 transition-all duration-300 shadow-lg flex items-center justify-center space-x-2 cursor-pointer"
+              className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white py-2 px-3 rounded-xl font-semibold hover:bg-red-700 transition-all duration-300 shadow-lg flex items-center justify-center space-x-2 cursor-pointer text-sm"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -189,11 +183,11 @@ const ProductCard = ({ product, index = 0 }) => {
                     className="flex items-center space-x-2"
                   >
                     <motion.div
-                      className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+                      className="w-3 h-3 border-2 border-white border-t-transparent rounded-full"
                       animate={{ rotate: 360 }}
                       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                     />
-                    <span className="text-sm">Adding...</span>
+                    <span className="text-xs">Adding...</span>
                   </motion.div>
                 ) : (
                   <motion.div
@@ -212,83 +206,78 @@ const ProductCard = ({ product, index = 0 }) => {
           </motion.div>
         </div>
 
-        {/* Content Section - Clickable */}
         <Link to={`/product/${product.id}`} className="block">
-          <div className="p-3 sm:p-5 cursor-pointer">
-            {/* Product Name */}
+          <div className="p-2 sm:p-4 cursor-pointer">
             <motion.div
-              className="mb-2"
+              className="mb-1"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
             >
               <div className="flex items-start justify-between mb-1">
-                <h3 className="text-base sm:text-lg font-bold text-gray-900 group-hover:text-red-600 transition-colors duration-300 line-clamp-2 leading-tight flex-1">
+                <h3 className="text-sm sm:text-base font-bold text-gray-900 group-hover:text-red-600 transition-colors duration-300 line-clamp-2 leading-tight flex-1">
                   {product.name}
                 </h3>
-                {/* Verified Badge */}
-                <div className="flex-shrink-0 bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full text-xs font-medium flex items-center space-x-1 ml-1">
-                  <Shield className="w-2.5 h-2.5" />
+                <div className="flex-shrink-0 bg-green-100 text-green-700 px-1 py-0 rounded-full text-xs font-medium flex items-center space-x-0.5 ml-1">
+                  <Shield className="w-2 h-2" />
                   <span className="hidden sm:inline">Verified</span>
                 </div>
               </div>
             </motion.div>
 
-            {/* Rating and Price Row */}
             <motion.div
-              className="flex items-center justify-between mb-3"
+              className="flex items-start justify-between mb-2"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <div className="flex items-center space-x-1">
+              <div className="flex items-center space-x-0.5 flex-grow-0 mt-1">
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-3 h-3 sm:w-4 sm:h-4 ${i < Math.floor(rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                    className={`w-2.5 h-2.5 sm:w-3 sm:h-3 ${i < Math.floor(rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
                   />
                 ))}
-                <span className="text-xs sm:text-sm text-gray-600 ml-1">({reviewCount})</span>
+                <span className="text-xs text-gray-600 ml-1">({reviewCount})</span>
               </div>
 
-              <div className="flex flex-col items-end">
+              <div className="flex flex-col items-start leading-none min-w-[50%]"> 
                 {isOnSale && (
-                  <span className="text-xs text-gray-500 line-through">
+                  <span className="text-[10px] sm:text-xs text-gray-500 line-through"> 
                     ₦{(product.price * (1 + discount / 100)).toLocaleString()}
                   </span>
                 )}
-                <span className="text-lg sm:text-xl font-black text-red-600">
+                <span className="text-xs sm:text-base font-black text-orange-400 mt-1"> 
                   ₦{product.price.toLocaleString()}
                 </span>
               </div>
+
             </motion.div>
 
-            {/* Product Features */}
             <motion.div
-              className="flex items-center justify-between text-xs sm:text-sm text-gray-600 mb-3"
+              className="flex items-center justify-between text-xs text-gray-600 mb-1"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
               <div className="flex items-center space-x-1">
-                <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-500" />
+                <Sparkles className="w-3 h-3 text-yellow-500" />
                 <span>Premium</span>
               </div>
               <div className="flex items-center space-x-1">
-                <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-500" />
+                <Check className="w-3 h-3 text-green-500" />
                 <span>In Stock</span>
               </div>
             </motion.div>
           </div>
         </Link>
 
-        {/* Mobile Action Buttons */}
-        <div className="px-3 pb-3 sm:hidden">
+        <div className="px-2 pb-2 hidden">
           <div className="flex space-x-2">
             <motion.button
               onClick={handleAddToCart}
               disabled={isAddingToCart}
-              className="flex-1 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white py-2.5 px-3 rounded-lg font-semibold hover:bg-red-700 transition-all duration-300 flex items-center justify-center space-x-2 text-sm"
+              className="flex-1 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white py-2 px-3 rounded-lg font-semibold hover:bg-red-700 transition-all duration-300 flex items-center justify-center space-x-0.5 text-xs" 
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -299,7 +288,7 @@ const ProductCard = ({ product, index = 0 }) => {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    className="flex items-center space-x-1"
+                    className="flex items-center space-x-0.5" 
                   >
                     <motion.div
                       className="w-3 h-3 border-2 border-white border-t-transparent rounded-full"
@@ -314,10 +303,10 @@ const ProductCard = ({ product, index = 0 }) => {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    className="flex items-center space-x-1"
+                    className="flex items-center space-x-0.5" // Reduced space-x to 0.5
                   >
                     <ShoppingCart className="w-3 h-3" />
-                    <span>Add to Cart</span>
+                    <span>Cart</span> {/* Shortened text for better fit */}
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -325,7 +314,7 @@ const ProductCard = ({ product, index = 0 }) => {
 
             <motion.button
               onClick={handleWishlistToggle}
-              className="bg-gray-100 text-gray-700 py-2.5 px-3 rounded-lg font-semibold hover:bg-gray-200 transition-all duration-300 flex items-center justify-center"
+              className="bg-gray-100 text-gray-700 py-2 px-3 rounded-lg font-semibold hover:bg-gray-200 transition-all duration-300 flex items-center justify-center"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -342,4 +331,4 @@ const ProductCard = ({ product, index = 0 }) => {
   );
 };
 
-export default memo(ProductCard);
+export default memo(ProCard);

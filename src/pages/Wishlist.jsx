@@ -26,22 +26,22 @@ const Wishlist = () => {
 
   const handleRemoveFromWishlist = (productId, productName) => {
     removeFromWishlist(productId);
-    showSuccess(`${productName} removed from wishlist`);
+    showSuccess(`${productName} removed from wishlist`, 1000);
   };
 
   const handleAddToCart = (product) => {
     addToCart(product);
-    showSuccess(`${product.name} added to cart!`);
+    showSuccess(`${product.name} added to cart!`, 1000);
   };
 
   const handleAddAllToCart = () => {
     wishlist.forEach(product => addToCart(product));
-    showSuccess(`All ${wishlist.length} items added to cart!`);
+    showSuccess(`All ${wishlist.length} items added to cart!`, 1000);
   };
 
   const handleClearWishlist = () => {
     clearWishlist();
-    showSuccess('Wishlist cleared');
+    showSuccess('Wishlist cleared', 1000);
   };
 
   useEffect(() => {
@@ -212,7 +212,7 @@ const Wishlist = () => {
                     {/* Enhanced Remove Button */}
                     <motion.button
                       onClick={() => handleRemoveFromWishlist(product.id, product.name)}
-                      className="absolute -top-2 -right-2 bg-red-600 text-white p-2 rounded-full shadow-lg hover:bg-red-700 transition-all duration-300 opacity-0 group-hover:opacity-100"
+                      className="absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white p-2 rounded-full shadow-lg hover:bg-red-700 transition-all duration-300 opacity-0 group-hover:opacity-100"
                       whileHover={{
                         scale: 1.2,
                         rotate: 15,
@@ -234,7 +234,7 @@ const Wishlist = () => {
                     >
                       <motion.button
                         onClick={() => handleAddToCart(product)}
-                        className="w-full bg-red-600 text-white py-2 px-4 rounded-xl font-semibold hover:bg-red-700 transition-all duration-300 shadow-lg flex items-center justify-center space-x-2 text-sm"
+                        className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white py-2 px-4 rounded-xl font-semibold hover:bg-red-700 transition-all duration-300 shadow-lg flex items-center justify-center space-x-2 text-sm"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                       >

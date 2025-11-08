@@ -17,143 +17,92 @@ const CategoryCard = ({ category }) => {
   return (
     <motion.div
       className="group cursor-pointer"
-      whileHover={{ y: -12, rotateY: 5 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-      style={{ perspective: "1000px" }}
+      whileHover={{ y: -5, scale: 1.03 }} // Simple lift and slight scale
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      style={{ perspective: "none" }}
     >
       <Link to={`/products?category=${category.name.toLowerCase().replace(/\s+/g, '-')}`} className="block">
         <motion.div
-          className="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden relative border border-gray-100"
-          whileHover={{ scale: 1.03 }}
-          transition={{ duration: 0.4 }}
+          className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden relative border border-gray-100"
+          whileHover={{ scale: 1.01 }} // Very subtle scale
+          transition={{ duration: 0.3 }}
         >
-          {/* Background Pattern */}
-          <div className="absolute pointer-events-none inset-0 opacity-5">
-            <div className="absolute pointer-events-none top-0 right-0 w-32 h-32 bg-red-600 rounded-full blur-3xl"></div>
-            <div className="absolute pointer-events-none bottom-0 left-0 w-24 h-24 bg-red-400 rounded-full blur-2xl"></div>
-          </div>
+          {/* Removed Background Pattern (Blur elements) for a cleaner Jumia feel */}
 
-          {/* Image Section */}
+          {/* Image Section - REDUCED HEIGHT */}
           <div className="relative overflow-hidden">
             <motion.img
               src={category.image}
               alt={category.name}
-              className="w-full h-32 sm:h-36 lg:h-40 object-cover"
-              whileHover={{ scale: 1.15 }}
-              transition={{ duration: 0.6 }}
+              // Fixed, smaller height
+              className="w-full h-24 object-cover" 
+              whileHover={{ scale: 1.1 }} // Slightly toned-down image zoom
+              transition={{ duration: 0.5 }}
             />
 
-            {/* Dynamic Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-red-600/20 via-transparent to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-            {/* Floating Elements */}
+            {/* Removed Dynamic Overlay for clean image background */}
+            
+            {/* Floating Elements (Product Count) - MODIFIED POSITION AND SIZE */}
             <motion.div
-              className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-semibold text-red-600 shadow-lg"
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+              className="absolute top-2 right-2 bg-black/50 rounded-full px-2 py-0.5 text-[10px] font-medium text-white shadow-md flex items-center" // Fixed small text size
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.1 }}
             >
-              <Package className="w-3 h-3 inline mr-1" />
+              <Package className="w-2.5 h-2.5 inline mr-1" />
               {productCount} items
             </motion.div>
 
-            {/* Hover CTA */}
+            {/* Hover CTA - Simplified to a direct button on hover */}
             <motion.div
-              className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500"
-              initial={{ scale: 0.8, rotate: -45 }}
-              whileHover={{ scale: 1.1, rotate: 0 }}
+              className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              initial={{ scale: 1 }}
+              whileHover={{ scale: 1 }}
             >
-              <motion.div
-                className="bg-gradient-to-r from-red-500 to-red-600 text-white rounded-full p-4 shadow-2xl"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
+              <div
+                className="bg-orange-500 text-white rounded-full p-2 shadow-lg"
               >
-                <ArrowRight className="w-6 h-6" />
-              </motion.div>
+                <ArrowRight className="w-4 h-4" /> {/* Smaller icon */}
+              </div>
             </motion.div>
 
-            {/* Shimmer Effect */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100"
-              animate={{ x: ["-100%", "100%"] }}
-              transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
-            />
+            {/* Removed Shimmer Effect for simplicity */}
           </div>
 
-          {/* Content Section */}
-          <div className="p-3 sm:p-4 relative z-10">
-            {/* Category Name */}
+          {/* Content Section - REDUCED PADDING */}
+          <div className="p-2 relative z-10"> 
+            
+            {/* Category Name - FIXED SMALLER FONT */}
             <motion.h3
-              className="text-base sm:text-lg font-bold text-gray-800 mb-1 sm:mb-2 group-hover:text-red-600 transition-colors duration-300 text-center"
-              initial={{ opacity: 0, y: 20 }}
+              // Using fixed text-sm, removed all responsive classes
+              className="text-sm font-bold text-gray-800 mb-0.5 group-hover:text-orange-600 transition-colors duration-300 text-center truncate" 
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
             >
               {category.name}
             </motion.h3>
 
-            {/* Description */}
-            <motion.p
-              className="text-gray-600 text-xs text-center mb-2 sm:mb-3 leading-relaxed"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              Professional {category.name.toLowerCase()} equipment
-            </motion.p>
-
-            {/* Stats */}
+          
             <motion.div
-              className="flex items-center justify-between text-xs"
-              initial={{ opacity: 0, y: 20 }}
+              // Fixed text-[10px] size
+              className="flex items-center justify-between text-[10px]" 
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
               <div className="flex items-center text-gray-500">
-                <Sparkles className="w-3 h-3 mr-1 text-yellow-500" />
+                <Sparkles className="w-2.5 h-2.5 mr-0.5 text-yellow-500" /> {/* Smaller icon */}
                 <span>Premium</span>
               </div>
-              <div className="text-red-600 font-semibold">
-                From ₦{avgPrice.toLocaleString()}
+              <div className="text-orange-600 font-semibold">
+                ₦{avgPrice.toLocaleString()}
               </div>
             </motion.div>
 
-            {/* Progress Bar */}
-            <motion.div
-              className="mt-3 bg-gray-200 rounded-full h-1.5 overflow-hidden"
-              initial={{ opacity: 0, scaleX: 0 }}
-              animate={{ opacity: 1, scaleX: 1 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-            >
-              <motion.div
-                className="h-full bg-gradient-to-r from-red-500 to-red-600 rounded-full"
-                initial={{ width: 0 }}
-                animate={{ width: `${Math.min((productCount / 5) * 100, 100)}%` }}
-                transition={{ delay: 0.6, duration: 0.8 }}
-              />
-            </motion.div>
-
-            {/* Call to Action */}
-            <motion.div
-              className="mt-3 text-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              <motion.span
-                className="inline-flex items-center text-red-600 font-medium text-xs group-hover:text-red-700"
-                whileHover={{ x: 3 }}
-                transition={{ type: "spring", stiffness: 400 }}
-              >
-                Explore
-                <ArrowRight className="w-3 h-3 ml-1" />
-              </motion.span>
-            </motion.div>
           </div>
 
-          {/* Decorative Elements */}
-          <div className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
-          <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-red-400 rounded-full opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+          {/* Removed Decorative Elements (Blur circles) */}
         </motion.div>
       </Link>
     </motion.div>

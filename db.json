@@ -31,7 +31,19 @@
           "isDefault": false
         }
       ],
-      "phone": []
+      "phone": [],
+      "cart": []
+    },
+    {
+      "id": 1761233355921,
+      "name": "DANIEL UDEH",
+      "email": "blexedsinner@gmail.com",
+      "password": "BQPfqff4WQQ3z!k",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=blexedsinner@gmail.com",
+      "joinedDate": "2025-10-23T15:29:15.922Z",
+      "shippingAddresses": [],
+      "phone": [],
+      "cart": []
     }
   ]
 }

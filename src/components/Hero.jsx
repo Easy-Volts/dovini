@@ -28,7 +28,7 @@ const slides = [
     subtitle: "Up to 40% Off Premium Lenses and Kits.",
     backgroundImage: "https://images.unsplash.com/photo-1606983340222-685b8ad6a142?q=80&w=870&auto=format&fit=crop",
     tag: "SHUTTER SALE",
-    tagColor: "bg-red-600",
+    tagColor: "bg-gradient-to-r from-amber-500 via-orange-500 to-red-500",
   },
   {
     title: "NEW DOVINI MARK V",
@@ -42,7 +42,7 @@ const slides = [
     subtitle: "Massive discounts on all Aerial Gear. Limited stock!",
     backgroundImage: "https://images.unsplash.com/photo-1473968512647-3e447244af8f?q=80&w=870&auto=format&fit=crop",
     tag: "FLY HIGH",
-    tagColor: "bg-red-600",
+    tagColor: "bg-gradient-to-r from-amber-500 via-orange-500 to-red-500",
   },
   {
     title: "PROFESSIONAL LIGHTING",
@@ -329,7 +329,7 @@ const Hero = () => {
             </div>
 
             {/* Secondary Banner */}
-            <div className="mt-6 bg-red-600 p-4 rounded-xl shadow-lg text-white text-center sm:text-left">
+            <div className="mt-6 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 p-4 rounded-xl shadow-lg text-white text-center sm:text-left">
               <Phone className="w-5 h-5 mb-2" />
               <h3 className="text-xl font-bold">CALL FOR ADVICE</h3>
               <p className="text-2xl font-extrabold mt-1">1-800-DOVINI</p>

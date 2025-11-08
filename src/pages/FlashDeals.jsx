@@ -34,7 +34,7 @@ const Countdown = ({ endTime }) => {
       const difference = end - now;
 
       if (difference > 0) {
-        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+        const hours = Math.floor(difference / (1000 * 60 * 60));
         const minutes = Math.floor((difference / (1000 * 60)) % 60);
         const seconds = Math.floor((difference / 1000) % 60);
         setTimeLeft({ hours, minutes, seconds });
@@ -97,12 +97,7 @@ const FlashDeals = () => {
 
   const handleBuyNow = (product) => {
     addToCart(product);
-    showSuccess(`🎉 ${product.name} added to cart!`, {
-      action: {
-        label: 'View Cart',
-        onClick: () => navigate('/cart')
-      }
-    });
+    showSuccess(`🎉 ${product.name} added to cart!`, 1000);
   };
 
   const handleWishlistToggle = (product) => {
@@ -111,7 +106,8 @@ const FlashDeals = () => {
     showSuccess(
       isInWish
         ? `💔 ${product.name} removed from wishlist`
-        : `❤️ ${product.name} added to wishlist!`
+        : `❤️ ${product.name} added to wishlist!`,
+      1000
     );
   };
 
@@ -249,30 +245,7 @@ const FlashDeals = () => {
             </motion.p>
 
             {/* Global Countdown Timer */}
-            <motion.div
-              className="inline-flex items-center space-x-2 sm:space-x-4 bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl px-4 sm:px-8 py-4 sm:py-6 shadow-xl border border-red-200 mb-6 sm:mb-8"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.7, type: "spring", stiffness: 200 }}
-            >
-              <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-red-600" />
-              <div className="flex items-center space-x-2 sm:space-x-4">
-                <div className="text-center">
-                  <div className="text-2xl sm:text-3xl lg:text-4xl font-black text-red-600 leading-none">{timeLeft.hours.toString().padStart(2, '0')}</div>
-                  <div className="text-xs sm:text-sm text-gray-600 font-semibold">HOURS</div>
-                </div>
-                <div className="text-lg sm:text-2xl font-black text-red-400 leading-none">:</div>
-                <div className="text-center">
-                  <div className="text-2xl sm:text-3xl lg:text-4xl font-black text-red-600 leading-none">{timeLeft.minutes.toString().padStart(2, '0')}</div>
-                  <div className="text-xs sm:text-sm text-gray-600 font-semibold">MINUTES</div>
-                </div>
-                <div className="text-lg sm:text-2xl font-black text-red-400 leading-none">:</div>
-                <div className="text-center">
-                  <div className="text-2xl sm:text-3xl lg:text-4xl font-black text-red-600 leading-none">{timeLeft.seconds.toString().padStart(2, '0')}</div>
-                  <div className="text-xs sm:text-sm text-gray-600 font-semibold">SECONDS</div>
-                </div>
-              </div>
-            </motion.div>
+          
 
             {/* Stats */}
             <motion.div

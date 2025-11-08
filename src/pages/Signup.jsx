@@ -48,7 +48,7 @@ const Signup = () => {
       const result = await signup(formData.name, formData.email, formData.password);
 
       if (result.success) {
-        showSuccess('Account created successfully! Welcome to Dovini! 🎉');
+        showSuccess('Account created successfully! Welcome to Dovini! 🎉', 1000);
         navigate('/');
       } else {
         showError(result.error || 'Signup failed');
@@ -71,7 +71,7 @@ const Signup = () => {
           transition={{ duration: 0.6 }}
         >
           <motion.div
-            className="mx-auto h-16 w-16 bg-red-600 rounded-2xl flex items-center justify-center shadow-xl"
+            className="mx-auto h-16 w-16 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-xl"
             whileHover={{ scale: 1.05, rotate: 5 }}
             transition={{ type: "spring", stiffness: 300 }}
           >

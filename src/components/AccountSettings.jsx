@@ -178,7 +178,7 @@ const AccountSettings = ({ user, onUpdateProfile, onChangePassword, onUpdatePref
                 />
                 <button
                   type="button"
-                  className="absolute bottom-0 right-0 bg-red-600 text-white p-2 rounded-full hover:bg-red-700 transition-colors"
+                  className="absolute bottom-0 right-0 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white p-2 rounded-full hover:bg-red-700 transition-colors"
                 >
                   <Camera className="w-4 h-4" />
                 </button>
@@ -257,7 +257,7 @@ const AccountSettings = ({ user, onUpdateProfile, onChangePassword, onUpdatePref
               <motion.button
                 type="submit"
                 disabled={isLoading}
-                className="bg-red-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
+                className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -363,7 +363,7 @@ const AccountSettings = ({ user, onUpdateProfile, onChangePassword, onUpdatePref
               <motion.button
                 type="submit"
                 disabled={isLoading}
-                className="bg-red-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
+                className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -404,7 +404,7 @@ const AccountSettings = ({ user, onUpdateProfile, onChangePassword, onUpdatePref
                         onChange={(e) => setPreferences({ ...preferences, [pref.key]: e.target.checked })}
                         className="sr-only peer"
                       />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r from-amber-500 via-orange-500 to-red-500"></div>
                     </label>
                   </div>
                 ))}
@@ -459,7 +459,7 @@ const AccountSettings = ({ user, onUpdateProfile, onChangePassword, onUpdatePref
               <motion.button
                 type="submit"
                 disabled={isLoading}
-                className="bg-red-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
+                className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >

@@ -136,7 +136,7 @@ const Orders = () => {
           </button>
 
           <div className="flex items-center space-x-4">
-            <div className="bg-red-600 p-3 rounded-2xl">
+            <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 p-3 rounded-2xl">
               <ShoppingBag className="w-8 h-8 text-white" />
             </div>
             <div>
@@ -155,7 +155,7 @@ const Orders = () => {
           >
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
               {/* Order Header */}
-              <div className="bg-red-600 text-white p-6">
+              <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white p-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-2xl font-bold">Order {selectedOrder.id}</h2>
@@ -238,7 +238,7 @@ const Orders = () => {
                         <div className="space-y-4">
                           {selectedOrder.tracking.updates.map((update, index) => (
                             <div key={index} className="flex items-start space-x-3">
-                              <div className="flex-shrink-0 w-8 h-8 bg-red-600 rounded-full flex items-center justify-center">
+                              <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-full flex items-center justify-center">
                                 <CheckCircle className="w-4 h-4 text-white" />
                               </div>
                               <div className="flex-1">
@@ -292,7 +292,7 @@ const Orders = () => {
                 <p className="text-gray-600 mb-6">Start shopping to see your order history here</p>
                 <button
                   onClick={() => navigate('/products')}
-                  className="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
+                  className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
                 >
                   Browse Products
                 </button>
@@ -350,7 +350,7 @@ const Orders = () => {
                           )}
                           <button
                             onClick={() => setSelectedOrder(order)}
-                            className="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center space-x-2"
+                            className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center space-x-2"
                           >
                             <Eye className="w-4 h-4" />
                             <span>View Details</span>

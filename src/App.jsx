@@ -16,9 +16,9 @@ import About from './pages/About'
 import Profile from './pages/Profile';
 import AccountSettingsPage from './pages/AccountSettingsPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminDashBoard from './pages/AdminDashBoard';
 
 
-// Lazy load pages for code splitting
 const Home = lazy(() => import('./pages/Home'));
 const Category = lazy(() => import('./pages/Category'));
 const Products = lazy(() => import('./pages/Products'));
@@ -62,6 +62,7 @@ const App = () => {
                           <Route path="/checkout" element={<Checkout />} />
                           <Route path="/login" element={<Login />} />
                           <Route path="/signup" element={<Signup />} />
+                          <Route path="/admin" element={<AdminDashBoard />} />
                           <Route path="/my-account" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                           <Route path="/myaccount/settings" element={<ProtectedRoute><AccountSettingsPage /></ProtectedRoute>} />
                           <Route path="/orders" element={<Orders />} />

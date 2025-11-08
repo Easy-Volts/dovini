@@ -142,7 +142,7 @@ const Profile = () => {
                     alt={user?.name}
                     className="w-20 h-20 rounded-full object-cover border-4 border-red-100"
                   />
-                  <button className="absolute bottom-0 right-0 bg-red-600 text-white p-1.5 rounded-full hover:bg-red-700 transition-colors">
+                  <button className="absolute bottom-0 right-0 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white p-1.5 rounded-full hover:bg-red-700 transition-colors">
                     <Edit className="w-3 h-3" />
                   </button>
                 </div>
@@ -306,7 +306,7 @@ const Profile = () => {
                         <span className="text-red-600 font-bold text-lg">₦{item.price?.toLocaleString()}</span>
                         <Link
                           to={`/product/${item.id}`}
-                          className="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-red-700 transition-colors flex items-center space-x-1"
+                          className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-red-700 transition-colors flex items-center space-x-1"
                         >
                           <ShoppingCart className="w-3 h-3" />
                           <span>View</span>
@@ -322,7 +322,7 @@ const Profile = () => {
                   <p className="text-gray-500 mb-6">Start adding items you love to your wishlist</p>
                   <Link
                     to="/products"
-                    className="bg-red-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors"
+                    className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors"
                   >
                     Browse Products
                   </Link>

@@ -17,7 +17,7 @@ const AccountSettingsPage = () => {
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 1000));
     // Update user data (in real app, this would come from API response)
-    showSuccess('Profile updated successfully!');
+    showSuccess('Profile updated successfully!', 1000);
     return Promise.resolve();
   };
 
@@ -27,7 +27,7 @@ const AccountSettingsPage = () => {
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 1000));
     // Validate password change (in real app, this would come from API response)
-    showSuccess('Password changed successfully!');
+    showSuccess('Password changed successfully!', 1000);
     return Promise.resolve();
   };
 
@@ -37,7 +37,7 @@ const AccountSettingsPage = () => {
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 1000));
     // Update preferences (in real app, this would come from API response)
-    showSuccess('Preferences updated successfully!');
+    showSuccess('Preferences updated successfully!', 1000);
     return Promise.resolve();
   };
 

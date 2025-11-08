@@ -27,7 +27,7 @@ import {
 
 const Checkout = () => {
   const { cart, getTotal, clearCart } = useCart();
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const { showSuccess } = useToast();
 
   const [currentStep, setCurrentStep] = useState(1);
@@ -48,7 +48,6 @@ const Checkout = () => {
     saveCard: false,
   });
   const [formErrors, setFormErrors] = useState({});
-  const [expandedItems, setExpandedItems] = useState({});
 
    useEffect(() => {
      window.scrollTo({top: 0, behavior: 'smooth'})
@@ -122,12 +121,6 @@ const Checkout = () => {
     setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
-  const toggleItemExpansion = (itemId) => {
-    setExpandedItems((prev) => ({
-      ...prev,
-      [itemId]: !prev[itemId],
-    }));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -139,7 +132,7 @@ const Checkout = () => {
     await new Promise((resolve) => setTimeout(resolve, 3000));
 
     setOrderPlaced(true);
-    showSuccess("Order placed successfully! 🎉");
+    showSuccess("Order placed successfully! 🎉", 1000);
     clearCart();
     setIsProcessing(false);
   };
@@ -222,7 +215,7 @@ const Checkout = () => {
           >
             <motion.button
               onClick={() => (window.location.href = "/")}
-              className="bg-red-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-red-700 transition-colors"
+              className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-red-700 transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -323,7 +316,7 @@ const Checkout = () => {
                       isCompleted
                         ? "bg-green-500 border-green-500 text-white"
                         : isCurrent
-                        ? "bg-red-600 border-red-600 text-white"
+                        ? "bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 border-red-600 text-white"
                         : "bg-gray-100 border-gray-300 text-gray-400"
                     }`}
                     whileHover={{ scale: 1.1 }}

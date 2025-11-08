@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import BannerSlider from '../components/BannerSlider';
 import CategoryCard from '../components/CategoryCard';
-import ProductCard from '../components/ProductCard';
+import ProCard from '../components/ProCard';
 import NewsletterSignup from '../components/NewsletterSignup';
 import { categories } from '../data/categories';
 import { products } from '../data/products';
@@ -28,7 +28,7 @@ const Countdown = ({ endTime }) => {
       const difference = end - now;
 
       if (difference > 0) {
-        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+        const hours = Math.floor(difference / (1000 * 60 * 60));
         const minutes = Math.floor((difference / (1000 * 60)) % 60);
         const seconds = Math.floor((difference / 1000) % 60);
         setTimeLeft({ hours, minutes, seconds });
@@ -57,7 +57,7 @@ const Countdown = ({ endTime }) => {
   );
 };
 
-const MobileFlashDealsCarousel = ({ flashDeals, onBuyNow, onWishlistToggle, onQuickView, isInWishlist }) => {
+const MobileFlashDealsCarousel = ({ flashDeals}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -76,10 +76,14 @@ const MobileFlashDealsCarousel = ({ flashDeals, onBuyNow, onWishlistToggle, onQu
 
   return (
     <div className="relative">
-      {/* Carousel Container */}
-      <div className="overflow-hidden rounded-2xl bg-white shadow-xl border border-red-100">
+      {/* Carousel Container with Overlay Background */}
+      <div className="relative overflow-hidden rounded-3xl shadow-2xl border-4 border-red-200">
+        {/* Background Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-red-100 via-orange-50 to-yellow-50 opacity-80"></div>
+        <div className="absolute inset-0 bg-white/60 backdrop-blur-sm"></div>
+
         <div
-          className="flex transition-transform duration-500 ease-in-out"
+          className="flex transition-transform duration-700 ease-in-out"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
           {flashDeals.map((product, index) => (
@@ -88,75 +92,246 @@ const MobileFlashDealsCarousel = ({ flashDeals, onBuyNow, onWishlistToggle, onQu
               className="flex-shrink-0 w-full p-4"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{
-                opacity: index === currentIndex ? 1 : 0.7,
-                scale: index === currentIndex ? 1 : 0.95
+                opacity: index === currentIndex ? 1 : 0.6,
+                scale: index === currentIndex ? 1 : 0.9
               }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.5 }}
             >
-              <div className="bg-gradient-to-br from-white to-red-50 rounded-xl p-4 shadow-lg border border-red-100">
+              <div className="relative bg-black/25 backdrop-blur-sm rounded-2xl p-3 shadow-xl border border-black/15 overflow-hidden">
+                {/* Dark Overlay Background */}
+                <div className="absolute inset-0 bg-black/30 rounded-2xl"></div>
+
+                {/* Flash Deal Heading - Moved Up for Better Product Visibility */}
+                <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
+                  <motion.div
+                    className="inline-flex items-center space-x-2 bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2 rounded-full shadow-lg relative overflow-hidden"
+                    initial={{ scale: 0 }}
+                    animate={{
+                      scale: [1, 1.1, 1]
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: index * 0.1
+                    }}
+                  >
+                    {/* Intense Lightning Flash Background */}
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-yellow-300 via-white to-yellow-400"
+                      animate={{
+                        opacity: [0, 1, 0.8, 0.3, 1, 0],
+                        scale: [1, 1.2, 1.1, 1.15, 1.05, 1]
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        repeatDelay: 2
+                      }}
+                    />
+
+                    {/* Secondary Flash Layer */}
+                    <motion.div
+                      className="absolute inset-0 bg-white"
+                      animate={{
+                        opacity: [0, 0.9, 0, 0.7, 0, 0.5, 0]
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        repeatDelay: 2,
+                        delay: 0.1
+                      }}
+                    />
+
+                    {/* Electric Arc Effect */}
+                    <motion.div
+                      className="absolute inset-0"
+                      style={{
+                        background: 'linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.8) 45%, rgba(255,255,255,0.8) 55%, transparent 60%)'
+                      }}
+                      animate={{
+                        opacity: [0, 1, 0],
+                        x: [-100, 100, -100]
+                      }}
+                      transition={{
+                        duration: 0.8,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        repeatDelay: 3
+                      }}
+                    />
+
+                    {/* Animated Flame with Intense Effects */}
+                    <motion.div
+                      className="relative z-20"
+                      animate={{
+                        rotate: [0, 15, -15, 10, -10, 0],
+                        scale: [1, 1.4, 1.2, 1.5, 1.1, 1],
+                        filter: [
+                          'brightness(1) hue-rotate(0deg)',
+                          'brightness(2) hue-rotate(45deg)',
+                          'brightness(1.5) hue-rotate(90deg)',
+                          'brightness(2.5) hue-rotate(180deg)',
+                          'brightness(1) hue-rotate(0deg)'
+                        ]
+                      }}
+                      transition={{
+                        duration: 1.2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        repeatDelay: 2.5
+                      }}
+                    >
+                      <Flame className="w-5 h-5 drop-shadow-lg" />
+                      {/* Flame Glow Effect */}
+                      <motion.div
+                        className="absolute inset-0 w-5 h-5 bg-orange-400 rounded-full blur-md"
+                        animate={{
+                          scale: [1, 2, 1.5, 1],
+                          opacity: [0.3, 0.8, 0.5, 0.3]
+                        }}
+                        transition={{
+                          duration: 1.2,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                          repeatDelay: 2.5
+                        }}
+                      />
+                    </motion.div>
+
+                    {/* Animated Text with Glow */}
+                    <motion.span
+                      className="font-black text-sm relative z-20 drop-shadow-lg whitespace-nowrap"
+                      animate={{
+                        textShadow: [
+                          '0 0 5px rgba(255,255,255,0.5)',
+                          '0 0 20px rgba(255,255,255,1), 0 0 30px rgba(255,215,0,0.8)',
+                          '0 0 10px rgba(255,255,255,0.8)',
+                          '0 0 5px rgba(255,255,255,0.5)'
+                        ]
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        repeatDelay: 2
+                      }}
+                    >
+                      FLASH DEALS
+                    </motion.span>
+
+                    {/* Animated Lightning Bolt with Intense Effects */}
+                    <motion.div
+                      className="relative z-20"
+                      animate={{
+                        rotate: [0, -20, 20, -15, 15, 0],
+                        scale: [1, 1.5, 1.3, 1.6, 1.2, 1],
+                        filter: [
+                          'brightness(1) contrast(1)',
+                          'brightness(3) contrast(2)',
+                          'brightness(2) contrast(1.5)',
+                          'brightness(4) contrast(2.5)',
+                          'brightness(1) contrast(1)'
+                        ]
+                      }}
+                      transition={{
+                        duration: 1.2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        repeatDelay: 2.5,
+                        delay: 0.2
+                      }}
+                    >
+                      <Zap className="w-5 h-5 drop-shadow-lg" />
+                      {/* Lightning Glow Effect */}
+                      <motion.div
+                        className="absolute inset-0 w-5 h-5 bg-yellow-300 rounded-full blur-lg"
+                        animate={{
+                          scale: [1, 2.5, 2, 1.5, 1],
+                          opacity: [0.2, 1, 0.7, 0.4, 0.2]
+                        }}
+                        transition={{
+                          duration: 1.2,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                          repeatDelay: 2.5,
+                          delay: 0.2
+                        }}
+                      />
+                      {/* Electric Spark Effects */}
+                      <motion.div
+                        className="absolute -top-1 -right-1 w-2 h-2 bg-white rounded-full"
+                        animate={{
+                          scale: [0, 1.5, 0],
+                          opacity: [0, 1, 0]
+                        }}
+                        transition={{
+                          duration: 0.3,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                          repeatDelay: 4,
+                          delay: 0.5
+                        }}
+                      />
+                      <motion.div
+                        className="absolute -bottom-1 -left-1 w-1.5 h-1.5 bg-yellow-200 rounded-full"
+                        animate={{
+                          scale: [0, 1, 0],
+                          opacity: [0, 0.8, 0]
+                        }}
+                        transition={{
+                          duration: 0.4,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                          repeatDelay: 4,
+                          delay: 0.7
+                        }}
+                      />
+                    </motion.div>
+                  </motion.div>
+                </div>
+
                 {/* Flash Deal Badge */}
-                <div className="absolute top-2 left-2 z-20 bg-gradient-to-r from-red-500 to-orange-500 text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg animate-pulse-slow">
+                <div className="absolute -top-1 -right-1 z-20 bg-gradient-to-r from-red-500 to-orange-500 text-white px-2 py-0.5 rounded-full text-xs font-bold shadow-lg animate-pulse">
                   -{product.discount}%
                 </div>
 
-                {/* Product Image */}
-                <div className="relative mb-3">
+                {/* Product Image - Very Small and Faded */}
+                <div className="relative mb-2 mt-4 opacity-60">
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-32 object-cover rounded-lg"
+                    className="w-full h-20 object-cover rounded-lg shadow-md"
                   />
+                  {/* Overlay gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-lg"></div>
                 </div>
 
-                {/* Product Info */}
-                <div className="space-y-2">
-                  <h3 className="text-sm font-bold text-gray-800 line-clamp-2 leading-tight">
+                {/* Product Info - Minimal and Faded */}
+                <div className="space-y-1 opacity-70">
+                  <h3 className="text-xs font-bold text-gray-800 line-clamp-2 leading-tight text-center">
                     {product.name}
                   </h3>
 
-                  {/* Pricing */}
-                  <div className="flex items-center space-x-2">
-                    <span className="text-lg font-black text-red-600">
-                      ₦{product.price.toLocaleString()}
-                    </span>
-                    <span className="text-sm text-gray-500 line-through">
-                      ₦{product.originalPrice.toLocaleString()}
-                    </span>
+                  {/* Countdown - Centered */}
+                  <div className="flex justify-center">
+                    <Countdown endTime={product.flashDealEnd} />
                   </div>
 
-                  {/* Countdown */}
-                  <Countdown endTime={product.flashDealEnd} />
-
-                  {/* Rating */}
-                  <div className="flex items-center space-x-1">
+                  {/* Rating - Centered */}
+                  <div className="flex items-center justify-center space-x-1">
                     <div className="flex items-center">
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          className={`w-3 h-3 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+                          className={`w-2.5 h-2.5 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
                         />
                       ))}
                     </div>
                     <span className="text-xs text-gray-600">({product.reviews})</span>
-                  </div>
-
-                  {/* Stock & CTA */}
-                  <div className="flex items-center justify-between pt-2">
-                    <div className="flex items-center space-x-1">
-                      <Package className="w-3 h-3 text-green-600" />
-                      <span className="text-xs text-green-600 font-medium">
-                        {product.stock > 10 ? 'In Stock' : `${product.stock} left`}
-                      </span>
-                    </div>
-                    <motion.button
-                      onClick={() => onBuyNow(product)}
-                      className="bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:shadow-md transition-all duration-300 flex items-center space-x-1"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <ShoppingBag className="w-3 h-3" />
-                      <span>Buy</span>
-                    </motion.button>
                   </div>
                 </div>
               </div>
@@ -168,16 +343,18 @@ const MobileFlashDealsCarousel = ({ flashDeals, onBuyNow, onWishlistToggle, onQu
       {/* Dots Indicator */}
       <div className="flex justify-center space-x-2 mt-4">
         {flashDeals.map((_, index) => (
-          <div
+          <motion.div
             key={index}
             onClick={() => goToSlide(index)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+            className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer ${
               index === currentIndex
-                ? 'bg-red-500 w-6'
+                ? 'bg-red-500 w-8'
                 : 'bg-gray-300 hover:bg-gray-400'
             }`}
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.9 }}
             aria-label={`Go to slide ${index + 1}`}
-          ></div>
+          />
         ))}
       </div>
     </div>
@@ -203,22 +380,12 @@ const Home = () => {
   // Handler functions for interactive buttons
   const handleBuyNow = (product) => {
     addToCart(product);
-    showSuccess(`🎉 ${product.name} added to cart!`, {
-      action: {
-        label: 'View Cart',
-        onClick: () => navigate('/cart')
-      }
-    });
+    showSuccess(`🎉 ${product.name} added to cart!`, 1000);
   };
 
   const handleGrabItNow = (product) => {
     addToCart(product);
-    showSuccess(`⚡ ${product.name} secured! Limited stock grabbed!`, {
-      action: {
-        label: 'Checkout Now',
-        onClick: () => navigate('/cart')
-      }
-    });
+    showSuccess(`⚡ ${product.name} secured! Limited stock grabbed!`, 1000);
   };
 
   const handleWishlistToggle = (product) => {
@@ -227,7 +394,8 @@ const Home = () => {
     showSuccess(
       isInWish
         ? `💔 ${product.name} removed from wishlist`
-        : `❤️ ${product.name} added to wishlist!`
+        : `❤️ ${product.name} added to wishlist!`,
+      1000
     );
   };
 
@@ -461,7 +629,7 @@ const Home = () => {
         <div className="max-w-sm mx-auto">
           {/* Main Container Box */}
           <motion.div
-            className="bg-white rounded-3xl shadow-2xl border-4 border-red-200 relative overflow-hidden cursor-pointer"
+            className="bg-white rounded-none shadow-2xl border-4 border-red-200 relative overflow-hidden cursor-pointer"
             onClick={() => navigate('/flash-deals')}
             whileHover={{ scale: 1.02, y: -5 }}
             whileTap={{ scale: 0.98 }}
@@ -471,7 +639,7 @@ const Home = () => {
             <div className="absolute -top-1 -left-1 w-8 h-8 bg-red-500 rounded-full"></div>
             <div className="absolute -top-1 -right-1 w-6 h-6 bg-orange-500 rounded-full"></div>
             <div className="absolute -bottom-1 -left-1 w-6 h-6 bg-yellow-500 rounded-full"></div>
-            <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-red-600 rounded-full"></div>
+            <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-full"></div>
 
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-5">
@@ -483,198 +651,16 @@ const Home = () => {
             <div className="relative z-10 p-6">
           {/* Section Header with Lightning Animation */}
           <motion.div
-            className="text-center mb-6"
+            className="text-center mb-2"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <motion.div
-              className="inline-flex items-center space-x-2 bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2 rounded-full mb-4 shadow-lg relative overflow-hidden"
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-              viewport={{ once: true }}
-            >
-              {/* Intense Lightning Flash Background */}
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-yellow-300 via-white to-yellow-400"
-                animate={{
-                  opacity: [0, 1, 0.8, 0.3, 1, 0],
-                  scale: [1, 1.2, 1.1, 1.15, 1.05, 1]
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  repeatDelay: 2
-                }}
-              />
 
-              {/* Secondary Flash Layer */}
-              <motion.div
-                className="absolute inset-0 bg-white"
-                animate={{
-                  opacity: [0, 0.9, 0, 0.7, 0, 0.5, 0]
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  repeatDelay: 2,
-                  delay: 0.1
-                }}
-              />
-
-              {/* Electric Arc Effect */}
-              <motion.div
-                className="absolute inset-0"
-                style={{
-                  background: 'linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.8) 45%, rgba(255,255,255,0.8) 55%, transparent 60%)'
-                }}
-                animate={{
-                  opacity: [0, 1, 0],
-                  x: [-100, 100, -100]
-                }}
-                transition={{
-                  duration: 0.8,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  repeatDelay: 3
-                }}
-              />
-
-              {/* Animated Flame with Intense Effects */}
-              <motion.div
-                className="relative z-20"
-                animate={{
-                  rotate: [0, 15, -15, 10, -10, 0],
-                  scale: [1, 1.4, 1.2, 1.5, 1.1, 1],
-                  filter: [
-                    'brightness(1) hue-rotate(0deg)',
-                    'brightness(2) hue-rotate(45deg)',
-                    'brightness(1.5) hue-rotate(90deg)',
-                    'brightness(2.5) hue-rotate(180deg)',
-                    'brightness(1) hue-rotate(0deg)'
-                  ]
-                }}
-                transition={{
-                  duration: 1.2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  repeatDelay: 2.5
-                }}
-              >
-                <Flame className="w-6 h-6 drop-shadow-lg" />
-                {/* Flame Glow Effect */}
-                <motion.div
-                  className="absolute inset-0 w-6 h-6 bg-orange-400 rounded-full blur-md"
-                  animate={{
-                    scale: [1, 2, 1.5, 1],
-                    opacity: [0.3, 0.8, 0.5, 0.3]
-                  }}
-                  transition={{
-                    duration: 1.2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    repeatDelay: 2.5
-                  }}
-                />
-              </motion.div>
-
-              {/* Animated Text with Glow */}
-              <motion.span
-                className="font-black text-sm relative z-20 drop-shadow-lg"
-                animate={{
-                  textShadow: [
-                    '0 0 5px rgba(255,255,255,0.5)',
-                    '0 0 20px rgba(255,255,255,1), 0 0 30px rgba(255,215,0,0.8)',
-                    '0 0 10px rgba(255,255,255,0.8)',
-                    '0 0 5px rgba(255,255,255,0.5)'
-                  ]
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  repeatDelay: 2
-                }}
-              >
-                FLASH DEALS
-              </motion.span>
-
-              {/* Animated Lightning Bolt with Intense Effects */}
-              <motion.div
-                className="relative z-20"
-                animate={{
-                  rotate: [0, -20, 20, -15, 15, 0],
-                  scale: [1, 1.5, 1.3, 1.6, 1.2, 1],
-                  filter: [
-                    'brightness(1) contrast(1)',
-                    'brightness(3) contrast(2)',
-                    'brightness(2) contrast(1.5)',
-                    'brightness(4) contrast(2.5)',
-                    'brightness(1) contrast(1)'
-                  ]
-                }}
-                transition={{
-                  duration: 1.2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  repeatDelay: 2.5,
-                  delay: 0.2
-                }}
-              >
-                <Zap className="w-6 h-6 drop-shadow-lg" />
-                {/* Lightning Glow Effect */}
-                <motion.div
-                  className="absolute inset-0 w-6 h-6 bg-yellow-300 rounded-full blur-lg"
-                  animate={{
-                    scale: [1, 2.5, 2, 1.5, 1],
-                    opacity: [0.2, 1, 0.7, 0.4, 0.2]
-                  }}
-                  transition={{
-                    duration: 1.2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    repeatDelay: 2.5,
-                    delay: 0.2
-                  }}
-                />
-                {/* Electric Spark Effects */}
-                <motion.div
-                  className="absolute -top-1 -right-1 w-2 h-2 bg-white rounded-full"
-                  animate={{
-                    scale: [0, 1.5, 0],
-                    opacity: [0, 1, 0]
-                  }}
-                  transition={{
-                    duration: 0.3,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    repeatDelay: 4,
-                    delay: 0.5
-                  }}
-                />
-                <motion.div
-                  className="absolute -bottom-1 -left-1 w-1.5 h-1.5 bg-yellow-200 rounded-full"
-                  animate={{
-                    scale: [0, 1, 0],
-                    opacity: [0, 0.8, 0]
-                  }}
-                  transition={{
-                    duration: 0.4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    repeatDelay: 4,
-                    delay: 0.7
-                  }}
-                />
-              </motion.div>
-            </motion.div>
 
             <motion.h2
-              className="text-lg font-black text-gray-800 mb-2"
+              className="text-sm font-black text-gray-800 mb-1"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.6 }}
@@ -684,7 +670,7 @@ const Home = () => {
             </motion.h2>
 
             <motion.p
-              className="text-sm text-gray-600"
+              className="text-xs text-gray-600"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.6 }}
@@ -939,189 +925,153 @@ const Home = () => {
       </section>
 
       {/* Featured Categories */}
-      <section className="py-12 sm:py-16 bg-gradient-to-br from-slate-50 via-red-50/20 to-white relative overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-10 right-20 w-40 h-40 bg-red-600 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-10 left-20 w-32 h-32 bg-red-400 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/3 left-1/3 w-24 h-24 bg-red-500 rounded-full blur-2xl"></div>
-        </div>
+      <section className="py-10 sm:py-12 bg-white relative overflow-hidden shadow-inner shadow-red-50/50">
+    {/* Background Elements (Modified colors for Jumia orange/red feel) */}
+    <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-0 right-0 w-40 h-40 bg-orange-400 rounded-full blur-3xl opacity-50"></div>
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-red-400 rounded-full blur-3xl opacity-50"></div>
+    </div>
 
-        {/* Floating Particles */}
-        {[...Array(8)].map((_, i) => (
-          <motion.div
+    {/* Floating Particles (Kept as is for movement, but adjusted color) */}
+    {[...Array(8)].map((_, i) => (
+        <motion.div
             key={i}
-            className="absolute w-3 h-3 bg-red-400/20 rounded-full"
+            className="absolute w-2 h-2 bg-orange-500/30 rounded-full"
             style={{
-              top: `${20 + (i * 10)}%`,
-              left: `${10 + (i * 12)}%`,
+                top: `${20 + (i * 10)}%`,
+                left: `${10 + (i * 12)}%`,
             }}
             animate={{
-              y: [0, -20, 0],
-              opacity: [0.2, 0.6, 0.2],
+                y: [0, -15, 0], // Reduced movement
+                opacity: [0.1, 0.4, 0.1],
             }}
             transition={{
-              duration: 6 + i,
-              repeat: Infinity,
-              ease: "easeInOut",
+                duration: 5 + i * 0.5, // Slightly faster
+                repeat: Infinity,
+                ease: "easeInOut",
             }}
-          />
-        ))}
+        />
+    ))}
 
-        <div className="container mx-auto px-4 relative z-10">
-          {/* Section Header */}
-          <motion.div
-            className="text-center mb-8 sm:mb-12"
+    <div className="container mx-auto px-4 relative z-10">
+        {/* Section Header */}
+        <motion.div
+            className="text-center mb-6 sm:mb-8"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-          >
-            <motion.div
-              className="inline-block mb-6"
-              initial={{ scale: 0, rotate: -180 }}
-              whileInView={{ scale: 1, rotate: 0 }}
-              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-              viewport={{ once: true }}
-            >
-              <div className="bg-gradient-to-r from-red-500 to-red-600 p-4 rounded-2xl shadow-xl">
-                <ArrowRight className="w-5 h-5 md:w-8 md:h-8 text-white" />
-              </div>
-            </motion.div>
+        >
+            {/* Removed ArrowRight icon block for a cleaner, e-commerce look */}
 
             <motion.h2
-              className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-black text-gray-800 mb-4 sm:mb-6"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-              viewport={{ once: true }}
+                className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-800 mb-3"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.8 }}
+                viewport={{ once: true }}
             >
-              Featured <span className="bg-clip-text text-red-600">Categories</span>
+                Shop Popular <span className="text-orange-600">Categories</span>
             </motion.h2>
 
             <motion.p
-              className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              Explore our comprehensive collection of professional photography equipment,
-              from cameras and lenses to lighting and audio gear for every creative need.
-            </motion.p>
-          </motion.div>
-
-          {/* Categories Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-8 sm:mb-12 p-4">
-            {categories.map((category, index) => (
-              <motion.div
-                key={category.id}
-                initial={{ opacity: 0, y: 60, rotateY: -20 }}
-                whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
-                transition={{
-                  delay: index * 0.15,
-                  duration: 0.8,
-                  type: "spring",
-                  stiffness: 100
-                }}
+                className="text-sm sm:text-base text-gray-600 max-w-3xl mx-auto leading-snug"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.8 }}
                 viewport={{ once: true }}
-                whileHover={{ y: -12, rotateY: 5 }}
-                style={{ perspective: "1000px" }}
-                className="group"
-              >
-                <div className="relative">
-                  {/* Enhanced Category Card */}
-                  <div className="relative overflow-hidden rounded-3xl bg-white shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100">
-                    {/* Background Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-red-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            >
+                Quickly jump to the best deals across all our main departments.
+            </motion.p>
+        </motion.div>
 
-                    {/* Floating Elements */}
-                    <div className="absolute top-4 left-4 w-8 h-8 bg-red-500/10 rounded-full blur-xl group-hover:bg-red-500/20 transition-colors duration-500"></div>
-                    <div className="absolute bottom-4 right-4 w-6 h-6 bg-red-400/10 rounded-full blur-lg group-hover:bg-red-400/20 transition-colors duration-500"></div>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-8 gap-x-2 gap-y-4 mb-8 sm:mb-12 p-2 bg-white border border-gray-100/80 rounded-xl shadow-lg shadow-red-50/50">
+            {categories.map((category, index) => (
+                <motion.div
+                    key={category.id}
+                    initial={{ opacity: 0, scale: 0.8 }} 
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{
+                        delay: index * 0.05, 
+                        duration: 0.5,
+                        type: "spring",
+                        stiffness: 150
+                    }}
+                    viewport={{ once: true }}
+                    whileHover={{ y: -5, scale: 1.05, boxShadow: "0 10px 15px -3px rgba(255, 120, 0, 0.1)" }} 
+                    style={{ perspective: "none" }} 
+                    className="group col-span-1 cursor-pointer"
+                >
+                    <div className="relative">
+                        <div className="relative overflow-hidden rounded-lg bg-white hover:shadow-xl transition-all duration-300 h-full">
+                            
+                           
+                            <div className="w-full p-2 h-auto">
+                                <CategoryCard category={category} /> 
+                            </div>
+                            
+                            <motion.div
+                                className="absolute inset-0 bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+                            >
+                                <ArrowRight className="w-4 h-4 text-orange-600" />
+                            </motion.div>
+                        </div>
 
-                    <CategoryCard category={category} />
-
-                    {/* Hover Overlay */}
-                    <motion.div
-                      className="absolute pointer-events-none inset-0 bg-gradient-to-t from-red-600/90 via-red-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-center pb-6"
-                      initial={{ y: 20 }}
-                      whileHover={{ y: 0 }}
-                    >
-                      <motion.button
-                        className="bg-white text-red-600 px-6 py-2 rounded-full font-semibold hover:bg-red-50 transition-colors flex items-center space-x-2"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <span>Explore</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </motion.button>
-                    </motion.div>
-                  </div>
-
-                  {/* Decorative Elements */}
-                  <div className="absolute -bottom-2 -right-2 w-4 h-4 bg-red-500 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
-                  <div className="absolute -top-1 -left-1 w-3 h-3 bg-red-400 rounded-full opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
-                </div>
-              </motion.div>
+                    </div>
+                </motion.div>
             ))}
-          </div>
+        </div>
 
-          {/* Category Stats Section */}
-      
-
-          {/* Call to Action */}
-          <motion.div
+        <motion.div
             className="text-center"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.0, duration: 0.8 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
             viewport={{ once: true }}
-          >
+        >
             <motion.div
-              className="inline-block p-8 rounded-3xl bg-gradient-to-r from-red-500 via-red-600 to-red-700 text-white shadow-2xl relative overflow-hidden"
-              whileHover={{ scale: 1.02, y: -5 }}
-              transition={{ type: "spring", stiffness: 300 }}
+                className="inline-block p-6 rounded-xl bg-orange-600 text-white shadow-2xl relative overflow-hidden transform hover:scale-[1.01] transition-transform duration-300"
+                whileHover={{ scale: 1.01, y: -2 }} // Less dramatic hover
+                transition={{ type: "spring", stiffness: 300 }}
             >
-              {/* Animated Background */}
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-red-400 to-red-600"
-                animate={{
-                  x: ['-100%', '100%'],
-                  opacity: [0.3, 0.6, 0.3]
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              />
+                <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-orange-500/80 to-red-500/80"
+                    animate={{
+                        x: ['-100%', '100%'],
+                        opacity: [0.3, 0.6, 0.3]
+                    }}
+                    transition={{
+                        duration: 4,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                    }}
+                />
 
-              <div className="relative z-10">
-                <h3 className="text-2xl font-bold mb-2">Find Your Perfect Gear</h3>
-                <p className="text-red-100 mb-6 max-w-md mx-auto">
-                  Browse our extensive collection and discover the tools that will elevate your creative work.
-                </p>
-                <motion.button
-                  onClick={() => navigate('/products')}
-                  className="bg-white text-red-600 px-6 py-3 rounded-full font-bold hover:bg-red-50 transition-colors flex cursor-pointer items-center space-x-2 mx-auto shadow-lg"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <span>Browse All Categories</span>
-                  <ArrowRight className="w-5 h-5" />
-                </motion.button>
-              </div>
+                <div className="relative z-10">
+                    <h3 className="text-xl font-bold mb-2">Explore the Mall!</h3>
+                    <p className="text-red-100 mb-4 max-w-md mx-auto text-sm">
+                        Access thousands of products with daily deals and massive discounts.
+                    </p>
+                    <motion.button
+                        onClick={() => navigate('/products')}
+                        className="bg-white text-orange-600 px-5 py-2 rounded-lg font-bold hover:bg-red-50 transition-colors flex cursor-pointer items-center space-x-2 mx-auto shadow-md text-sm"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        <span>Start Shopping Now</span>
+                        <ArrowRight className="w-4 h-4" />
+                    </motion.button>
+                </div>
             </motion.div>
-          </motion.div>
-        </div>
-      </section>
+        </motion.div>
+    </div>
+</section>
 
-      {/* Why Choose Us Section */}
+    
       
 
-      {/* Featured Products */}
-    <section className="py-8 sm:py-12 lg:py-16 bg-gradient-to-br from-gray-50 to-red-50 px-5 sm:px-8 lg:px-12">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-8 sm:py-12 lg:py-16 bg-gradient-to-br from-gray-50 to-red-50 px-2 sm:px-8 lg:px-12">
+  <div className="max-w-7xl mx-auto px-1 sm:px-6 lg:px-8">
     
     {/* Section Header */}
     <motion.div
@@ -1140,7 +1090,7 @@ const Home = () => {
     </motion.div>
 
     {/* Product Grid */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-6 lg:gap-8">
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 sm:gap-6 lg:gap-8">
       {featuredProducts.map((product, index) => (
         <motion.div
           key={product.id}
@@ -1150,7 +1100,7 @@ const Home = () => {
           viewport={{ once: true }}
           className="w-full"
         >
-          <ProductCard product={product} />
+          <ProCard product={product} />
         </motion.div>
       ))}
     </div>
@@ -1164,7 +1114,7 @@ const Home = () => {
       viewport={{ once: true }}
     >
       <motion.button
-        className="bg-red-600 text-white px-6 sm:px-8 py-2 sm:py-3 text-sm sm:text-base lg:text-lg rounded-xl font-semibold hover:bg-red-700 transition flex items-center mx-auto space-x-2"
+        className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-6 sm:px-8 py-2 sm:py-3 text-sm sm:text-base lg:text-lg rounded-xl font-semibold hover:bg-red-700 transition flex items-center mx-auto space-x-2"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >

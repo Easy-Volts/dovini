@@ -74,7 +74,7 @@ const ProductDetails = () => {
       // Set initial selected image
       setSelectedImage(0);
 
-      // Get related products (same category, excluding current product)
+
       const related = products
         .filter(p => p.categoryId === foundProduct.categoryId && p.id !== foundProduct.id)
         .slice(0, 4);
@@ -108,12 +108,7 @@ const ProductDetails = () => {
       for (let i = 0; i < quantity; i++) {
         addToCart(product);
       }
-      showSuccess(`${quantity} x ${product.name} added to cart!`, {
-        action: {
-          label: 'View Cart',
-          onClick: () => navigate('/cart')
-        }
-      });
+      showSuccess(`${quantity} x ${product.name} added to cart!`, 1000);
     }
   };
 
@@ -124,7 +119,8 @@ const ProductDetails = () => {
       showSuccess(
         isInWish
           ? `${product.name} removed from wishlist`
-          : `${product.name} added to wishlist!`
+          : `${product.name} added to wishlist!`,
+        1000
       );
     }
   };
@@ -138,7 +134,7 @@ const ProductDetails = () => {
       });
     } else {
       navigator.clipboard.writeText(window.location.href);
-      showSuccess('Product link copied to clipboard!');
+      showSuccess('Product link copied to clipboard!', 1000);
     }
   };
 
@@ -240,7 +236,7 @@ const ProductDetails = () => {
                 {/* Badges */}
                 <div className="absolute top-4 left-4 flex flex-col space-y-2">
                   {product.isFlashDeal && (
-                    <div className="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                    <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
                       FLASH DEAL
                     </div>
                   )}
@@ -361,7 +357,7 @@ const ProductDetails = () => {
               <motion.button
                 onClick={handleAddToCart}
                 disabled={product.stock === 0}
-                className="flex-1 bg-red-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center space-x-2"
+                className="flex-1 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center space-x-2"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -678,7 +674,6 @@ const ProductDetails = () => {
           </div>
         </div>
 
-        {/* Related Products */}
         {relatedProducts.length > 0 && (
           <motion.div
             className="mt-16 sm:mt-20"
@@ -687,7 +682,6 @@ const ProductDetails = () => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            {/* Section Header */}
             <div className="text-center mb-12">
               <motion.div
                 className="inline-flex items-center space-x-2 bg-gradient-to-r from-red-100 to-red-200 px-4 py-2 rounded-full mb-4"
@@ -721,104 +715,109 @@ const ProductDetails = () => {
               </motion.p>
             </div>
 
-            {/* Products Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-              {relatedProducts.map((relatedProduct, index) => (
-                <motion.div
-                  key={relatedProduct.id}
-                  initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{
-                    duration: 0.6,
-                    delay: index * 0.1,
-                    type: "spring",
-                    stiffness: 100
-                  }}
-                  viewport={{ once: true }}
-                  whileHover={{
-                    y: -8,
-                    transition: { duration: 0.2 }
-                  }}
-                  className="group"
-                >
-                  <Link to={`/product/${relatedProduct.id}`} className="block">
-                    <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-red-200">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5 lg:gap-8 px-1 sm:px-0">
+  {relatedProducts.map((relatedProduct, index) => (
+    <motion.div
+      key={relatedProduct.id}
+      initial={{ opacity: 0, y: 30, scale: 0.9 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{
+        duration: 0.6,
+        delay: index * 0.1,
+        type: "spring",
+        stiffness: 100,
+      }}
+      viewport={{ once: true }}
+      whileHover={{ y: -8, transition: { duration: 0.2 } }}
+      className="group flex flex-col h-full"
+    >
+      <Link to={`/product/${relatedProduct.id}`} className="block h-full">
+        <div className="flex flex-col h-full bg-white rounded-xl sm:rounded-2xl shadow-md hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-red-200">
 
-                      {/* Product Image */}
-                      <div className="relative overflow-hidden">
-                        <div className="aspect-square overflow-hidden">
-                          <img
-                            src={relatedProduct.image}
-                            alt={relatedProduct.name}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                          />
-                        </div>
-
-                        {/* Overlay Effects */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                        {/* Quick Action Button */}
-                        <motion.div
-                          className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300"
-                          initial={{ scale: 0.8 }}
-                          whileHover={{ scale: 1.1 }}
-                        >
-                          <div className="bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg">
-                            <Eye className="w-4 h-4 text-gray-700" />
-                          </div>
-                        </motion.div>
-
-                        {/* Rating Badge */}
-                        <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1">
-                          <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                          <span className="text-xs font-semibold text-gray-800">{relatedProduct.rating}</span>
-                        </div>
-                      </div>
-
-                      {/* Product Info */}
-                      <div className="p-5">
-                        <h3 className="font-bold text-gray-900 mb-3 line-clamp-2 text-sm sm:text-base group-hover:text-red-600 transition-colors duration-300">
-                          {relatedProduct.name}
-                        </h3>
-
-                        <div className="flex items-center justify-between">
-                          <div className="flex flex-col">
-                            <span className="text-lg sm:text-xl font-black text-red-600">
-                              ₦{relatedProduct.price.toLocaleString()}
-                            </span>
-                            <span className="text-xs text-gray-500">Free shipping</span>
-                          </div>
-
-                          <motion.button
-                            className="bg-red-600 text-white p-3 rounded-xl hover:bg-red-700 transition-colors duration-300 shadow-lg hover:shadow-xl"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleAddToCart();
-                            }}
-                          >
-                            <ShoppingCart className="w-4 h-4" />
-                          </motion.button>
-                        </div>
-
-                        {/* Features */}
-                        <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
-                          <div className="flex items-center space-x-1 text-xs text-gray-600">
-                            <CheckCircle className="w-3 h-3 text-green-500" />
-                            <span>In Stock</span>
-                          </div>
-                          <div className="flex items-center space-x-1 text-xs text-gray-600">
-                            <Shield className="w-3 h-3 text-blue-500" />
-                            <span>Warranty</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
+          {/* Product Image */}
+          <div className="relative overflow-hidden">
+            <div className="aspect-square overflow-hidden">
+              <img
+                src={relatedProduct.image}
+                alt={relatedProduct.name}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              />
             </div>
+
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+            {/* Quick Action */}
+            <motion.div
+              className="absolute top-2.5 right-2.5 sm:top-4 sm:right-4 opacity-0 group-hover:opacity-100 transition-all duration-300"
+              initial={{ scale: 0.8 }}
+              whileHover={{ scale: 1.1 }}
+            >
+              <div className="bg-white/90 backdrop-blur-sm rounded-full p-2 sm:p-3 shadow-lg">
+                <Eye className="w-3 h-3 sm:w-4 sm:h-4 text-gray-700" />
+              </div>
+            </motion.div>
+
+            {/* Rating */}
+            <div className="absolute top-2.5 left-2.5 sm:top-4 sm:left-4 bg-white/90 backdrop-blur-sm rounded-full px-2 py-0.5 sm:px-3 sm:py-1 flex items-center space-x-1">
+              <Star className="w-2.5 h-2.5 sm:w-3 h-3 text-yellow-400 fill-current" />
+              <span className="text-[10px] sm:text-xs font-semibold text-gray-800">
+                {relatedProduct.rating}
+              </span>
+            </div>
+          </div>
+
+          {/* Product Info */}
+          <div className="flex flex-col justify-between flex-grow p-3 sm:p-5">
+            <div>
+              <h3 className="font-semibold sm:font-bold text-gray-900 mb-1.5 sm:mb-3 line-clamp-2 text-[12px] sm:text-base group-hover:text-red-600 transition-colors duration-300">
+                {relatedProduct.name}
+              </h3>
+
+              <div className="flex items-center justify-between">
+                <div className="flex flex-col">
+                  <span className="text-sm sm:text-lg font-black text-red-600">
+                    ₦{relatedProduct.price.toLocaleString()}
+                  </span>
+                  <span className="text-[10px] sm:text-xs text-gray-500">
+                    Free shipping
+                  </span>
+                </div>
+
+                <motion.button
+                  className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white p-2 sm:p-3 rounded-lg sm:rounded-xl transition duration-300 shadow-md hover:shadow-lg"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleAddToCart();
+                  }}
+                >
+                  <ShoppingCart className="w-3 h-3 sm:w-4 sm:h-4" />
+                </motion.button>
+              </div>
+            </div>
+
+            {/* Features */}
+            <div className="flex items-center justify-between mt-2 sm:mt-4 pt-2 sm:pt-4 border-t border-gray-100">
+              <div className="flex items-center space-x-1 text-[10px] sm:text-xs text-gray-600">
+                <CheckCircle className="w-3 h-3 text-green-500" />
+                <span>In Stock</span>
+              </div>
+              <div className="flex items-center space-x-1 text-[10px] sm:text-xs text-gray-600">
+                <Shield className="w-3 h-3 text-blue-500" />
+                <span>Warranty</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Link>
+    </motion.div>
+  ))}
+</div>
+
+
+
 
             {/* View All Button */}
             <motion.div

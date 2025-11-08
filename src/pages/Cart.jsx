@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import { products } from '../data/products';
 import RecentlyViewedSection from '../components/RecentlyViewedSection';
 import {
@@ -33,19 +34,21 @@ import {
 } from 'lucide-react';
 
 const Cart = () => {
-  const { cart, updateQuantity, removeFromCart, getTotal,addToCart } = useCart();
+  const { cart, updateQuantity, removeFromCart, getTotal, addToCart } = useCart();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [savedItems, setSavedItems] = useState([]);
   const [selectedShipping, setSelectedShipping] = useState('standard');
   const [giftMessage, setGiftMessage] = useState('');
   const [promoCode, setPromoCode] = useState('');
   const [appliedDiscount, setAppliedDiscount] = useState(0);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
  useEffect(() => {
    window.scrollTo({top: 0, behavior: 'smooth'})
   },[])
 
 
-  // Mock cross-sell recommendations
   const recommendations = products.filter(p => !cart.some(item => item.id === p.id)).slice(0, 4);
 
   const subtotal = getTotal();
@@ -62,6 +65,19 @@ const Cart = () => {
     setSavedItems(prev => prev.filter(saved => saved.id !== item.id));
     addToCart(item);
   };
+
+  const handleCheckoutClick = () => {
+    if (!isAuthenticated) {
+      setShowLoginPrompt(true);
+    } else {
+      navigate('/checkout');
+    }
+  };
+
+  const handleLoginRedirect = () => {
+    navigate('/login');
+  };
+
 
   const applyPromoCode = () => {
     if (promoCode.toLowerCase() === 'dovini10') {
@@ -88,7 +104,7 @@ const Cart = () => {
               animate={{ scale: 1, rotate: 0 }}
               transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
             >
-              <div className="bg-gradient-to-r from-red-500 to-red-600 p-6 rounded-3xl shadow-2xl">
+              <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 p-6 rounded-3xl shadow-2xl">
                 <ShoppingCart className="w-12 h-12 text-white" />
               </div>
             </motion.div>
@@ -119,7 +135,7 @@ const Cart = () => {
             >
               <Link
                 to="/"
-                className="btn-primary px-8 py-4 text-lg flex items-center space-x-2"
+                className="btn-primary bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 px-8 py-4 text-lg flex items-center space-x-2"
               >
                 <ShoppingCart className="w-5 h-5" />
                 <span>Start Shopping</span>
@@ -155,6 +171,84 @@ const Cart = () => {
 
   return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-red-50/20 to-white py-4 sm:py-8">
+        {/* Login Prompt Modal */}
+        <AnimatePresence>
+          {showLoginPrompt && (
+            <motion.div
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.div
+                className="bg-white rounded-3xl p-8 max-w-md w-full text-center relative"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+              >
+                <motion.div
+                  className="w-20 h-20 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-6"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    rotate: [0, 360],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <Lock className="w-10 h-10 text-white" />
+                </motion.div>
+
+                <motion.h2
+                  className="text-2xl font-bold text-gray-800 mb-4"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  Login Required
+                </motion.h2>
+
+                <motion.p
+                  className="text-gray-600 mb-6"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7 }}
+                >
+                  Please log in to your account to proceed with checkout and save your cart.
+                </motion.p>
+
+                <motion.div
+                  className="flex flex-col space-y-3"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.9 }}
+                >
+                  <button
+                    onClick={handleLoginRedirect}
+                    className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300"
+                  >
+                    Login Now
+                  </button>
+                  <Link
+                    to="/signup"
+                    className="bg-white border-2 border-gray-300 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-all duration-300"
+                  >
+                    Create Account
+                  </Link>
+                  <button
+                    onClick={() => setShowLoginPrompt(false)}
+                    className="text-gray-600 hover:text-gray-800 transition-colors"
+                  >
+                    Continue as Guest
+                  </button>
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <div className="container mx-auto px-3 sm:px-4">
           {/* Header */}
           <motion.div
@@ -377,7 +471,7 @@ const Cart = () => {
               </h3>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-                {recommendations.map((product, index) => (
+                {recommendations.map((product) => (
                   <motion.div
                     key={product.id}
                     className="bg-white rounded-lg p-3 shadow-md hover:shadow-lg transition-all duration-300 group cursor-pointer"
@@ -545,14 +639,14 @@ const Cart = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <Link
-                  to="/checkout"
+                <button
+                  onClick={handleCheckoutClick}
                   className="w-full bg-gradient-to-r from-red-500 via-red-600 to-red-700 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3"
                 >
                   <Lock className="w-4 h-4 sm:w-5 sm:h-5" />
                   <span>Secure Checkout</span>
                   <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
-                </Link>
+                </button>
               </motion.div>
 
               {/* Security Badges */}

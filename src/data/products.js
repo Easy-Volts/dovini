@@ -1,5 +1,4 @@
 export const products = [
-  // Original products with enhanced data
   {
     id: 1,
     name: 'Professional Softbox Kit',

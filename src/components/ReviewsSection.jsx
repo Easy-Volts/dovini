@@ -44,7 +44,7 @@ const ReviewsSection = ({ productId }) => {
     };
 
     addReview(productId, review);
-    showSuccess('Review submitted successfully!');
+    showSuccess('Review submitted successfully!', 1000);
 
     setNewReview({ rating: 5, title: '', comment: '' });
     setShowReviewForm(false);
@@ -83,7 +83,7 @@ const ReviewsSection = ({ productId }) => {
         {user && (
           <motion.button
             onClick={() => setShowReviewForm(!showReviewForm)}
-            className="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center space-x-2"
+            className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center space-x-2"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -152,7 +152,7 @@ const ReviewsSection = ({ productId }) => {
               <div className="flex items-center space-x-3">
                 <motion.button
                   type="submit"
-                  className="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center space-x-2"
+                  className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center space-x-2"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -206,7 +206,6 @@ const ReviewsSection = ({ productId }) => {
         </div>
       </div>
 
-      {/* Reviews List */}
       <div className="space-y-6">
         {reviews.length === 0 ? (
           <div className="text-center py-12 bg-gray-50 rounded-2xl">

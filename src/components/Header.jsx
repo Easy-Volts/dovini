@@ -34,7 +34,6 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const userMenuRef = useRef(null);
 
-  // Close menus when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
@@ -61,7 +60,6 @@ const Header = () => {
 
   return (
     <>
-      {/* Top Announcement Bar */}
       <motion.div
         className="bg-gradient-to-r from-red-600 via-red-700 to-red-800 text-white relative overflow-hidden"
         initial={{ height: 0 }}
@@ -116,22 +114,26 @@ const Header = () => {
         </div>
       </motion.div>
 
-      {/* Main Header */}
       <header className="sticky top-0 z-50 bg-white shadow-md border-b border-gray-200">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           {/* Top Row - Logo, Navigation, Actions */}
           <div className="flex items-center justify-between h-16">
 
-            {/* Logo Section - Bigger Logo Only */}
-            <div className="flex items-center relative right-4 md:right-0">
-              <Link to="/" className="hover:opacity-90 transition-opacity">
-                <img
-                  src='https://i.ibb.co/ZRrLbMy2/logo-2.png'
-                  alt="logo"
-                  className="md:w-45 md:h-45 w-30 h-30 drop-shadow-sm"
-                />
-              </Link>
-            </div>
+            <div className="flex items-center relative">
+               <button
+                className="lg:hidden rounded-lg hover:bg-gray-100 transition-colors relative- z-50"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+               </button>
+               <Link to="/" className="hover:opacity-90 transition-opacity relative -left-10">
+                 <img
+                   src='https://i.ibb.co/ZRrLbMy2/logo-2.png'
+                   alt="logo"
+                   className="md:w-45 md:h-45 w-30 h-30 drop-shadow-sm "
+                 />
+               </Link>
+             </div>
 
             {/* Desktop Navigation with Icons */}
             <nav className="hidden lg:flex items-center space-x-4">
@@ -161,7 +163,7 @@ const Header = () => {
             </nav>
 
             {/* Right Side Actions with Text */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
              
               
               {/* Wishlist with Text */}
@@ -172,13 +174,12 @@ const Header = () => {
                 <Heart className="w-5 h-5" />
                 <span className="hidden lg:inline">Wishlist</span>
                 {wishlistCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                  <span className="absolute -top-1 -right-1 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
                     {wishlistCount}
                   </span>
                 )}
               </Link>
 
-              {/* Cart with Text */}
               <Link
                 to="/cart"
                 className="relative hidden sm:flex items-center space-x-2 px-3 py-2 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all font-medium"
@@ -186,18 +187,18 @@ const Header = () => {
                 <ShoppingCart className="w-5 h-5" />
                 <span className="hidden lg:inline">Cart</span>
                 {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                  <span className="absolute -top-1 -right-1 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
                     {cartCount}
                   </span>
                 )}
               </Link>
               
-             {/* User Menu / Auth */}
+
              {user ? (
                <div className="relative" ref={userMenuRef}>
                  <button
                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                   className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                   className="flex relative left-6 md:left-0 items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
                  >
                    <img
                      src={user.avatar}
@@ -254,7 +255,7 @@ const Header = () => {
                  )}
                </div>
              ) : (
-               <div className="hidden lg:flex items-center space-x-6">
+               <div className="hidden lg:flex items-center space-x-2">
                  <Link
                    to="/login"
                    className="text-gray-700 hover:text-red-600 font-medium transition-colors"
@@ -263,31 +264,38 @@ const Header = () => {
                  </Link>
                  <Link
                    to="/signup"
-                   className="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors"
+                   className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors"
                  >
                    Sign Up
                  </Link>
                </div>
              )}
 
-              
-
-             {/* Contact Button - Desktop */}
              <a
                href="tel:08063971335"
-               className="hidden xl:flex items-center space-x-2 bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors"
+               className="hidden xl:flex items-center space-x-2 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors"
              >
                <Phone className="w-4 h-4" />
                <span className="hidden 2xl:inline">08063971335</span>
              </a>
-
-             {/* Mobile Menu Button */}
-             <button
-               className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-             >
-               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-             </button>
+            
+               <Link
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  to="/cart"
+                  className="flex md:hidden relative items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
+                >
+                    <ShoppingCart className="w-5 h-5 lg:w-6 lg:h-6 font-bold" />
+                  {cartCount > 0 && (
+                    <motion.span
+                      className="absolute -top-0.5 left-6 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 500 }}
+                    >
+                      {cartCount}
+                    </motion.span>
+                  )}
+                  </Link>
             </div>
           </div>
 
@@ -307,7 +315,7 @@ const Header = () => {
                 />
                 <button
                   type="submit"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium"
                 >
                   Search
                 </button>
@@ -368,24 +376,7 @@ const Header = () => {
                     <Grid3X3 className="w-5 h-5" />
                     <span>All Products</span>
                   </Link>
-                  <Link
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  to="/cart"
-                  className="flex relative items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
-                >
-                    <ShoppingCart className="w-5 h-5 lg:w-6 lg:h-6" />
-                    <span>Cart</span>
-                  {cartCount > 0 && (
-                    <motion.span
-                      className="absolute top-1 left-20 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", stiffness: 500 }}
-                    >
-                      {cartCount}
-                    </motion.span>
-                  )}
-                  </Link>
+                 
                   
                   <Link
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -396,7 +387,7 @@ const Header = () => {
                     <span>Wishlist</span>
                   {wishlistCount > 0 && (
                     <motion.span
-                      className="absolute top-1 left-26 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold"
+                      className="absolute top-1 left-26 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold"
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ type: "spring", stiffness: 500 }}
@@ -419,7 +410,6 @@ const Header = () => {
                 {/* Mobile Categories */}
               
 
-                {/* Mobile Auth */}
                 {user ? (
                   <div className="border-t border-gray-100 pt-4 space-y-3">
                     <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
@@ -469,7 +459,7 @@ const Header = () => {
                   <div className="border-t border-gray-100 pt-4 space-y-3">
                     <Link
                       to="/login"
-                      className="flex items-center justify-center w-full py-3 px-4 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors"
+                      className="flex items-center justify-center w-full py-3 px-4 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white rounded-lg font-medium hover:bg-red-700 transition-colors"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Sign In
@@ -488,7 +478,7 @@ const Header = () => {
                 <div className="border-t border-gray-100 pt-4">
                   <a
                     href="tel:08063971335"
-                    className="flex items-center justify-center space-x-3 w-full py-3 px-4 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors"
+                    className="flex items-center justify-center space-x-3 w-full py-3 px-4 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white rounded-lg font-medium hover:bg-red-700 transition-colors"
                   >
                     <Phone className="w-5 h-5" />
                     <span>Call: 08063971335</span>

@@ -5,7 +5,20 @@ const AuthContext = createContext();
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    // Return default values instead of throwing error
+    return {
+      user: null,
+      isAuthenticated: false,
+      isLoading: true,
+      login: () => Promise.resolve({ success: false, error: 'AuthProvider not available' }),
+      signup: () => Promise.resolve({ success: false, error: 'AuthProvider not available' }),
+      logout: () => {},
+      updateProfile: () => {},
+      addAddress: () => Promise.resolve({ success: false, error: 'AuthProvider not available' }),
+      updateAddress: () => Promise.resolve({ success: false, error: 'AuthProvider not available' }),
+      deleteAddress: () => Promise.resolve({ success: false, error: 'AuthProvider not available' }),
+      setUser: () => {},
+    };
   }
   return context;
 };
@@ -31,7 +44,7 @@ export const AuthProvider = ({ children }) => {
 const login = async (email, password) => {
   setIsLoading(true);
   try {
-    const res = await fetch(`http://localhost:5000/users?email=${email}&password=${password}`);
+    const res = await fetch(`http://localhost:3000/users?email=${email}&password=${password}`);
     const users = await res.json();
 
     if (users.length === 0) {
@@ -54,7 +67,7 @@ const login = async (email, password) => {
   setIsLoading(true);
   try {
     // check if user already exists
-    const res = await fetch(`http://localhost:5000/users?email=${email}`);
+    const res = await fetch(`http://localhost:3000/users?email=${email}`);
     const existing = await res.json();
     if (existing.length > 0) {
       return { success: false, error: "Email already registered" };
@@ -72,7 +85,7 @@ const login = async (email, password) => {
       phone: []
     };
 
-    const response = await fetch("http://localhost:5000/users", {
+    const response = await fetch("http://localhost:3000/users", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newUser),
@@ -120,7 +133,7 @@ const login = async (email, password) => {
       };
 
       // Update JSON server
-      const response = await fetch(`http://localhost:5000/users/${user.id}`, {
+      const response = await fetch(`http://localhost:3000/users/${user.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedUser),
@@ -150,7 +163,7 @@ const login = async (email, password) => {
       };
 
       // Update JSON server
-      const response = await fetch(`http://localhost:5000/users/${user.id}`, {
+      const response = await fetch(`http://localhost:3000/users/${user.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedUser),
@@ -178,7 +191,7 @@ const login = async (email, password) => {
       };
 
       // Update JSON server
-      const response = await fetch(`http://localhost:5000/users/${user.id}`, {
+      const response = await fetch(`http://localhost:3000/users/${user.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedUser),

@@ -36,7 +36,7 @@ const Login = () => {
       const result = await login(formData.email, formData.password);
 
       if (result.success) {
-        showSuccess('Welcome back! 🎉');
+        showSuccess('Welcome back! 🎉', 1000);
         navigate(from, { replace: true });
       } else {
         showError(result.error || 'Login failed');
@@ -59,7 +59,7 @@ const Login = () => {
           transition={{ duration: 0.6 }}
         >
           <motion.div
-            className="mx-auto h-16 w-16 bg-red-600 rounded-2xl flex items-center justify-center shadow-xl"
+            className="mx-auto h-16 w-16 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-xl"
             whileHover={{ scale: 1.05, rotate: 5 }}
             transition={{ type: "spring", stiffness: 300 }}
           >

@@ -96,7 +96,7 @@ const Chat = () => {
       {/* Chat Toggle Button */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 bg-red-600 text-white p-4 rounded-full shadow-xl hover:bg-red-700 transition-colors z-50"
+        className="fixed bottom-6 right-6 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white p-4 rounded-full shadow-xl hover:bg-red-700 transition-colors z-50"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
       >
@@ -124,7 +124,7 @@ const Chat = () => {
             className="fixed bottom-24 right-6 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden z-50 max-w-sm sm:max-w-none"
           >
             {/* Header */}
-            <div className="bg-red-600 text-white p-4 flex items-center justify-between">
+            <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white p-4 flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 {currentConversation && !showConversationList && (
                   <button
@@ -180,7 +180,7 @@ const Chat = () => {
                         <p className="text-sm mb-4">Start chatting with our support team!</p>
                         <button
                           onClick={handleStartNewChat}
-                          className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
+                          className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
                         >
                           Start New Chat
                         </button>
@@ -240,7 +240,7 @@ const Chat = () => {
                             <div
                               className={`max-w-xs px-4 py-2 rounded-2xl ${
                                 isOwnMessage
-                                  ? 'bg-red-600 text-white'
+                                  ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white'
                                   : 'bg-gray-100 text-gray-900'
                               }`}
                             >
@@ -268,7 +268,7 @@ const Chat = () => {
                         <button
                           type="submit"
                           disabled={!messageInput.trim()}
-                          className="bg-red-600 text-white p-2 rounded-full hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white p-2 rounded-full hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           <Send className="w-4 h-4" />
                         </button>

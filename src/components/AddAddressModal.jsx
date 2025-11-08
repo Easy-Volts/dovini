@@ -170,7 +170,7 @@ const AddAddressModal = ({
       }
 
       if (result.success) {
-        showSuccess(editingAddress ? "Address updated successfully!" : "Address added successfully!");
+        showSuccess(editingAddress ? "Address updated successfully!" : "Address added successfully!", 1000);
         setShowAddress(false);
         setEditingAddress(null);
       } else {
@@ -223,7 +223,7 @@ const AddAddressModal = ({
       }
 
       if (result.success) {
-        showSuccess(editingAddress ? "Address updated successfully!" : "Address added successfully!");
+        showSuccess(editingAddress ? "Address updated successfully!" : "Address added successfully!", 1000);
         setShowAddress(false);
         setEditingAddress(null);
       } else {
@@ -453,7 +453,7 @@ const AddAddressModal = ({
                 <div className="flex gap-4">
                   <button
                     onClick={handleHomeSave}
-                    className={`flex-1 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition duration-300 shadow-md shadow-red-300/50 disabled:bg-gray-500 cursor-pointer ${
+                    className={`flex-1 py-3 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white rounded-lg font-semibold hover:bg-red-700 transition duration-300 shadow-md shadow-red-300/50 disabled:bg-gray-500 cursor-pointer ${
                       editingAddress && editingAddress.type === "Work" ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                     disabled={isSubmitting || (editingAddress && editingAddress.type === "Work")}
