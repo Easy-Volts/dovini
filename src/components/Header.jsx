@@ -350,52 +350,7 @@ const Header = () => {
 
                 {/* Mobile Navigation */}
                 <div className="space-y-2">
-                  <Link
-                    to="/"
-                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <Home className="w-5 h-5" />
-                    <span>Home</span>
-                  </Link>
-
-                  <Link
-                    to="/flash-deals"
-                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 font-semibold"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <span className="text-lg">⚡</span>
-                    <span>Flash Deals</span>
-                  </Link>
-
-                  <Link
-                    to="/products"
-                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <Grid3X3 className="w-5 h-5" />
-                    <span>All Products</span>
-                  </Link>
-                 
-                  
-                  <Link
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  to="/wishlist"
-                  className="flex relative items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
-                >
-                    <Heart className="w-5 h-5 lg:w-6 lg:h-6" />
-                    <span>Wishlist</span>
-                  {wishlistCount > 0 && (
-                    <motion.span
-                      className="absolute top-1 left-26 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", stiffness: 500 }}
-                    >
-                      {wishlistCount}
-                    </motion.span>
-                  )}
-                </Link>
+           
 
                   <Link
                     to="/about"
@@ -408,7 +363,7 @@ const Header = () => {
                 </div>
 
                 {/* Mobile Categories */}
-              
+
 
                 {user ? (
                   <div className="border-t border-gray-100 pt-4 space-y-3">
@@ -488,6 +443,62 @@ const Header = () => {
             </div>
           )}
       </header>
+
+      {/* Mobile Bottom Navigation */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
+        <div className="grid grid-cols-5 h-16">
+          <Link
+            to="/"
+            className="flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-red-600 transition-colors"
+          >
+            <Home className="w-5 h-5" />
+            <span className="text-xs">Home</span>
+          </Link>
+
+          <Link
+            to="/flash-deals"
+            className="flex flex-col items-center justify-center space-y-1 text-red-600 hover:text-red-700 transition-colors"
+          >
+            <span className="text-lg">⚡</span>
+            <span className="text-xs">Deals</span>
+          </Link>
+
+          <Link
+            to="/products"
+            className="flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-red-600 transition-colors"
+          >
+            <Grid3X3 className="w-5 h-5" />
+            <span className="text-xs">Products</span>
+          </Link>
+
+          <Link
+            to="/wishlist"
+            className="flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-red-600 transition-colors relative"
+          >
+            <Heart className="w-5 h-5" />
+            <span className="text-xs">Wishlist</span>
+            {wishlistCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold text-[10px]">
+                {wishlistCount}
+              </span>
+            )}
+          </Link>
+
+          <Link
+            to="/cart"
+            className="flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-red-600 transition-colors relative"
+          >
+            <ShoppingCart className="w-5 h-5" />
+            <span className="text-xs">Cart</span>
+            {cartCount > 0 && (
+              <span className="absolute -top-1 right-3 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold text-[10px]">
+                {cartCount}
+              </span>
+            )}
+          </Link>
+        </div>
+      </div>
+
     </>
   );
 };

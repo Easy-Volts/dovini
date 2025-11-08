@@ -39,7 +39,7 @@ const PageLoader = () => (
 );
 
 const App = () => {
-    
+
   return (
     <AuthProvider>
       <ChatProvider>
@@ -50,7 +50,7 @@ const App = () => {
                 <CartProvider>
                   <div className="min-h-screen flex flex-col">
                     <Header />
-                    <main className="flex-grow">
+                    <main className="flex-grow pb-16 lg:pb-0">
                       <Suspense fallback={<PageLoader />}>
                         <Routes>
                           <Route path="/" element={<Home />} />
