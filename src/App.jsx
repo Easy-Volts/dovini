@@ -28,6 +28,8 @@ const Cart = lazy(() => import('./pages/Cart'));
 const Checkout = lazy(() => import('./pages/Checkout'));
 const Login = lazy(() => import('./pages/Login'));
 const Signup = lazy(() => import('./pages/Signup'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const AccountActivation = lazy(() => import('./pages/AccountActivation'));
 const Orders = lazy(() => import('./pages/Orders'));
 const FlashDeals = lazy(() => import('./pages/FlashDeals'));
 
@@ -65,6 +67,8 @@ const App = () => {
                           <Route path="/admin" element={<AdminDashBoard />} />
                           <Route path="/my-account" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                           <Route path="/myaccount/settings" element={<ProtectedRoute><AccountSettingsPage /></ProtectedRoute>} />
+                          <Route path="/forgot-password" element={<ForgotPassword />} />
+                          <Route path="/account-activation" element={<AccountActivation />} />
                           <Route path="/orders" element={<Orders />} />
                           <Route path="/flash-deals" element={<FlashDeals />} />
                           <Route path="/about" element={<About />} />

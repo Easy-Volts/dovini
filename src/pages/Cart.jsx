@@ -135,7 +135,7 @@ const Cart = () => {
             >
               <Link
                 to="/"
-                className="btn-primary bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 px-8 py-4 text-lg flex items-center space-x-2"
+                className="text-white rounded-2xl hover:scale-[0.95] transition duration-300 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 px-8 py-4 text-lg flex items-center space-x-2"
               >
                 <ShoppingCart className="w-5 h-5" />
                 <span>Start Shopping</span>
@@ -530,7 +530,7 @@ const Cart = () => {
                   />
                   <motion.button
                     onClick={applyPromoCode}
-                    className="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 whitespace-nowrap"
+                    className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-4 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 whitespace-nowrap"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -641,7 +641,7 @@ const Cart = () => {
               >
                 <button
                   onClick={handleCheckoutClick}
-                  className="w-full bg-gradient-to-r from-red-500 via-red-600 to-red-700 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3"
+                  className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3"
                 >
                   <Lock className="w-4 h-4 sm:w-5 sm:h-5" />
                   <span>Secure Checkout</span>

@@ -457,7 +457,7 @@ const Header = () => {
 
           <Link
             to="/flash-deals"
-            className="flex flex-col items-center justify-center space-y-1 text-red-600 hover:text-red-700 transition-colors"
+            className="flex flex-col items-center justify-center space-y-1 text-red-600 hover:text-red-700 transition-colors mb-2"
           >
             <span className="text-lg">⚡</span>
             <span className="text-xs">Deals</span>
@@ -478,7 +478,7 @@ const Header = () => {
             <Heart className="w-5 h-5" />
             <span className="text-xs">Wishlist</span>
             {wishlistCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold text-[10px]">
+              <span className="absolute -top-1 right-3 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold text-[10px]">
                 {wishlistCount}
               </span>
             )}

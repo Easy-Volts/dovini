@@ -3,12 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Eye, EyeOff, Mail, Lock, User, ArrowRight, ShoppingBag } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, ArrowRight, ShoppingBag, Phone } from 'lucide-react';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     password: '',
     confirmPassword: '',
   });
@@ -44,12 +45,18 @@ const Signup = () => {
     setIsLoading(true);
 
     try {
-          await new Promise((resolve) => setTimeout(resolve, 3000));
-      const result = await signup(formData.name, formData.email, formData.password);
+      const result = await signup(formData.name, formData.email, formData.password, formData.phone);
 
       if (result.success) {
-        showSuccess('Account created successfully! Welcome to Dovini! 🎉', 1000);
-        navigate('/');
+        showSuccess('Account created successfully! Please verify your email to activate.', 1500);
+        // Redirect to account activation page with email
+        navigate('/account-activation', {
+          replace: true,
+          state: {
+            email: formData.email,
+            message: 'Account created! Please verify your email to activate your account.'
+          }
+        });
       } else {
         showError(result.error || 'Signup failed');
       }
@@ -141,6 +148,29 @@ const Signup = () => {
                 </div>
               </div>
 
+              {/* Phone */}
+              <div>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                  Phone Number
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Phone className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    autoComplete="tel"
+                    required
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
+                    placeholder="Enter your phone number"
+                  />
+                </div>
+              </div>
+
               {/* Password */}
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
@@ -214,7 +244,7 @@ const Signup = () => {
             <motion.button
               type="submit"
               disabled={isLoading}
-              className="mt-8 w-full flex justify-center items-center px-4 py-3 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              className="mt-8 w-full flex justify-center items-center px-4 py-3 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 hover:from-red-700 hover:to-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >

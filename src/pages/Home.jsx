@@ -8,7 +8,6 @@ import NewsletterSignup from '../components/NewsletterSignup';
 import { categories } from '../data/categories';
 import { products } from '../data/products';
 import { Phone, Trophy, Truck, MessageCircle, ArrowRight, Award, Users, Clock, Zap, Package, Heart, ShoppingBag, Timer, Flame, Sparkles,Star, Eye, Share2, Bell, ChevronLeft, ChevronRight } from 'lucide-react';
-import CallForDealsBanner from '../components/CallForDeals';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useToast } from '../context/ToastContext';

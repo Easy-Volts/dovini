@@ -66,7 +66,7 @@ const Wishlist = () => {
         >
           {/* Animated Icon */}
           <motion.div
-            className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-red-500 to-pink-500 rounded-3xl mb-6 shadow-2xl"
+            className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-3xl mb-6 shadow-2xl"
             whileHover={{ scale: 1.1, rotate: 10 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
@@ -227,21 +227,7 @@ const Wishlist = () => {
                     </motion.button>
 
                     {/* Quick Add to Cart Overlay */}
-                    <motion.div
-                      className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300"
-                      initial={{ y: 20 }}
-                      whileHover={{ y: 0 }}
-                    >
-                      <motion.button
-                        onClick={() => handleAddToCart(product)}
-                        className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white py-2 px-4 rounded-xl font-semibold hover:bg-red-700 transition-all duration-300 shadow-lg flex items-center justify-center space-x-2 text-sm"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <ShoppingBag className="w-4 h-4" />
-                        <span>Quick Add</span>
-                      </motion.button>
-                    </motion.div>
+                   
                   </motion.div>
                 ))}
               </motion.div>
@@ -270,7 +256,7 @@ const Wishlist = () => {
                     >
                       <Link
                         to="/cart"
-                        className="bg-gradient-to-r from-red-600 to-red-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold hover:shadow-2xl transition-all duration-300 flex items-center justify-center space-x-2 w-full sm:w-auto"
+                        className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold hover:shadow-2xl transition-all duration-300 flex items-center justify-center space-x-2 w-full sm:w-auto"
                       >
                         <ShoppingBag className="w-5 h-5" />
                         <span>View Cart</span>
@@ -412,7 +398,7 @@ const Wishlist = () => {
               >
                 <Link
                   to="/"
-                  className="bg-gradient-to-r from-red-600 to-red-700 text-white px-8 sm:px-12 py-4 sm:py-5 rounded-2xl font-bold hover:shadow-2xl transition-all duration-300 inline-flex items-center space-x-3 text-base sm:text-lg"
+                  className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-8 sm:px-12 py-3 sm:py-5 rounded-2xl font-bold hover:shadow-2xl transition-all duration-300 inline-flex items-center space-x-3 text-base sm:text-lg"
                 >
                   <Sparkles className="w-5 h-5 sm:w-6 sm:h-6" />
                   <span>Start Your Wishlist Journey</span>

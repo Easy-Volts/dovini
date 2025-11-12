@@ -479,7 +479,7 @@ const Products = () => {
 className={`grid gap-4 sm:gap-6 mb-8 ${
 viewMode === 'grid'
  ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5' // This line is changed
- : 'grid-cols-3'
+ : 'grid-cols-1'
  }`}
  initial={{ opacity: 0 }}
  animate={{ opacity: 1 }}

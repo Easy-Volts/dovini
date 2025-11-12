@@ -55,7 +55,6 @@ export const CartProvider = ({ children }) => {
     return merged;
   };
 
-  // Helper function to update user cart on server
   const updateUserCart = async (userId, cartData) => {
     try {
       await fetch(`http://localhost:3000/users/${userId}`, {
@@ -68,7 +67,6 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // Sync cart with server when user logs in
   useEffect(() => {
     if (isAuthenticated && user) {
       // Load user's cart from server

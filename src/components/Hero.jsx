@@ -332,7 +332,7 @@ const Hero = () => {
             <div className="mt-6 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 p-4 rounded-xl shadow-lg text-white text-center sm:text-left">
               <Phone className="w-5 h-5 mb-2" />
               <h3 className="text-xl font-bold">CALL FOR ADVICE</h3>
-              <p className="text-2xl font-extrabold mt-1">1-800-DOVINI</p>
+              <p className="text-2xl font-extrabold mt-1">080-6397-1335</p>
             </div>
           </div>
         </div>
