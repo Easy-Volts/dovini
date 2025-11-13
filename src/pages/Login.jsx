@@ -14,7 +14,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { login, checkAccountStatus,showActivationPrompt } = useAuth();
+  const { login, checkAccountStatus, showActivationPrompt, setShowActivationPrompt } = useAuth();
   const { showSuccess, showError } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
@@ -68,6 +68,7 @@ const Login = () => {
   };
 
   const handleActivateAccount = () => {
+    setShowActivationPrompt(false)
     navigate('/account-activation', {
       state: {
         email: formData.email,
@@ -240,6 +241,7 @@ const Login = () => {
           <p className="text-sm text-gray-600">
             Don't have an account?{' '}
             <Link
+              onClick={() => setShowActivationPrompt(false)}
               to="/signup"
               className="font-medium text-red-600 hover:text-red-500 transition-colors duration-200"
             >
@@ -248,6 +250,7 @@ const Login = () => {
           </p>
           <p className="text-sm text-gray-600">
             <Link
+              onClick={() => setShowActivationPrompt(false)}
               to="/forgot-password"
               className="font-medium text-red-600 hover:text-red-500 transition-colors duration-200"
             >

@@ -103,6 +103,7 @@ const login = async (email, password) => {
     return { success: false, error: 'Network error. Please try again.' };
   } finally {
     setIsLoading(false);
+   
   }
 };
 
@@ -544,6 +545,7 @@ const login = async (email, password) => {
     sendOTP,
     verifyOTP,
     checkAccountStatus,
+    setShowActivationPrompt,
     validatePassword,
     showActivationPrompt,
     isAuthenticated: !!user,
