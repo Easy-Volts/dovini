@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
 const login = async (email, password) => {
   setIsLoading(true);
   try {
-    const response = await fetch('/api/login', {
+    const response = await fetch('https://api.dovinigears.ng/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -60,10 +60,6 @@ const login = async (email, password) => {
         password,
       }),
     });
-
-    // Log the response for debugging
-    console.log('Login response status:', response.status);
-    console.log('Login response headers:', response.headers);
 
     let data;
     try {
@@ -112,7 +108,7 @@ const login = async (email, password) => {
  const signup = async (name, email, password, phone) => {
  setIsLoading(true);
  try {
-  const response = await fetch('/api/signup', {
+  const response = await fetch('https://api.dovinigears.ng/signup', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -270,7 +266,7 @@ const login = async (email, password) => {
     try {
       // First check if account exists and is active by making a dummy login call
       // This validates the account status before sending OTP
-      const loginCheckResponse = await fetch('/api/login', {
+      const loginCheckResponse = await fetch('https://api.dovinigears.ng/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -304,7 +300,7 @@ const login = async (email, password) => {
       }
 
       // If we get here, the account exists and is active, proceed to send OTP
-      const response = await fetch('/api/send-otp', {
+      const response = await fetch('https://api.dovinigears.ng/send-otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -346,7 +342,7 @@ const login = async (email, password) => {
   const verifyOTP = async (email, otp, purpose = 'login') => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/verify-otp', {
+      const response = await fetch('https://api.dovinigears.ng/verify-otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -386,7 +382,6 @@ const login = async (email, password) => {
       return { success: true, data: data.data };
     } catch (error) {
       console.error('Verify OTP error:', error);
-      // Check if it's a CORS or network error
       if (error.message.includes('fetch')) {
         return { success: false, error: 'Unable to connect to server. Please check your internet connection.' };
       }
@@ -399,9 +394,8 @@ const login = async (email, password) => {
   const checkAccountStatus = async (email) => {
     setIsLoading(true);
     try {
-      // Use the existing login endpoint to check if account exists and is active
-      // We'll make a "dummy" login attempt with empty password to just check account status
-      const response = await fetch('/api/check-account-status', {
+      
+      const response = await fetch('https://api.dovinigears.ng/check-account-status', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -416,7 +410,7 @@ const login = async (email, password) => {
         // Alternative: Try to call the existing login API with dummy credentials
         // This will give us information about whether the account exists and is active
         try {
-          const loginResponse = await fetch('/api/login', {
+          const loginResponse = await fetch('https://api.dovinigears.ng/login', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -490,7 +484,7 @@ const login = async (email, password) => {
   const validatePassword = async (email, password) => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/login', {
+      const response = await fetch('https://api.dovinigears.ng/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

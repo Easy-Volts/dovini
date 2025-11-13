@@ -97,8 +97,8 @@ const Profile = () => {
   const menuItems = [
     { icon: Package, label: 'My Orders', count: userStats.totalOrders, id: '#orders' },
     { icon: Heart, label: 'Wishlist', count: userStats.wishlistItems, id: '#wishlist' },
-    { icon: MapPin, label: 'Addresses', count: user.shippingAddresses.length, id: '#addresses' },
-    { icon: CreditCard, label: 'Payment Methods', count: paymentMethods.length, id: '#payment-methods' },
+    { icon: MapPin, label: 'Addresses', count: user?.shippingAddresses?.length || 0, id: '#addresses' },
+    { icon: CreditCard, label: 'Payment Methods', count: paymentMethods?.length, id: '#payment-methods' },
     { icon: Settings, label: 'Account Settings', path: '/myaccount/settings' }
   ];
   const [showAddress, setShowAddress] = useState(false)
@@ -262,7 +262,7 @@ const Profile = () => {
                     </div>
                     <div className="text-sm text-gray-600">
                       {order.items.map((item, i) => (
-                        <span key={i}>{item.quantity}x {item.name}{i < order.items.length - 1 ? ', ' : ''}</span>
+                        <span key={i}>{item.quantity}x {item.name}{i < order.items?.length - 1 ? ', ' : ''}</span>
                       ))}
                     </div>
                   </motion.div>
@@ -278,7 +278,7 @@ const Profile = () => {
                   View All
                 </Link>
               </div>
-              {wishlist.length > 0 ? (
+              {wishlist?.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {wishlist.slice(0, 6).map((item, index) => (
                     <motion.div
@@ -381,7 +381,7 @@ const Profile = () => {
                   ))}
 
                   {/* Add Address Button - Show if less than 2 addresses */}
-                  {(!user?.shippingAddresses || user.shippingAddresses.length < 2) && (
+                  {(!user?.shippingAddresses || user?.shippingAddresses?.length < 2) && (
                     <motion.div
                       className="border-2 border-dashed border-gray-300 rounded-lg p-8 hover:border-red-300 transition-colors cursor-pointer"
                       onClick={() => setShowAddress(true)}
