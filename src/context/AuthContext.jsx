@@ -28,6 +28,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showActivationPrompt, setShowActivationPrompt] = useState(false);
 
   useEffect(() => {
     // Check for stored token and user data on app load
@@ -75,6 +76,7 @@ const login = async (email, password) => {
     if (!data.success) {
       // Check if the error indicates inactive account
       if (data.error && data.error.toLowerCase().includes('not active')) {
+        setShowActivationPrompt(true)
         return { success: false, error: 'User is not active. Please verify your email to activate your account.' };
       }
       return { success: false, error: data.error || 'Login failed' };
@@ -290,9 +292,9 @@ const login = async (email, password) => {
       if (!loginCheckData.success) {
         // If the error indicates account is not active
         if (loginCheckData.error && loginCheckData.error.toLowerCase().includes('not active')) {
+          console.log(loginCheckData)
           return { success: false, error: 'User is not active. Please verify your email to activate your account.' };
         }
-        // If the error indicates account doesn't exist
         else if (loginCheckData.error && (loginCheckData.error.toLowerCase().includes('not found') || loginCheckData.error.toLowerCase().includes('invalid email'))) {
           return { success: false, error: 'No account found with this email address.' };
         }
@@ -543,6 +545,7 @@ const login = async (email, password) => {
     verifyOTP,
     checkAccountStatus,
     validatePassword,
+    showActivationPrompt,
     isAuthenticated: !!user,
   };
 
