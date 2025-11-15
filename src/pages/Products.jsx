@@ -5,6 +5,7 @@ import { useCart } from '../context/CartContext';
 import { categories } from '../data/categories';
 import ProCard from '../components/ProCard';
 import { useProducts } from '../context/ProductContext';
+import { transformProduct } from '../utils/productUtils';
 import { motion } from 'framer-motion';
 import {
   Filter,
@@ -51,24 +52,7 @@ const Products = () => {
   const itemsPerPage = 12;
 
   const transformBackendProduct = (backendProduct) => {
-    return {
-      id: backendProduct.id,
-      name: backendProduct.name,
-      price: parseFloat(backendProduct.price) || 0,
-      categoryId: backendProduct.categoryId,
-      image: backendProduct.image || '/api/placeholder/300/300',
-      stock: backendProduct.stock || 0,
-      description: backendProduct.description || '',
-      rating: backendProduct.rating || 0,
-      reviews: backendProduct.reviews || 0,
-      brand: 'Professional Gear',
-      isFlashDeal: backendProduct.isFlashDeal || false,
-      discount: backendProduct.discount || 0,
-      originalPrice: backendProduct.originalPrice || parseFloat(backendProduct.price) || 0,
-      isLimitedStock: (backendProduct.stock || 0) < 10,
-      flashDealEnd: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-      featured: true,
-    };
+    return transformProduct(backendProduct);
   };
 
   const fetchBackendProducts = useCallback(async (categoryId) => {

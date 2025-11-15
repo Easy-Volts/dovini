@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { transformProduct } from "../utils/productUtils";
 
 const ProductContext = createContext();
 
@@ -15,7 +16,8 @@ export const ProductProvider = ({ children }) => {
       if (!res.ok) throw new Error("Failed to fetch products");
 
       const data = await res.json();
-      setProducts(data.data);
+      const transformedProducts = data.data.map(transformProduct);
+      setProducts(transformedProducts);
     } catch (err) {
       setError(err.message);
     } finally {
