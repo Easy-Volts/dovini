@@ -12,6 +12,10 @@ const About = () => {
   const currentYear = new Date().getFullYear();
   const nav = useNavigate()
 
+    React.useEffect(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, [])
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-red-50/20">
       {/* Hero Section */}

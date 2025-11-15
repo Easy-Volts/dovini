@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import ProductCard from '../components/ProductCard';
 import { products } from '../data/products';
 import { categories } from '../data/categories';
@@ -10,6 +9,10 @@ const Category = () => {
   const categoryId = parseInt(id);
   const category = categories.find(cat => cat.id === categoryId);
   const categoryProducts = products.filter(product => product.categoryId === categoryId);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   if (!category) {
     return (

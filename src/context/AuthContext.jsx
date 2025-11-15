@@ -77,7 +77,7 @@ const login = async (email, password) => {
       // Check if the error indicates inactive account
       if (data.error && data.error.toLowerCase().includes('not active')) {
         setShowActivationPrompt(true)
-        return { success: false, error: 'User is not active. Please verify your email to activate your account.' };
+        return { success: false, error: 'Account is not active. Please verify your email to activate your account.' };
       }
       return { success: false, error: data.error || 'Login failed' };
     }

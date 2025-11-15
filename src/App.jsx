@@ -17,12 +17,14 @@ import Profile from './pages/Profile';
 import AccountSettingsPage from './pages/AccountSettingsPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminDashBoard from './pages/AdminDashBoard';
+import Privacy from './pages/Privacy';
 
 
 const Home = lazy(() => import('./pages/Home'));
 const Category = lazy(() => import('./pages/Category'));
 const Products = lazy(() => import('./pages/Products'));
 import ProductDetails from './pages/ProductDetails';
+import Terms from './pages/Terms';
 const Wishlist = lazy(() => import('./pages/Wishlist'));
 const Cart = lazy(() => import('./pages/Cart'));
 const Checkout = lazy(() => import('./pages/Checkout'));
@@ -68,6 +70,8 @@ const App = () => {
                           <Route path="/my-account" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                           <Route path="/myaccount/settings" element={<ProtectedRoute><AccountSettingsPage /></ProtectedRoute>} />
                           <Route path="/forgot-password" element={<ForgotPassword />} />
+                          <Route path="/privacy-policies" element={<Privacy />} />
+                          <Route path="/terms" element={<Terms />} />
                           <Route path="/account-activation" element={<AccountActivation />} />
                           <Route path="/orders" element={<Orders />} />
                           <Route path="/flash-deals" element={<FlashDeals />} />

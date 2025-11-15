@@ -1,24 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import BannerSlider from '../components/BannerSlider';
-import CategoryCard from '../components/CategoryCard';
-import ProCard from '../components/ProCard';
-import NewsletterSignup from '../components/NewsletterSignup';
-import { categories } from '../data/categories';
-import { products } from '../data/products';
-import { Phone, Trophy, Truck, MessageCircle, ArrowRight, Award, Users, Clock, Zap, Package, Heart, ShoppingBag, Timer, Flame, Sparkles,Star, Eye, Share2, Bell, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useCart } from '../context/CartContext';
-import { useWishlist } from '../context/WishlistContext';
-import { useToast } from '../context/ToastContext';
-import Hero from '../components/Hero';
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import BannerSlider from "../components/BannerSlider";
+import CategoryCard from "../components/CategoryCard";
+import ProCard from "../components/ProCard";
+import NewsletterSignup from "../components/NewsletterSignup";
+import { products } from "../data/products";
+import {
+  Phone,
+  Trophy,
+  Truck,
+  MessageCircle,
+  ArrowRight,
+  Award,
+  Users,
+  Clock,
+  Zap,
+  Package,
+  Heart,
+  ShoppingBag,
+  Timer,
+  Flame,
+  Sparkles,
+  Star,
+  Eye,
+  Share2,
+  Bell,
+  ChevronLeft,
+  ChevronRight,
+  Camera,
+  Aperture,
+  Focus,
+  Cpu,
+  Video,
+  Lightbulb,
+  SunMedium,
+  BatteryCharging,
+  SlidersHorizontal,
+} from "lucide-react";
+import { useCart } from "../context/CartContext";
+import { useWishlist } from "../context/WishlistContext";
+import { useToast } from "../context/ToastContext";
+import Hero from "../components/Hero";
 
 const PhoneIcon = (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 3.08 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 3.08 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+  </svg>
 );
 
 const Countdown = ({ endTime }) => {
-  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
+  const [timeLeft, setTimeLeft] = useState({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
 
   useEffect(() => {
     const calculateTimeLeft = () => {
@@ -46,17 +91,17 @@ const Countdown = ({ endTime }) => {
     <div className="flex items-center space-x-1 text-xs font-bold text-red-600">
       <Clock className="w-3 h-3" />
       <div className="flex items-center space-x-1">
-        <span>{timeLeft.hours.toString().padStart(2, '0')}</span>
+        <span>{timeLeft.hours.toString().padStart(2, "0")}</span>
         <span>:</span>
-        <span>{timeLeft.minutes.toString().padStart(2, '0')}</span>
+        <span>{timeLeft.minutes.toString().padStart(2, "0")}</span>
         <span>:</span>
-        <span>{timeLeft.seconds.toString().padStart(2, '0')}</span>
+        <span>{timeLeft.seconds.toString().padStart(2, "0")}</span>
       </div>
     </div>
   );
 };
 
-const MobileFlashDealsCarousel = ({ flashDeals}) => {
+const MobileFlashDealsCarousel = ({ flashDeals }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -92,7 +137,7 @@ const MobileFlashDealsCarousel = ({ flashDeals}) => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{
                 opacity: index === currentIndex ? 1 : 0.6,
-                scale: index === currentIndex ? 1 : 0.9
+                scale: index === currentIndex ? 1 : 0.9,
               }}
               transition={{ duration: 0.5 }}
             >
@@ -106,13 +151,13 @@ const MobileFlashDealsCarousel = ({ flashDeals}) => {
                     className="inline-flex items-center space-x-2 bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2 rounded-full shadow-lg relative overflow-hidden"
                     initial={{ scale: 0 }}
                     animate={{
-                      scale: [1, 1.1, 1]
+                      scale: [1, 1.1, 1],
                     }}
                     transition={{
                       duration: 2,
                       repeat: Infinity,
                       ease: "easeInOut",
-                      delay: index * 0.1
+                      delay: index * 0.1,
                     }}
                   >
                     {/* Intense Lightning Flash Background */}
@@ -120,13 +165,13 @@ const MobileFlashDealsCarousel = ({ flashDeals}) => {
                       className="absolute inset-0 bg-gradient-to-r from-yellow-300 via-white to-yellow-400"
                       animate={{
                         opacity: [0, 1, 0.8, 0.3, 1, 0],
-                        scale: [1, 1.2, 1.1, 1.15, 1.05, 1]
+                        scale: [1, 1.2, 1.1, 1.15, 1.05, 1],
                       }}
                       transition={{
                         duration: 1.5,
                         repeat: Infinity,
                         ease: "easeInOut",
-                        repeatDelay: 2
+                        repeatDelay: 2,
                       }}
                     />
 
@@ -134,14 +179,14 @@ const MobileFlashDealsCarousel = ({ flashDeals}) => {
                     <motion.div
                       className="absolute inset-0 bg-white"
                       animate={{
-                        opacity: [0, 0.9, 0, 0.7, 0, 0.5, 0]
+                        opacity: [0, 0.9, 0, 0.7, 0, 0.5, 0],
                       }}
                       transition={{
                         duration: 1.5,
                         repeat: Infinity,
                         ease: "easeInOut",
                         repeatDelay: 2,
-                        delay: 0.1
+                        delay: 0.1,
                       }}
                     />
 
@@ -149,17 +194,18 @@ const MobileFlashDealsCarousel = ({ flashDeals}) => {
                     <motion.div
                       className="absolute inset-0"
                       style={{
-                        background: 'linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.8) 45%, rgba(255,255,255,0.8) 55%, transparent 60%)'
+                        background:
+                          "linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.8) 45%, rgba(255,255,255,0.8) 55%, transparent 60%)",
                       }}
                       animate={{
                         opacity: [0, 1, 0],
-                        x: [-100, 100, -100]
+                        x: [-100, 100, -100],
                       }}
                       transition={{
                         duration: 0.8,
                         repeat: Infinity,
                         ease: "easeInOut",
-                        repeatDelay: 3
+                        repeatDelay: 3,
                       }}
                     />
 
@@ -170,18 +216,18 @@ const MobileFlashDealsCarousel = ({ flashDeals}) => {
                         rotate: [0, 15, -15, 10, -10, 0],
                         scale: [1, 1.4, 1.2, 1.5, 1.1, 1],
                         filter: [
-                          'brightness(1) hue-rotate(0deg)',
-                          'brightness(2) hue-rotate(45deg)',
-                          'brightness(1.5) hue-rotate(90deg)',
-                          'brightness(2.5) hue-rotate(180deg)',
-                          'brightness(1) hue-rotate(0deg)'
-                        ]
+                          "brightness(1) hue-rotate(0deg)",
+                          "brightness(2) hue-rotate(45deg)",
+                          "brightness(1.5) hue-rotate(90deg)",
+                          "brightness(2.5) hue-rotate(180deg)",
+                          "brightness(1) hue-rotate(0deg)",
+                        ],
                       }}
                       transition={{
                         duration: 1.2,
                         repeat: Infinity,
                         ease: "easeInOut",
-                        repeatDelay: 2.5
+                        repeatDelay: 2.5,
                       }}
                     >
                       <Flame className="w-5 h-5 drop-shadow-lg" />
@@ -190,13 +236,13 @@ const MobileFlashDealsCarousel = ({ flashDeals}) => {
                         className="absolute inset-0 w-5 h-5 bg-orange-400 rounded-full blur-md"
                         animate={{
                           scale: [1, 2, 1.5, 1],
-                          opacity: [0.3, 0.8, 0.5, 0.3]
+                          opacity: [0.3, 0.8, 0.5, 0.3],
                         }}
                         transition={{
                           duration: 1.2,
                           repeat: Infinity,
                           ease: "easeInOut",
-                          repeatDelay: 2.5
+                          repeatDelay: 2.5,
                         }}
                       />
                     </motion.div>
@@ -206,17 +252,17 @@ const MobileFlashDealsCarousel = ({ flashDeals}) => {
                       className="font-black text-sm relative z-20 drop-shadow-lg whitespace-nowrap"
                       animate={{
                         textShadow: [
-                          '0 0 5px rgba(255,255,255,0.5)',
-                          '0 0 20px rgba(255,255,255,1), 0 0 30px rgba(255,215,0,0.8)',
-                          '0 0 10px rgba(255,255,255,0.8)',
-                          '0 0 5px rgba(255,255,255,0.5)'
-                        ]
+                          "0 0 5px rgba(255,255,255,0.5)",
+                          "0 0 20px rgba(255,255,255,1), 0 0 30px rgba(255,215,0,0.8)",
+                          "0 0 10px rgba(255,255,255,0.8)",
+                          "0 0 5px rgba(255,255,255,0.5)",
+                        ],
                       }}
                       transition={{
                         duration: 1.5,
                         repeat: Infinity,
                         ease: "easeInOut",
-                        repeatDelay: 2
+                        repeatDelay: 2,
                       }}
                     >
                       FLASH DEALS
@@ -229,19 +275,19 @@ const MobileFlashDealsCarousel = ({ flashDeals}) => {
                         rotate: [0, -20, 20, -15, 15, 0],
                         scale: [1, 1.5, 1.3, 1.6, 1.2, 1],
                         filter: [
-                          'brightness(1) contrast(1)',
-                          'brightness(3) contrast(2)',
-                          'brightness(2) contrast(1.5)',
-                          'brightness(4) contrast(2.5)',
-                          'brightness(1) contrast(1)'
-                        ]
+                          "brightness(1) contrast(1)",
+                          "brightness(3) contrast(2)",
+                          "brightness(2) contrast(1.5)",
+                          "brightness(4) contrast(2.5)",
+                          "brightness(1) contrast(1)",
+                        ],
                       }}
                       transition={{
                         duration: 1.2,
                         repeat: Infinity,
                         ease: "easeInOut",
                         repeatDelay: 2.5,
-                        delay: 0.2
+                        delay: 0.2,
                       }}
                     >
                       <Zap className="w-5 h-5 drop-shadow-lg" />
@@ -250,14 +296,14 @@ const MobileFlashDealsCarousel = ({ flashDeals}) => {
                         className="absolute inset-0 w-5 h-5 bg-yellow-300 rounded-full blur-lg"
                         animate={{
                           scale: [1, 2.5, 2, 1.5, 1],
-                          opacity: [0.2, 1, 0.7, 0.4, 0.2]
+                          opacity: [0.2, 1, 0.7, 0.4, 0.2],
                         }}
                         transition={{
                           duration: 1.2,
                           repeat: Infinity,
                           ease: "easeInOut",
                           repeatDelay: 2.5,
-                          delay: 0.2
+                          delay: 0.2,
                         }}
                       />
                       {/* Electric Spark Effects */}
@@ -265,28 +311,28 @@ const MobileFlashDealsCarousel = ({ flashDeals}) => {
                         className="absolute -top-1 -right-1 w-2 h-2 bg-white rounded-full"
                         animate={{
                           scale: [0, 1.5, 0],
-                          opacity: [0, 1, 0]
+                          opacity: [0, 1, 0],
                         }}
                         transition={{
                           duration: 0.3,
                           repeat: Infinity,
                           ease: "easeInOut",
                           repeatDelay: 4,
-                          delay: 0.5
+                          delay: 0.5,
                         }}
                       />
                       <motion.div
                         className="absolute -bottom-1 -left-1 w-1.5 h-1.5 bg-yellow-200 rounded-full"
                         animate={{
                           scale: [0, 1, 0],
-                          opacity: [0, 0.8, 0]
+                          opacity: [0, 0.8, 0],
                         }}
                         transition={{
                           duration: 0.4,
                           repeat: Infinity,
                           ease: "easeInOut",
                           repeatDelay: 4,
-                          delay: 0.7
+                          delay: 0.7,
                         }}
                       />
                     </motion.div>
@@ -326,11 +372,17 @@ const MobileFlashDealsCarousel = ({ flashDeals}) => {
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          className={`w-2.5 h-2.5 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+                          className={`w-2.5 h-2.5 ${
+                            i < Math.floor(product.rating)
+                              ? "text-yellow-400 fill-current"
+                              : "text-gray-300"
+                          }`}
                         />
                       ))}
                     </div>
-                    <span className="text-xs text-gray-600">({product.reviews})</span>
+                    <span className="text-xs text-gray-600">
+                      ({product.reviews})
+                    </span>
                   </div>
                 </div>
               </div>
@@ -347,8 +399,8 @@ const MobileFlashDealsCarousel = ({ flashDeals}) => {
             onClick={() => goToSlide(index)}
             className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer ${
               index === currentIndex
-                ? 'bg-red-500 w-8'
-                : 'bg-gray-300 hover:bg-gray-400'
+                ? "bg-red-500 w-8"
+                : "bg-gray-300 hover:bg-gray-400"
             }`}
             whileHover={{ scale: 1.2 }}
             whileTap={{ scale: 0.9 }}
@@ -366,15 +418,82 @@ const Home = () => {
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { showSuccess } = useToast();
 
-  const featuredProducts = products // Show first 8 products
-  const flashDeals = products.filter(product => product.isFlashDeal).slice(0, 6);
-  const limitedStock = products.filter(product => product.isLimitedStock).slice(0, 9);
+  const featuredProducts = products; // Show first 8 products
+  const flashDeals = products
+    .filter((product) => product.isFlashDeal)
+    .slice(0, 6);
+  const limitedStock = products
+    .filter((product) => product.isLimitedStock)
+    .slice(0, 9);
+  const [categories, setCategories] = useState([]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
-   useEffect(() => {
-     window.scrollTo({top: 0, behavior: 'smooth'})
-    },[])
+  const extraCategoryData = {
+    1: {
+      image:
+        "https://images.openai.com/thumbnails/url/WSbURnicu5meUVJSUGylr5-al1xUWVCSmqJbkpRnoJdeXJJYkpmsl5yfq5-Zm5ieWmxfaAuUsXL0S7F0Tw70cw1NrwoO8Y7MLAkrcNTNKAmszC1zS88xNbNIyc8Ny6kw9jLLTYuPd3VNVyu2NTQAAB6oJYw",
+      icon: SunMedium,
+    },
+    2: {
+      image:
+        "https://images.unsplash.com/photo-1574281813181-02b512471486?fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=3000",
+      icon: Focus,
+    },
+    3: {
+      image:
+        "https://burst.shopifycdn.com/photos/black-microphone-set-against-a-pink-background.jpg?exif=0&format=pjpg&iptc=0&width=1000",
+      icon: Cpu,
+    },
+    4: {
+      image:
+        "https://lumecube.com/cdn/shop/files/Studio_Panel_Lighting_Kit_UCSD-09339-1160x1500-64b44e5_1160x.jpg?v=1704215663",
+      icon: Zap,
+    },
+    5: {
+      image:
+        "https://www.lighting-geek.com/wp-content/uploads/2023/05/14-3-1-e1689965711325.png",
+      icon: Lightbulb,
+    },
+    6: {
+      image:
+        "https://freestockfootagearchive.com/wp-content/uploads/2019/08/Glitchy-Shapes-Strobe-Light-Overlay-Effect.jpeg",
+      icon: BatteryCharging,
+    },
+    7: {
+      image:
+        "https://i.fbcd.co/products/resized/resized-750-500/c-1000-designbundle-studio-lighting-isolated-on-black02-11-10-e852f1a4722511624c5d4d237891e5857f2abad0c0b13f9912f6708d40fc8dfd.jpg",
+      icon: Package,
+    },
+    8: {
+      image: "https://www.ulanzi.com/cdn/shop/files/2_2x-2.png?v=1753167291",
+      icon: Video,
+    }
+  };
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("https://api.dovinigears.ng/categories");
+        if (!res.ok) {
+          throw new Error();
+        }
+        const data = await res.json();
+        console.log(data);
+        const mergedCategories = data.data.map((cat) => ({
+          ...cat, // id, name, description from backend
+          image: extraCategoryData[cat.id]?.image, // add frontend image
+          icon: extraCategoryData[cat.id]?.icon, // add frontend icon
+        }));
+        setCategories(mergedCategories);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    fetchCategories();
+  }, [extraCategoryData]);
 
   // Handler functions for interactive buttons
   const handleBuyNow = (product) => {
@@ -401,11 +520,6 @@ const Home = () => {
   const handleQuickView = (product) => {
     navigate(`/product/${product.id}`);
   };
-
-
-
-
-  
 
   return (
     <div className="min-h-screen">
@@ -461,7 +575,6 @@ const Home = () => {
             >
               Don't miss out on these incredible deals - ending soon!
             </motion.p>
-
           </motion.div>
 
           {/* Flash Deals Horizontal Slider */}
@@ -538,7 +651,13 @@ const Home = () => {
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                         >
-                          <Heart className={`w-3 h-3 ${isInWishlist(product.id) ? 'text-red-600 fill-red-600' : 'text-red-600'}`} />
+                          <Heart
+                            className={`w-3 h-3 ${
+                              isInWishlist(product.id)
+                                ? "text-red-600 fill-red-600"
+                                : "text-red-600"
+                            }`}
+                          />
                         </motion.button>
                         <motion.button
                           onClick={() => handleQuickView(product)}
@@ -578,11 +697,17 @@ const Home = () => {
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
-                              className={`w-3 h-3 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+                              className={`w-3 h-3 ${
+                                i < Math.floor(product.rating)
+                                  ? "text-yellow-400 fill-current"
+                                  : "text-gray-300"
+                              }`}
                             />
                           ))}
                         </div>
-                        <span className="text-xs text-gray-600">({product.reviews})</span>
+                        <span className="text-xs text-gray-600">
+                          ({product.reviews})
+                        </span>
                       </div>
 
                       {/* Stock Indicator & CTA */}
@@ -590,7 +715,9 @@ const Home = () => {
                         <div className="flex items-center space-x-1">
                           <Package className="w-3 h-3 text-green-600" />
                           <span className="text-xs text-green-600 font-medium">
-                            {product.stock > 10 ? 'In Stock' : `${product.stock} left`}
+                            {product.stock > 10
+                              ? "In Stock"
+                              : `${product.stock} left`}
                           </span>
                         </div>
                         <motion.button
@@ -617,9 +744,7 @@ const Home = () => {
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.6 }}
             viewport={{ once: true }}
-          >
-    
-          </motion.div>
+          ></motion.div>
         </div>
       </section>
 
@@ -629,7 +754,7 @@ const Home = () => {
           {/* Main Container Box */}
           <motion.div
             className="bg-white rounded-none shadow-2xl border-4 border-red-200 relative overflow-hidden cursor-pointer"
-            onClick={() => navigate('/flash-deals')}
+            onClick={() => navigate("/flash-deals")}
             whileHover={{ scale: 1.02, y: -5 }}
             whileTap={{ scale: 0.98 }}
             transition={{ type: "spring", stiffness: 300 }}
@@ -648,45 +773,43 @@ const Home = () => {
             </div>
 
             <div className="relative z-10 p-6">
-          {/* Section Header with Lightning Animation */}
-          <motion.div
-            className="text-center mb-2"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
+              {/* Section Header with Lightning Animation */}
+              <motion.div
+                className="text-center mb-2"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                <motion.h2
+                  className="text-sm font-black text-gray-800 mb-1"
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                  viewport={{ once: true }}
+                >
+                  Limited Time Offers
+                </motion.h2>
 
+                <motion.p
+                  className="text-xs text-gray-600"
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6, duration: 0.6 }}
+                  viewport={{ once: true }}
+                >
+                  Don't miss out on these incredible deals!
+                </motion.p>
+              </motion.div>
 
-            <motion.h2
-              className="text-sm font-black text-gray-800 mb-1"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              Limited Time Offers
-            </motion.h2>
-
-            <motion.p
-              className="text-xs text-gray-600"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              Don't miss out on these incredible deals!
-            </motion.p>
-          </motion.div>
-
-          {/* Auto-Sliding Mobile Carousel */}
-          <MobileFlashDealsCarousel
-            flashDeals={flashDeals}
-            onBuyNow={handleBuyNow}
-            onWishlistToggle={handleWishlistToggle}
-            onQuickView={handleQuickView}
-            isInWishlist={isInWishlist}
-          />
+              {/* Auto-Sliding Mobile Carousel */}
+              <MobileFlashDealsCarousel
+                flashDeals={flashDeals}
+                onBuyNow={handleBuyNow}
+                onWishlistToggle={handleWishlistToggle}
+                onQuickView={handleQuickView}
+                isInWishlist={isInWishlist}
+              />
             </div>
           </motion.div>
 
@@ -753,7 +876,8 @@ const Home = () => {
               transition={{ delay: 0.6, duration: 0.8 }}
               viewport={{ once: true }}
             >
-              These premium items are selling fast. Secure yours before they're gone!
+              These premium items are selling fast. Secure yours before they're
+              gone!
             </motion.p>
           </motion.div>
 
@@ -762,7 +886,9 @@ const Home = () => {
             {/* Scroll Buttons */}
             <button
               onClick={() => {
-                const container = document.getElementById("limited-stock-slider");
+                const container = document.getElementById(
+                  "limited-stock-slider"
+                );
                 if (container) {
                   container.scrollBy({ left: -200, behavior: "smooth" });
                 }
@@ -775,7 +901,9 @@ const Home = () => {
 
             <button
               onClick={() => {
-                const container = document.getElementById("limited-stock-slider");
+                const container = document.getElementById(
+                  "limited-stock-slider"
+                );
                 if (container) {
                   container.scrollBy({ left: 200, behavior: "smooth" });
                 }
@@ -848,11 +976,17 @@ const Home = () => {
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
-                              className={`w-2.5 h-2.5 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+                              className={`w-2.5 h-2.5 ${
+                                i < Math.floor(product.rating)
+                                  ? "text-yellow-400 fill-current"
+                                  : "text-gray-300"
+                              }`}
                             />
                           ))}
                         </div>
-                        <span className="text-xs text-gray-600">({product.reviews})</span>
+                        <span className="text-xs text-gray-600">
+                          ({product.reviews})
+                        </span>
                       </div>
 
                       {/* Action Buttons */}
@@ -864,7 +998,13 @@ const Home = () => {
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                           >
-                            <Heart className={`w-3 h-3 ${isInWishlist(product.id) ? 'text-red-600 fill-red-600' : 'text-gray-600'}`} />
+                            <Heart
+                              className={`w-3 h-3 ${
+                                isInWishlist(product.id)
+                                  ? "text-red-600 fill-red-600"
+                                  : "text-gray-600"
+                              }`}
+                            />
                           </motion.button>
                           <motion.button
                             onClick={() => handleQuickView(product)}
@@ -907,10 +1047,11 @@ const Home = () => {
             >
               <h3 className="text-2xl font-bold mb-2">⚡ Don't Wait!</h3>
               <p className="text-amber-100 mb-6 max-w-md mx-auto">
-                These limited stock items are disappearing fast. Add them to your cart before someone else gets them!
+                These limited stock items are disappearing fast. Add them to
+                your cart before someone else gets them!
               </p>
               <motion.button
-                onClick={() => navigate('/products?limitedStock=true')}
+                onClick={() => navigate("/products?limitedStock=true")}
                 className="bg-white text-amber-600 px-8 py-3 rounded-full font-bold hover:bg-amber-50 transition-colors flex items-center space-x-2 mx-auto shadow-lg"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -925,205 +1066,201 @@ const Home = () => {
 
       {/* Featured Categories */}
       <section className="py-10 sm:py-12 bg-white relative overflow-hidden shadow-inner shadow-red-50/50">
-    {/* Background Elements (Modified colors for Jumia orange/red feel) */}
-    <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 right-0 w-40 h-40 bg-orange-400 rounded-full blur-3xl opacity-50"></div>
-        <div className="absolute bottom-0 left-0 w-32 h-32 bg-red-400 rounded-full blur-3xl opacity-50"></div>
-    </div>
+        {/* Background Elements (Modified colors for Jumia orange/red feel) */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 right-0 w-40 h-40 bg-orange-400 rounded-full blur-3xl opacity-50"></div>
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-red-400 rounded-full blur-3xl opacity-50"></div>
+        </div>
 
-    {/* Floating Particles (Kept as is for movement, but adjusted color) */}
-    {[...Array(8)].map((_, i) => (
-        <motion.div
+        {/* Floating Particles (Kept as is for movement, but adjusted color) */}
+        {[...Array(8)].map((_, i) => (
+          <motion.div
             key={i}
             className="absolute w-2 h-2 bg-orange-500/30 rounded-full"
             style={{
-                top: `${20 + (i * 10)}%`,
-                left: `${10 + (i * 12)}%`,
+              top: `${20 + i * 10}%`,
+              left: `${10 + i * 12}%`,
             }}
             animate={{
-                y: [0, -15, 0], // Reduced movement
-                opacity: [0.1, 0.4, 0.1],
+              y: [0, -15, 0], // Reduced movement
+              opacity: [0.1, 0.4, 0.1],
             }}
             transition={{
-                duration: 5 + i * 0.5, // Slightly faster
-                repeat: Infinity,
-                ease: "easeInOut",
+              duration: 5 + i * 0.5, // Slightly faster
+              repeat: Infinity,
+              ease: "easeInOut",
             }}
-        />
-    ))}
+          />
+        ))}
 
-    <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
-        <motion.div
+        <div className="container mx-auto px-4 relative z-10">
+          {/* Section Header */}
+          <motion.div
             className="text-center mb-6 sm:mb-8"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-        >
+          >
             {/* Removed ArrowRight icon block for a cleaner, e-commerce look */}
 
             <motion.h2
-                className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-800 mb-3"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.8 }}
-                viewport={{ once: true }}
+              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-800 mb-3"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              viewport={{ once: true }}
             >
-                Shop Popular <span className="text-orange-600">Categories</span>
+              Shop Popular <span className="text-orange-600">Categories</span>
             </motion.h2>
 
             <motion.p
-                className="text-sm sm:text-base text-gray-600 max-w-3xl mx-auto leading-snug"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 0.8 }}
-                viewport={{ once: true }}
+              className="text-sm sm:text-base text-gray-600 max-w-3xl mx-auto leading-snug"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+              viewport={{ once: true }}
             >
-                Quickly jump to the best deals across all our main departments.
+              Quickly jump to the best deals across all our main departments.
             </motion.p>
-        </motion.div>
+          </motion.div>
 
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-8 gap-x-2 gap-y-4 mb-8 sm:mb-12 p-2 bg-white border border-gray-100/80 rounded-xl shadow-lg shadow-red-50/50">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-8 gap-x-2 gap-y-4 mb-8 sm:mb-12 p-2 bg-white border border-gray-100/80 rounded-xl shadow-lg shadow-red-50/50">
             {categories.map((category, index) => (
-                <motion.div
-                    key={category.id}
-                    initial={{ opacity: 0, scale: 0.8 }} 
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{
-                        delay: index * 0.05, 
-                        duration: 0.5,
-                        type: "spring",
-                        stiffness: 150
-                    }}
-                    viewport={{ once: true }}
-                    whileHover={{ y: -5, scale: 1.05, boxShadow: "0 10px 15px -3px rgba(255, 120, 0, 0.1)" }} 
-                    style={{ perspective: "none" }} 
-                    className="group col-span-1 cursor-pointer"
-                >
-                    <div className="relative">
-                        <div className="relative overflow-hidden rounded-lg bg-white hover:shadow-xl transition-all duration-300 h-full">
-                            
-                           
-                            <div className="w-full p-2 h-auto">
-                                <CategoryCard category={category} /> 
-                            </div>
-                            
-                            <motion.div
-                                className="absolute inset-0 bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-                            >
-                                <ArrowRight className="w-4 h-4 text-orange-600" />
-                            </motion.div>
-                        </div>
-
+              <motion.div
+                key={category.id}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{
+                  delay: index * 0.05,
+                  duration: 0.5,
+                  type: "spring",
+                  stiffness: 150,
+                }}
+                viewport={{ once: true }}
+                whileHover={{
+                  y: -5,
+                  scale: 1.05,
+                  boxShadow: "0 10px 15px -3px rgba(255, 120, 0, 0.1)",
+                }}
+                style={{ perspective: "none" }}
+                className="group col-span-1 cursor-pointer"
+              >
+                <div className="relative">
+                  <div className="relative overflow-hidden rounded-lg bg-white hover:shadow-xl transition-all duration-300 h-full">
+                    <div className="w-full p-2 h-auto">
+                      <CategoryCard category={category} />
                     </div>
-                </motion.div>
-            ))}
-        </div>
 
-        <motion.div
+                    <motion.div className="absolute inset-0 bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <ArrowRight className="w-4 h-4 text-orange-600" />
+                    </motion.div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div
             className="text-center"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
             viewport={{ once: true }}
-        >
+          >
             <motion.div
-                className="inline-block p-6 rounded-xl bg-orange-600 text-white shadow-2xl relative overflow-hidden transform hover:scale-[1.01] transition-transform duration-300"
-                whileHover={{ scale: 1.01, y: -2 }} // Less dramatic hover
-                transition={{ type: "spring", stiffness: 300 }}
+              className="inline-block p-6 rounded-xl bg-orange-600 text-white shadow-2xl relative overflow-hidden transform hover:scale-[1.01] transition-transform duration-300"
+              whileHover={{ scale: 1.01, y: -2 }} // Less dramatic hover
+              transition={{ type: "spring", stiffness: 300 }}
             >
-                <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-orange-500/80 to-red-500/80"
-                    animate={{
-                        x: ['-100%', '100%'],
-                        opacity: [0.3, 0.6, 0.3]
-                    }}
-                    transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                    }}
-                />
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-orange-500/80 to-red-500/80"
+                animate={{
+                  x: ["-100%", "100%"],
+                  opacity: [0.3, 0.6, 0.3],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
 
-                <div className="relative z-10">
-                    <h3 className="text-xl font-bold mb-2">Explore the Mall!</h3>
-                    <p className="text-red-100 mb-4 max-w-md mx-auto text-sm">
-                        Access thousands of products with daily deals and massive discounts.
-                    </p>
-                    <motion.button
-                        onClick={() => navigate('/products')}
-                        className="bg-white text-orange-600 px-5 py-2 rounded-lg font-bold hover:bg-red-50 transition-colors flex cursor-pointer items-center space-x-2 mx-auto shadow-md text-sm"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        <span>Start Shopping Now</span>
-                        <ArrowRight className="w-4 h-4" />
-                    </motion.button>
-                </div>
+              <div className="relative z-10">
+                <h3 className="text-xl font-bold mb-2">Explore the Mall!</h3>
+                <p className="text-red-100 mb-4 max-w-md mx-auto text-sm">
+                  Access thousands of products with daily deals and massive
+                  discounts.
+                </p>
+                <motion.button
+                  onClick={() => navigate("/products")}
+                  className="bg-white text-orange-600 px-5 py-2 rounded-lg font-bold hover:bg-red-50 transition-colors flex cursor-pointer items-center space-x-2 mx-auto shadow-md text-sm"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <span>Start Shopping Now</span>
+                  <ArrowRight className="w-4 h-4" />
+                </motion.button>
+              </div>
             </motion.div>
-        </motion.div>
-    </div>
-</section>
+          </motion.div>
+        </div>
+      </section>
 
-    
-      
+      <section className="py-8 sm:py-12 lg:py-16 bg-gradient-to-br from-gray-50 to-red-50 px-2 sm:px-8 lg:px-12">
+        <div className="max-w-7xl mx-auto px-1 sm:px-6 lg:px-8">
+          {/* Section Header */}
+          <motion.div
+            className="text-center mb-8 sm:mb-10 lg:mb-12"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-bold text-gray-800 mb-3">
+              Featured Products
+            </h2>
+            <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto px-2">
+              Explore our handpicked selection of professional photography
+              equipment
+            </p>
+          </motion.div>
 
-    <section className="py-8 sm:py-12 lg:py-16 bg-gradient-to-br from-gray-50 to-red-50 px-2 sm:px-8 lg:px-12">
-  <div className="max-w-7xl mx-auto px-1 sm:px-6 lg:px-8">
-    
-    {/* Section Header */}
-    <motion.div
-      className="text-center mb-8 sm:mb-10 lg:mb-12"
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      viewport={{ once: true }}
-    >
-      <h2 className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-bold text-gray-800 mb-3">
-        Featured Products
-      </h2>
-      <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto px-2">
-        Explore our handpicked selection of professional photography equipment
-      </p>
-    </motion.div>
+          {/* Product Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 sm:gap-6 lg:gap-8">
+            {featuredProducts.map((product, index) => (
+              <motion.div
+                key={product.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+                viewport={{ once: true }}
+                className="w-full"
+              >
+                <ProCard product={product} />
+              </motion.div>
+            ))}
+          </div>
 
-    {/* Product Grid */}
-    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 sm:gap-6 lg:gap-8">
-      {featuredProducts.map((product, index) => (
-        <motion.div
-          key={product.id}
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ delay: index * 0.1, duration: 0.5 }}
-          viewport={{ once: true }}
-          className="w-full"
-        >
-          <ProCard product={product} />
-        </motion.div>
-      ))}
-    </div>
-
-    {/* Button */}
-    <motion.div
-      className="text-center mt-10 sm:mt-12 lg:mt-14"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      transition={{ delay: 0.5, duration: 0.6 }}
-      viewport={{ once: true }}
-    >
-      <motion.button
-        className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-6 sm:px-8 py-2 sm:py-3 text-sm sm:text-base lg:text-lg rounded-xl font-semibold hover:bg-red-700 transition flex items-center mx-auto space-x-2"
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <span>View All Products</span>
-        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
-      </motion.button>
-    </motion.div>
-  </div>
-</section>
-
+          {/* Button */}
+          <motion.div
+            className="text-center mt-10 sm:mt-12 lg:mt-14"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <motion.button
+              className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-6 sm:px-8 py-2 sm:py-3 text-sm sm:text-base lg:text-lg rounded-xl font-semibold hover:bg-red-700 transition flex items-center mx-auto space-x-2"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <span>View All Products</span>
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+            </motion.button>
+          </motion.div>
+        </div>
+      </section>
 
       {/* Testimonials Section */}
       {/* <Testimonials /> */}

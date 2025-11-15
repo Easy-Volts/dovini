@@ -1,8 +1,9 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Package, Sparkles } from "lucide-react";
 import { products } from "../data/products";
+
 
 const CategoryCard = ({ category }) => {
   // Get product count for this category
@@ -13,6 +14,7 @@ const CategoryCard = ({ category }) => {
   const avgPrice = categoryProducts.length > 0
     ? Math.round(categoryProducts.reduce((sum, product) => sum + product.price, 0) / categoryProducts.length)
     : 0;
+ 
 
   return (
     <motion.div

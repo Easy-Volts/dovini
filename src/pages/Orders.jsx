@@ -22,6 +22,10 @@ const Orders = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  useEffect(() => {
     if (!user) {
       navigate('/login');
       return;
