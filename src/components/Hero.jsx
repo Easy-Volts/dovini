@@ -187,9 +187,7 @@ const Hero = ({categories}) => {
               <ul className="space-y-1">
                 {categories.map((category) => (
                   <Link
-                    to={`/products?category=${category.name
-                      .toLowerCase()
-                      .replace(/\s+/g, "-")}`}
+                    to={`/products?cat=${category.id}`}
                     key={category.id}
                     className="flex items-center text-sm text-gray-700 p-2 rounded-lg transition duration-150 hover:bg-red-50 hover:text-red-600 cursor-pointer"
                   >

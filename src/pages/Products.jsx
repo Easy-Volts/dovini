@@ -31,23 +31,103 @@ const Products = () => {
   
   // Get category from URL params
   const categoryParam = searchParams.get('category');
+  const backendCategoryId = searchParams.get('cat');
   const searchQuery = searchParams.get('search') || '';
   const sortBy = searchParams.get('sort') || 'featured';
   const viewMode = searchParams.get('view') || 'grid';
   const flashDealsParam = searchParams.get('flashDeals') === 'true';
   const limitedStockParam = searchParams.get('limitedStock') === 'true';
 
-  // State for filters
+ 
   const [priceRange, setPriceRange] = useState([0, 1000000]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedRatings, setSelectedRatings] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isUsingBackend, setIsUsingBackend] = useState(false);
+  const [backendProducts, setBackendProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const itemsPerPage = 12;
+
+  const transformBackendProduct = (backendProduct) => {
+    return {
+      id: backendProduct.id,
+      name: backendProduct.name,
+      price: parseFloat(backendProduct.price) || 0,
+      categoryId: backendProduct.categoryId,
+      image: backendProduct.image || '/api/placeholder/300/300',
+      stock: backendProduct.stock || 0,
+      description: backendProduct.description || 'No description available',
+      rating: backendProduct.rating || 0,
+      reviews: backendProduct.reviews || 0,
+      brand: 'Professional Gear', // Default brand
+      isFlashDeal: backendProduct.isFlashDeal || false,
+      discount: backendProduct.discount || 0,
+      originalPrice: backendProduct.originalPrice || parseFloat(backendProduct.price) || 0,
+      isLimitedStock: (backendProduct.stock || 0) < 10,
+      flashDealEnd: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // Default to 24h from now
+      featured: true,
+    };
+  };
+
+  // Fetch products from backend API
+  const fetchBackendProducts = useCallback(async (categoryId) => {
+    if (!categoryId) return;
+    
+    
+    setIsLoading(true);
+    setIsUsingBackend(true);
+    
+    try {
+      const response = await fetch(`https://api.dovinigears.ng/products/by-category?category_id=${categoryId}`);
+      
+      const data = await response.json();
+      
+      
+      if (data.success && data.data) {
+        const transformedProducts = data.data.map(transformBackendProduct);
+        console.log('Transformed products:', transformedProducts);
+        setBackendProducts(transformedProducts);
+      } else {
+        
+        setIsUsingBackend(false);
+        setBackendProducts([]);
+      }
+    } catch (error) {
+      
+      setIsUsingBackend(false);
+      setBackendProducts([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Effect to fetch backend products when backendCategoryId changes
+  useEffect(() => {
+    if (backendCategoryId) {
+      fetchBackendProducts(backendCategoryId);
+    } else {
+      setIsUsingBackend(false);
+      setBackendProducts([]);
+    }
+  }, [backendCategoryId, fetchBackendProducts]);
+
+  // Fallback effect: if backend fails, use local data with category filtering
+  useEffect(() => {
+    if (backendCategoryId && !isLoading && !isUsingBackend) {
+      console.log('Backend API failed, falling back to local filtering');
+      // Find the category and filter local products
+      const category = categories.find(cat => cat.id === parseInt(backendCategoryId));
+      if (category) {
+        console.log('Using local fallback for category:', category.name);
+        // The local filtering will happen automatically in the useMemo
+      }
+    }
+  }, [backendCategoryId, isLoading, isUsingBackend, categories]);
 
   // Filter and sort products
   const filteredAndSortedProducts = useMemo(() => {
-    let filtered = products;
+    let filtered = isUsingBackend ? backendProducts : products;
 
     // Filter by category
     if (categoryParam) {
@@ -58,6 +138,20 @@ const Products = () => {
       if (category) {
         filtered = filtered.filter(product => product.categoryId === category.id);
       }
+    }
+    
+    // Also handle local filtering for backend category ID when backend is not available
+    if (!isUsingBackend && backendCategoryId && backendProducts.length === 0) {
+      const category = categories.find(cat => cat.id === parseInt(backendCategoryId));
+      if (category) {
+        filtered = filtered.filter(product => product.categoryId === category.id);
+      }
+    }
+    
+    // Handle backend category filtering (already filtered by API)
+    if (isUsingBackend && backendCategoryId) {
+      // No additional filtering needed since backend already filtered
+      // But we might want to apply other filters like search, price, etc.
     }
 
     // Filter by search query
@@ -120,7 +214,7 @@ const Products = () => {
     }
 
     return filtered;
-  }, [categoryParam, searchQuery, priceRange, selectedBrands, selectedRatings, sortBy, flashDealsParam, limitedStockParam]);
+  }, [isUsingBackend, backendProducts, categoryParam, searchQuery, priceRange, selectedBrands, selectedRatings, sortBy, flashDealsParam, limitedStockParam]);
 
   // Pagination
   const totalPages = Math.ceil(filteredAndSortedProducts.length / itemsPerPage);
@@ -129,8 +223,11 @@ const Products = () => {
     currentPage * itemsPerPage
   );
 
-  // Get unique brands for filter
-  const availableBrands = [...new Set(products.map(p => p.brand).filter(Boolean))];
+  // Get unique brands for filter (works with both local and backend products)
+  const availableBrands = useMemo(() => {
+    const sourceProducts = isUsingBackend ? backendProducts : products;
+    return [...new Set(sourceProducts.map(p => p.brand).filter(Boolean))];
+  }, [isUsingBackend, backendProducts]);
 
   // Update URL params - memoized for performance
   const updateSearchParams = useCallback((key, value) => {
@@ -160,6 +257,20 @@ const Products = () => {
     if (limitedStockParam) {
       return { name: 'Limited Stock', description: 'Almost gone - secure these items before they\'re sold out' };
     }
+    
+    // Handle backend categories
+    if (isUsingBackend && backendCategoryId) {
+      const category = categories.find(cat => cat.id === parseInt(backendCategoryId));
+      if (category) {
+        return {
+          name: category.name,
+          description: category.description || `Premium ${category.name.toLowerCase()} equipment from our backend collection`
+        };
+      }
+      return { name: 'Backend Category', description: 'Products from our backend API' };
+    }
+    
+    // Handle local categories
     if (!categoryParam) return null;
     const categoryName = categoryParam.replace(/-/g, ' ');
     const category = categories.find(cat =>
@@ -467,19 +578,40 @@ const Products = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <p className="text-gray-600">
-                Showing {paginatedProducts.length} of {filteredAndSortedProducts.length} products
-              </p>
+              <div className="flex items-center justify-between">
+                <p className="text-gray-600">
+                  Showing {paginatedProducts.length} of {filteredAndSortedProducts.length} products
+                </p>
+                {backendCategoryId && !isUsingBackend && backendProducts.length === 0 && !isLoading && (
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                    <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-1.5"></div>
+                    Local Data
+                  </span>
+                )}
+                {isUsingBackend && backendProducts.length > 0 && (
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mr-1.5 animate-pulse"></div>
+                    Live Data
+                  </span>
+                )}
+              </div>
             </motion.div>
 
             {/* Products */}
-            {paginatedProducts.length > 0 ? (
+            {isLoading ? (
+              <div className="flex justify-center items-center py-16">
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="w-8 h-8 border-4 border-red-200 border-t-red-600 rounded-full animate-spin"></div>
+                  <p className="text-gray-600">Loading products...</p>
+                </div>
+              </div>
+            ) : paginatedProducts.length > 0 ? (
               <>
                 <motion.div
 className={`grid gap-4 sm:gap-6 mb-8 ${
-viewMode === 'grid'
- ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5' // This line is changed
- : 'grid-cols-1'
+ viewMode === 'grid'
+  ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5' // This line is changed
+  : 'grid-cols-1'
  }`}
  initial={{ opacity: 0 }}
  animate={{ opacity: 1 }}

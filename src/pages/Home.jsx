@@ -5,7 +5,7 @@ import BannerSlider from "../components/BannerSlider";
 import CategoryCard from "../components/CategoryCard";
 import ProCard from "../components/ProCard";
 import NewsletterSignup from "../components/NewsletterSignup";
-import { products } from "../data/products";
+import { useProducts } from "../context/ProductContext";
 import {
   Phone,
   Trophy,
@@ -417,6 +417,7 @@ const Home = () => {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { showSuccess } = useToast();
+  const {products} = useProducts()
 
   const featuredProducts = products; // Show first 8 products
   const flashDeals = products
@@ -483,7 +484,7 @@ const Home = () => {
         const data = await res.json();
         console.log(data);
         const mergedCategories = data.data.map((cat) => ({
-          ...cat, // id, name, description from backend
+          ...cat, 
           image: extraCategoryData[cat.id]?.image, // add frontend image
           icon: extraCategoryData[cat.id]?.icon, // add frontend icon
         }));
@@ -493,9 +494,8 @@ const Home = () => {
       }
     };
     fetchCategories();
-  }, [extraCategoryData]);
+  }, []);
 
-  // Handler functions for interactive buttons
   const handleBuyNow = (product) => {
     addToCart(product);
     showSuccess(`🎉 ${product.name} added to cart!`, 1000);

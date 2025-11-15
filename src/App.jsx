@@ -18,6 +18,7 @@ import AccountSettingsPage from './pages/AccountSettingsPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminDashBoard from './pages/AdminDashBoard';
 import Privacy from './pages/Privacy';
+import { ProductProvider } from './context/ProductContext';
 
 
 const Home = lazy(() => import('./pages/Home'));
@@ -52,6 +53,7 @@ const App = () => {
             <RecentlyViewedProvider>
               <WishlistProvider>
                 <CartProvider>
+                  <ProductProvider>
                   <div className="min-h-screen flex flex-col">
                     <Header />
                     <main className="flex-grow pb-16 lg:pb-0">
@@ -82,7 +84,8 @@ const App = () => {
                     <Footer />
                     <Chat />
                     <ScrollToTop />
-                  </div>
+                    </div>
+                   </ProductProvider> 
                 </CartProvider>
               </WishlistProvider>
             </RecentlyViewedProvider>
