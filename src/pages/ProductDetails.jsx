@@ -4,9 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useToast } from '../context/ToastContext';
-import { products } from '../data/products';
 import { useRecentlyViewed } from '../context/RecentlyViewedContext';
-
+import { useProducts } from '../context/ProductContext';
 import {
   Star,
   Heart,
@@ -44,7 +43,7 @@ const ProductDetails = () => {
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { showSuccess, showError } = useToast();
     const { addToRecentlyViewed } = useRecentlyViewed();
-
+  const {products} = useProducts()
 
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -71,7 +70,6 @@ const ProductDetails = () => {
     const foundProduct = products.find(p => p.id === parseInt(id));
     if (foundProduct) {
       setProduct(foundProduct);
-      // Set initial selected image
       setSelectedImage(0);
 
 
@@ -83,7 +81,7 @@ const ProductDetails = () => {
       // Generate mock reviews
       const mockReviews = Array.from({ length: Math.floor(Math.random() * 20) + 5 }, (_, i) => ({
         id: i + 1,
-        name: ['John D.', 'Sarah M.', 'Mike R.', 'Emma L.', 'David K.', 'Lisa P.'][Math.floor(Math.random() * 6)],
+        name: ['Daniel Udeh', 'David Jack', 'Jack Chiorlu', 'Ambrose Nsonwu', 'Akinola S.', 'Lisa P.'][Math.floor(Math.random() * 6)],
         rating: Math.floor(Math.random() * 2) + 4, // 4-5 stars
         date: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toLocaleDateString(),
         comment: [

@@ -35,6 +35,7 @@ const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const AccountActivation = lazy(() => import('./pages/AccountActivation'));
 const Orders = lazy(() => import('./pages/Orders'));
 const FlashDeals = lazy(() => import('./pages/FlashDeals'));
+import NotFound from './pages/NotFound';
 
 // Loading component for Suspense fallback
 const PageLoader = () => (
@@ -78,6 +79,7 @@ const App = () => {
                           <Route path="/orders" element={<Orders />} />
                           <Route path="/flash-deals" element={<FlashDeals />} />
                           <Route path="/about" element={<About />} />
+                          <Route path="*" element={<NotFound />} />
                         </Routes>
                       </Suspense>
                     </main>

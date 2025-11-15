@@ -3,8 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import { products } from '../data/products';
 import RecentlyViewedSection from '../components/RecentlyViewedSection';
+import { useProducts } from '../context/ProductContext';
 import {
   MessageCircle,
   ShoppingCart,
@@ -43,6 +43,7 @@ const Cart = () => {
   const [promoCode, setPromoCode] = useState('');
   const [appliedDiscount, setAppliedDiscount] = useState(0);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const {products} = useProducts()
 
  useEffect(() => {
    window.scrollTo({top: 0, behavior: 'smooth'})

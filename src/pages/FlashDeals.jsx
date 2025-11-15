@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
-import { products } from '../data/products';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useToast } from '../context/ToastContext';
+import { useProducts } from '../context/ProductContext';
 import {
   Clock,
   Zap,
@@ -68,6 +68,7 @@ const FlashDeals = () => {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { showSuccess } = useToast();
+  const {products} = useProducts()
 
   const flashDeals = products.filter(product => product.isFlashDeal);
 
