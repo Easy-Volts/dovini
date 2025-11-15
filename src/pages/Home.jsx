@@ -417,14 +417,13 @@ const Home = () => {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { showSuccess } = useToast();
-  const {products} = useProducts()
+  const {products, loading} = useProducts()
 
   const featuredProducts = products; // Show first 8 products
   const flashDeals = products
     .filter((product) => product.isFlashDeal)
     .slice(0, 6);
   const limitedStock = products
-    .filter((product) => product.isLimitedStock)
     .slice(0, 9);
   const [categories, setCategories] = useState([]);
 
@@ -1064,15 +1063,12 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Featured Categories */}
       <section className="py-10 sm:py-12 bg-white relative overflow-hidden shadow-inner shadow-red-50/50">
-        {/* Background Elements (Modified colors for Jumia orange/red feel) */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 right-0 w-40 h-40 bg-orange-400 rounded-full blur-3xl opacity-50"></div>
           <div className="absolute bottom-0 left-0 w-32 h-32 bg-red-400 rounded-full blur-3xl opacity-50"></div>
         </div>
 
-        {/* Floating Particles (Kept as is for movement, but adjusted color) */}
         {[...Array(8)].map((_, i) => (
           <motion.div
             key={i}
@@ -1082,11 +1078,11 @@ const Home = () => {
               left: `${10 + i * 12}%`,
             }}
             animate={{
-              y: [0, -15, 0], // Reduced movement
+              y: [0, -15, 0], 
               opacity: [0.1, 0.4, 0.1],
             }}
             transition={{
-              duration: 5 + i * 0.5, // Slightly faster
+              duration: 5 + i * 0.5, 
               repeat: Infinity,
               ease: "easeInOut",
             }}
@@ -1094,7 +1090,6 @@ const Home = () => {
         ))}
 
         <div className="container mx-auto px-4 relative z-10">
-          {/* Section Header */}
           <motion.div
             className="text-center mb-6 sm:mb-8"
             initial={{ opacity: 0, y: 40 }}
@@ -1102,7 +1097,6 @@ const Home = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            {/* Removed ArrowRight icon block for a cleaner, e-commerce look */}
 
             <motion.h2
               className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-800 mb-3"
@@ -1226,8 +1220,54 @@ const Home = () => {
             </p>
           </motion.div>
 
-          {/* Product Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 sm:gap-6 lg:gap-8">
+         
+         {loading ? (
+          <div className="flex flex-col items-center justify-center py-20 space-y-4">
+         
+            <div className="relative">
+              <motion.div
+                className="w-16 h-16 border-4 border-red-200 border-t-red-600 rounded-full"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              />
+              <motion.div
+                className="absolute top-2 left-2 w-12 h-12 border-4 border-orange-200 border-t-orange-500 rounded-full"
+                animate={{ rotate: -360 }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+              />
+            </div>
+            
+           
+            <motion.div
+              className="text-center space-y-2"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <h3 className="text-lg font-semibold text-gray-700">Loading featured products...</h3>
+              <p className="text-sm text-gray-500">Preparing the best deals for you</p>
+            </motion.div>
+            
+           
+            <div className="flex space-x-1">
+              {[0, 1, 2].map((i) => (
+                <motion.div
+                  key={i}
+                  className="w-2 h-2 bg-gradient-to-r from-red-500 to-orange-500 rounded-full"
+                  animate={{
+                    scale: [1, 1.5, 1],
+                    opacity: [0.5, 1, 0.5],
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    delay: i * 0.2,
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+         ) : ( <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 sm:gap-6 lg:gap-8">
             {featuredProducts.map((product, index) => (
               <motion.div
                 key={product.id}
@@ -1240,7 +1280,7 @@ const Home = () => {
                 <ProCard product={product} />
               </motion.div>
             ))}
-          </div>
+          </div>)}
 
           {/* Button */}
           <motion.div

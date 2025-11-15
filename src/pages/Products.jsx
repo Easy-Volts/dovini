@@ -2,9 +2,9 @@ import React, { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../context/CartContext';
-import { products } from '../data/products';
 import { categories } from '../data/categories';
 import ProCard from '../components/ProCard';
+import { useProducts } from '../context/ProductContext';
 import {
   Filter,
   SortAsc,
@@ -24,12 +24,12 @@ import {
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { addToCart } = useCart();
+  const {products, loading} = useProducts()
 
    useEffect(() => {
      window.scrollTo({top: 0, behavior: 'smooth'})
    }, [])
   
-  // Get category from URL params
   const categoryParam = searchParams.get('category');
   const backendCategoryId = searchParams.get('cat');
   const searchQuery = searchParams.get('search') || '';
@@ -46,7 +46,7 @@ const Products = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isUsingBackend, setIsUsingBackend] = useState(false);
   const [backendProducts, setBackendProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingBackend, setIsLoadingBackend] = useState(false);
   const itemsPerPage = 12;
 
   const transformBackendProduct = (backendProduct) => {
@@ -75,7 +75,7 @@ const Products = () => {
     if (!categoryId) return;
     
     
-    setIsLoading(true);
+    setIsLoadingBackend(true);
     setIsUsingBackend(true);
     
     try {
@@ -86,19 +86,18 @@ const Products = () => {
       
       if (data.success && data.data) {
         const transformedProducts = data.data.map(transformBackendProduct);
-        console.log('Transformed products:', transformedProducts);
         setBackendProducts(transformedProducts);
       } else {
         
         setIsUsingBackend(false);
         setBackendProducts([]);
       }
-    } catch (error) {
+    } catch {
       
       setIsUsingBackend(false);
       setBackendProducts([]);
     } finally {
-      setIsLoading(false);
+      setIsLoadingBackend(false);
     }
   }, []);
 
@@ -114,22 +113,19 @@ const Products = () => {
 
   // Fallback effect: if backend fails, use local data with category filtering
   useEffect(() => {
-    if (backendCategoryId && !isLoading && !isUsingBackend) {
+    if (backendCategoryId && !isLoadingBackend && !isUsingBackend) {
       console.log('Backend API failed, falling back to local filtering');
-      // Find the category and filter local products
       const category = categories.find(cat => cat.id === parseInt(backendCategoryId));
       if (category) {
         console.log('Using local fallback for category:', category.name);
         // The local filtering will happen automatically in the useMemo
       }
     }
-  }, [backendCategoryId, isLoading, isUsingBackend, categories]);
+  }, [backendCategoryId, isLoadingBackend, isUsingBackend, categories]);
 
-  // Filter and sort products
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = isUsingBackend ? backendProducts : products;
 
-    // Filter by category
     if (categoryParam) {
       const categoryName = categoryParam.replace(/-/g, ' ');
       const category = categories.find(cat =>
@@ -140,7 +136,6 @@ const Products = () => {
       }
     }
     
-    // Also handle local filtering for backend category ID when backend is not available
     if (!isUsingBackend && backendCategoryId && backendProducts.length === 0) {
       const category = categories.find(cat => cat.id === parseInt(backendCategoryId));
       if (category) {
@@ -223,7 +218,6 @@ const Products = () => {
     currentPage * itemsPerPage
   );
 
-  // Get unique brands for filter (works with both local and backend products)
   const availableBrands = useMemo(() => {
     const sourceProducts = isUsingBackend ? backendProducts : products;
     return [...new Set(sourceProducts.map(p => p.brand).filter(Boolean))];
@@ -245,9 +239,9 @@ const Products = () => {
     setSelectedBrands([]);
     setSelectedRatings([]);
     setCurrentPage(1);
-    const newParams = new URLSearchParams();
-    if (categoryParam) newParams.set('category', categoryParam);
-    setSearchParams(newParams);
+    
+    // Clear ALL search parameters including categories
+    setSearchParams({});
   };
 
   const getCategoryInfo = () => {
@@ -582,7 +576,7 @@ const Products = () => {
                 <p className="text-gray-600">
                   Showing {paginatedProducts.length} of {filteredAndSortedProducts.length} products
                 </p>
-                {backendCategoryId && !isUsingBackend && backendProducts.length === 0 && !isLoading && (
+                {backendCategoryId && !isUsingBackend && backendProducts.length === 0 && !isLoadingBackend && (
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                     <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-1.5"></div>
                     Local Data
@@ -598,7 +592,7 @@ const Products = () => {
             </motion.div>
 
             {/* Products */}
-            {isLoading ? (
+            {loading ? (
               <div className="flex justify-center items-center py-16">
                 <div className="flex flex-col items-center space-y-4">
                   <div className="w-8 h-8 border-4 border-red-200 border-t-red-600 rounded-full animate-spin"></div>
