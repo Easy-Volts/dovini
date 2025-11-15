@@ -524,7 +524,7 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* Banner Slider */}
-      <Hero />
+      <Hero categories={categories}/>
 
       {/* Flash Deals Section */}
       <section className="py-4 bg-gradient-to-br from-red-50 via-orange-50 to-yellow-50 relative overflow-hidden hidden sm:block">

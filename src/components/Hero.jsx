@@ -18,7 +18,6 @@ import {
   ChevronRight,
   CheckCircle,
 } from "lucide-react";
-import { categories } from "../data/categories";
 import { Link } from "react-router-dom";
 
 
@@ -147,7 +146,7 @@ const InfoButton = ({ title, description, Icon }) => (
 
 // --- Main App Component ---
 
-const Hero = () => {
+const Hero = ({categories}) => {
   // State for the main carousel
   const [currentSlide, setCurrentSlide] = useState(0);
   const totalSlides = 3; // for desktop carousel
