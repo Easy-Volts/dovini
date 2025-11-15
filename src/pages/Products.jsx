@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useMemo, useCallback, memo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 import { categories } from '../data/categories';
 import ProCard from '../components/ProCard';
 import { useProducts } from '../context/ProductContext';
+import { motion } from 'framer-motion';
 import {
   Filter,
   SortAsc,
@@ -57,20 +58,19 @@ const Products = () => {
       categoryId: backendProduct.categoryId,
       image: backendProduct.image || '/api/placeholder/300/300',
       stock: backendProduct.stock || 0,
-      description: backendProduct.description || 'No description available',
+      description: backendProduct.description || '',
       rating: backendProduct.rating || 0,
       reviews: backendProduct.reviews || 0,
-      brand: 'Professional Gear', // Default brand
+      brand: 'Professional Gear',
       isFlashDeal: backendProduct.isFlashDeal || false,
       discount: backendProduct.discount || 0,
       originalPrice: backendProduct.originalPrice || parseFloat(backendProduct.price) || 0,
       isLimitedStock: (backendProduct.stock || 0) < 10,
-      flashDealEnd: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // Default to 24h from now
+      flashDealEnd: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       featured: true,
     };
   };
 
-  // Fetch products from backend API
   const fetchBackendProducts = useCallback(async (categoryId) => {
     if (!categoryId) return;
     
@@ -101,7 +101,6 @@ const Products = () => {
     }
   }, []);
 
-  // Effect to fetch backend products when backendCategoryId changes
   useEffect(() => {
     if (backendCategoryId) {
       fetchBackendProducts(backendCategoryId);
@@ -111,14 +110,12 @@ const Products = () => {
     }
   }, [backendCategoryId, fetchBackendProducts]);
 
-  // Fallback effect: if backend fails, use local data with category filtering
   useEffect(() => {
     if (backendCategoryId && !isLoadingBackend && !isUsingBackend) {
       console.log('Backend API failed, falling back to local filtering');
       const category = categories.find(cat => cat.id === parseInt(backendCategoryId));
       if (category) {
         console.log('Using local fallback for category:', category.name);
-        // The local filtering will happen automatically in the useMemo
       }
     }
   }, [backendCategoryId, isLoadingBackend, isUsingBackend, categories]);
@@ -136,20 +133,13 @@ const Products = () => {
       }
     }
     
-    if (!isUsingBackend && backendCategoryId && backendProducts.length === 0) {
+    if (!isUsingBackend && backendCategoryId && backendProducts.length === 0 && !isLoadingBackend) {
       const category = categories.find(cat => cat.id === parseInt(backendCategoryId));
       if (category) {
         filtered = filtered.filter(product => product.categoryId === category.id);
       }
     }
     
-    // Handle backend category filtering (already filtered by API)
-    if (isUsingBackend && backendCategoryId) {
-      // No additional filtering needed since backend already filtered
-      // But we might want to apply other filters like search, price, etc.
-    }
-
-    // Filter by search query
     if (searchQuery) {
       filtered = filtered.filter(product =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -158,36 +148,30 @@ const Products = () => {
       );
     }
 
-    // Filter by price range
     filtered = filtered.filter(product =>
       product.price >= priceRange[0] && product.price <= priceRange[1]
     );
 
-    // Filter by brands
     if (selectedBrands.length > 0) {
       filtered = filtered.filter(product =>
         selectedBrands.includes(product.brand)
       );
     }
 
-    // Filter by ratings
     if (selectedRatings.length > 0) {
       filtered = filtered.filter(product =>
         selectedRatings.some(rating => product.rating >= parseInt(rating))
       );
     }
 
-    // Filter by flash deals
     if (flashDealsParam) {
       filtered = filtered.filter(product => product.isFlashDeal);
     }
 
-    // Filter by limited stock
     if (limitedStockParam) {
       filtered = filtered.filter(product => product.isLimitedStock);
     }
 
-    // Sort products
     switch (sortBy) {
       case 'price-low':
         filtered.sort((a, b) => a.price - b.price);
@@ -204,14 +188,13 @@ const Products = () => {
       case 'popular':
         filtered.sort((a, b) => b.reviews - a.reviews);
         break;
-      default: // featured
+      default:
         filtered.sort((a, b) => (b.isFlashDeal ? 1 : 0) - (a.isFlashDeal ? 1 : 0));
     }
 
     return filtered;
   }, [isUsingBackend, backendProducts, categoryParam, searchQuery, priceRange, selectedBrands, selectedRatings, sortBy, flashDealsParam, limitedStockParam]);
 
-  // Pagination
   const totalPages = Math.ceil(filteredAndSortedProducts.length / itemsPerPage);
   const paginatedProducts = filteredAndSortedProducts.slice(
     (currentPage - 1) * itemsPerPage,
@@ -223,7 +206,6 @@ const Products = () => {
     return [...new Set(sourceProducts.map(p => p.brand).filter(Boolean))];
   }, [isUsingBackend, backendProducts]);
 
-  // Update URL params - memoized for performance
   const updateSearchParams = useCallback((key, value) => {
     const newParams = new URLSearchParams(searchParams);
     if (value) {
@@ -240,7 +222,6 @@ const Products = () => {
     setSelectedRatings([]);
     setCurrentPage(1);
     
-    // Clear ALL search parameters including categories
     setSearchParams({});
   };
 
@@ -252,7 +233,6 @@ const Products = () => {
       return { name: 'Limited Stock', description: 'Almost gone - secure these items before they\'re sold out' };
     }
     
-    // Handle backend categories
     if (isUsingBackend && backendCategoryId) {
       const category = categories.find(cat => cat.id === parseInt(backendCategoryId));
       if (category) {
@@ -264,7 +244,6 @@ const Products = () => {
       return { name: 'Backend Category', description: 'Products from our backend API' };
     }
     
-    // Handle local categories
     if (!categoryParam) return null;
     const categoryName = categoryParam.replace(/-/g, ' ');
     const category = categories.find(cat =>
@@ -277,10 +256,8 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-red-50/20 to-white overflow-hidden">
-      {/* Header */}
       <div className="bg-white shadow-lg border-b border-red-100 top-0 z-30">
         <div className="container mx-auto px-4 py-6">
-          {/* Breadcrumb */}
           <motion.nav
             className="mb-4"
             initial={{ opacity: 0 }}
@@ -299,7 +276,6 @@ const Products = () => {
             </ol>
           </motion.nav>
 
-          {/* Title and Description */}
           <motion.div
             className="text-center mb-6"
             initial={{ opacity: 0, y: 20 }}
@@ -321,7 +297,6 @@ const Products = () => {
             </p>
           </motion.div>
 
-          {/* Search Bar */}
           <motion.div
             className="max-w-2xl mx-auto mb-6"
             initial={{ opacity: 0, y: 20 }}
@@ -340,7 +315,6 @@ const Products = () => {
             </div>
           </motion.div>
 
-          {/* Quick Filters */}
           <motion.div
             className="mb-6"
             initial={{ opacity: 0, y: 20 }}
@@ -367,7 +341,6 @@ const Products = () => {
             </div>
           </motion.div>
 
-          {/* Controls */}
           <motion.div
             className="flex flex-col sm:flex-row items-center justify-between gap-4"
             initial={{ opacity: 0, y: 20 }}
@@ -400,7 +373,6 @@ const Products = () => {
             </div>
 
             <div className="flex items-center space-x-4">
-              {/* Sort */}
               <div className="relative">
                 <select
                   value={sortBy}
@@ -417,7 +389,6 @@ const Products = () => {
                 <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
               </div>
 
-              {/* View Mode */}
               <div className="flex items-center border border-gray-200 rounded-lg">
                 <button
                   onClick={() => updateSearchParams('view', 'grid')}
@@ -439,7 +410,6 @@ const Products = () => {
 
       <div className="container mx-auto px-4 py-8">
         <div className="flex gap-8">
-          {/* Filters Backdrop */}
           <AnimatePresence>
             {showFilters && (
               <motion.div
@@ -453,7 +423,6 @@ const Products = () => {
             )}
           </AnimatePresence>
 
-          {/* Filters Sidebar */}
           <AnimatePresence>
             {showFilters && (
               <motion.div
@@ -474,7 +443,6 @@ const Products = () => {
                   </button>
                 </div>
 
-                {/* Price Range */}
                 <div className="mb-6">
                   <h4 className="font-semibold text-gray-800 mb-3">Price Range</h4>
                   <div className="space-y-2">
@@ -503,7 +471,6 @@ const Products = () => {
                   </div>
                 </div>
 
-                {/* Brands */}
                 <div className="mb-6">
                   <h4 className="font-semibold text-gray-800 mb-3">Brands</h4>
                   <div className="space-y-2 max-h-40 overflow-y-auto">
@@ -527,7 +494,6 @@ const Products = () => {
                   </div>
                 </div>
 
-                {/* Ratings */}
                 <div className="mb-6">
                   <h4 className="font-semibold text-gray-800 mb-3">Minimum Rating</h4>
                   <div className="space-y-2">
@@ -536,7 +502,7 @@ const Products = () => {
                         <input
                           type="checkbox"
                           checked={selectedRatings.includes(rating.toString())}
-                          onChange={(e) => {
+                          onChange={() => {
                             if (selectedRatings.includes(rating.toString())) {
                               setSelectedRatings(selectedRatings.filter(r => r !== rating.toString()));
                             } else {
@@ -563,9 +529,7 @@ const Products = () => {
             )}
           </AnimatePresence>
 
-          {/* Products Grid */}
           <div className="flex-1 w-full">
-            {/* Results Count */}
             <motion.div
               className="mb-6"
               initial={{ opacity: 0 }}
@@ -591,7 +555,6 @@ const Products = () => {
               </div>
             </motion.div>
 
-            {/* Products */}
             {loading ? (
               <div className="flex justify-center items-center py-16">
                 <div className="flex flex-col items-center space-y-4">
@@ -604,12 +567,12 @@ const Products = () => {
                 <motion.div
 className={`grid gap-4 sm:gap-6 mb-8 ${
  viewMode === 'grid'
-  ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5' // This line is changed
+  ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
   : 'grid-cols-1'
- }`}
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- transition={{ duration: 0.5 }}
+}`}
+initial={{ opacity: 0 }}
+animate={{ opacity: 1 }}
+transition={{ duration: 0.5 }}
 >
                   {paginatedProducts.map((product, index) => (
                     <motion.div
@@ -623,7 +586,6 @@ className={`grid gap-4 sm:gap-6 mb-8 ${
                   ))}
                 </motion.div>
 
-                {/* Pagination */}
                 {totalPages > 1 && (
                   <motion.div
                     className="flex justify-center items-center space-x-2 w-full"

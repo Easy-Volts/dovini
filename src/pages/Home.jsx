@@ -1285,6 +1285,7 @@ const Home = () => {
           {/* Button */}
           <motion.div
             className="text-center mt-10 sm:mt-12 lg:mt-14"
+            onClick={() => navigate('/products')}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.6 }}
