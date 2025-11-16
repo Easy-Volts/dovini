@@ -424,7 +424,8 @@ const Home = () => {
     .filter((product) => product.isFlashDeal)
     .slice(0, 6);
   const limitedStock = products
-    .slice(0, 9);
+    .filter((product) => product.isLimitedStock)
+    .slice(0, 6);
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {

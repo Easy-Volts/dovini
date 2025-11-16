@@ -33,76 +33,91 @@ const cartReducer = (state, action) => {
   }
 };
 
+// Generate user-specific storage key
+const getUserCartKey = (user) => {
+  if (!user || !user.id) return 'dovini_guest_cart';
+  return `dovini_cart_user_${user.id}`;
+};
+
+// Generate guest cart key
+const getGuestCartKey = () => 'dovini_guest_cart';
+
+// Merge guest cart with user cart
+const mergeCarts = (guestCart, userCart) => {
+  const merged = [...userCart];
+  guestCart.forEach(guestItem => {
+    const existingIndex = merged.findIndex(item => item.id === guestItem.id);
+    if (existingIndex >= 0) {
+      merged[existingIndex].quantity += guestItem.quantity;
+    } else {
+      merged.push(guestItem);
+    }
+  });
+  return merged;
+};
+
+// Load cart from localStorage
+const loadCartFromStorage = (key) => {
+  try {
+    const localData = localStorage.getItem(key);
+    return localData ? JSON.parse(localData) : [];
+  } catch (error) {
+    console.error('Error loading cart from localStorage:', error);
+    return [];
+  }
+};
+
+// Save cart to localStorage
+const saveCartToStorage = (key, cartData) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(cartData));
+  } catch (error) {
+    console.error('Error saving cart to localStorage:', error);
+  }
+};
+
 export const CartProvider = ({ children }) => {
   const { user, isAuthenticated } = useAuth();
-  const [cart, dispatch] = useReducer(cartReducer, [], () => {
-    const localData = localStorage.getItem('cart');
-    return localData ? JSON.parse(localData) : [];
-  });
+  
+  // Generate current user's cart key
+  const currentCartKey = isAuthenticated && user ? getUserCartKey(user) : getGuestCartKey();
+  
+  // Load initial cart
+  const initialCart = loadCartFromStorage(currentCartKey);
+  
+  const [cart, dispatch] = useReducer(cartReducer, initialCart);
 
-
-  // Helper function to merge guest cart with user cart
-  const mergeCarts = (guestCart, userCart) => {
-    const merged = [...userCart];
-    guestCart.forEach(guestItem => {
-      const existingIndex = merged.findIndex(item => item.id === guestItem.id);
-      if (existingIndex >= 0) {
-        merged[existingIndex].quantity += guestItem.quantity;
-      } else {
-        merged.push(guestItem);
-      }
-    });
-    return merged;
-  };
-
-  const updateUserCart = async (userId, cartData) => {
-    try {
-      await fetch(`http://localhost:3000/users/${userId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cart: cartData }),
-      });
-    } catch (error) {
-      console.error('Error updating user cart:', error);
-    }
-  };
-
+  // Handle user authentication changes
   useEffect(() => {
     if (isAuthenticated && user) {
-      // Load user's cart from server
-      fetch(`http://localhost:3000/users/${user.id}`)
-        .then(res => res.json())
-        .then(userData => {
-          if (userData.cart && userData.cart.length > 0) {
-            // Merge guest cart with user cart
-            const guestCart = JSON.parse(localStorage.getItem('cart') || '[]');
-            const mergedCart = mergeCarts(guestCart, userData.cart);
-            dispatch({ type: 'SET_CART', payload: mergedCart });
-            // Update server with merged cart
-            updateUserCart(user.id, mergedCart);
-          } else {
-            // If user has no cart, use guest cart
-            const guestCart = JSON.parse(localStorage.getItem('cart') || '[]');
-            if (guestCart.length > 0) {
-              dispatch({ type: 'SET_CART', payload: guestCart });
-              updateUserCart(user.id, guestCart);
-            }
-          }
-        })
-        .catch(error => console.error('Error loading user cart:', error));
-    } else {
-      // User logged out, save current cart to localStorage
-      localStorage.setItem('cart', JSON.stringify(cart));
+      // User just logged in
+      const userCartKey = getUserCartKey(user);
+      const currentUserCart = loadCartFromStorage(userCartKey);
+      const guestCart = loadCartFromStorage(getGuestCartKey());
+      
+      if (guestCart.length > 0) {
+        // Merge guest cart with user cart
+        const mergedCart = mergeCarts(guestCart, currentUserCart);
+        dispatch({ type: 'SET_CART', payload: mergedCart });
+        saveCartToStorage(userCartKey, mergedCart);
+        
+        // Clear guest cart
+        localStorage.removeItem(getGuestCartKey());
+      } else if (currentUserCart.length > 0) {
+        // Load existing user cart
+        dispatch({ type: 'SET_CART', payload: currentUserCart });
+      }
+    } else if (!isAuthenticated && user === null) {
+      // User just logged out - save to guest cart
+      const guestCartKey = getGuestCartKey();
+      saveCartToStorage(guestCartKey, cart);
     }
   }, [isAuthenticated, user]);
 
-  // Save cart to server when cart changes and user is authenticated
+  // Save cart changes to appropriate storage location
   useEffect(() => {
-    if (isAuthenticated && user && cart.length >= 0) {
-      updateUserCart(user.id, cart);
-    } else if (!isAuthenticated) {
-      localStorage.setItem('cart', JSON.stringify(cart));
-    }
+    const storageKey = isAuthenticated && user ? getUserCartKey(user) : getGuestCartKey();
+    saveCartToStorage(storageKey, cart);
   }, [cart, isAuthenticated, user]);
 
   const addToCart = (product) => {
@@ -123,10 +138,57 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => {
     dispatch({ type: 'CLEAR_CART' });
+    
+    // Also clear from storage
+    const storageKey = isAuthenticated && user ? getUserCartKey(user) : getGuestCartKey();
+    localStorage.removeItem(storageKey);
   };
 
   const getTotal = () => {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  };
+
+  const getItemCount = () => {
+    return cart.reduce((total, item) => total + item.quantity, 0);
+  };
+
+  const getCartSummary = () => {
+    const total = getTotal();
+    const itemCount = getItemCount();
+    const savings = cart.reduce((total, item) => {
+      if (item.originalPrice && item.originalPrice > item.price) {
+        return total + ((item.originalPrice - item.price) * item.quantity);
+      }
+      return total;
+    }, 0);
+
+    return {
+      total,
+      itemCount,
+      savings,
+      isEmpty: cart.length === 0
+    };
+  };
+
+  // Get user's cart key (useful for debugging or showing cart info)
+  const getCurrentUserCartKey = () => {
+    return currentCartKey;
+  };
+
+  // Clear all user carts (useful for admin or cleanup)
+  const clearAllUserCarts = () => {
+    const keys = Object.keys(localStorage);
+    keys.forEach(key => {
+      if (key.startsWith('dovini_cart_user_')) {
+        localStorage.removeItem(key);
+      }
+    });
+  };
+
+  // Get all saved user cart keys (for admin purposes)
+  const getAllUserCartKeys = () => {
+    const keys = Object.keys(localStorage);
+    return keys.filter(key => key.startsWith('dovini_cart_user_'));
   };
 
   return (
@@ -137,6 +199,13 @@ export const CartProvider = ({ children }) => {
       updateQuantity,
       clearCart,
       getTotal,
+      getItemCount,
+      getCartSummary,
+      getCurrentUserCartKey,
+      clearAllUserCarts,
+      getAllUserCartKeys,
+      isAuthenticated,
+      user,
     }}>
       {children}
     </CartContext.Provider>

@@ -44,7 +44,7 @@ const NotFound = () => {
             className="relative mb-8"
             variants={itemVariants}
           >
-            <div className="text-9xl md:text-[12rem] font-black text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-700 to-red-800 leading-none">
+            <div className="text-9xl md:text-[12rem] font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 leading-none">
               404
             </div>
             <motion.div

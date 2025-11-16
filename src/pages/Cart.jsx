@@ -142,7 +142,7 @@ const Cart = () => {
                 <span>Start Shopping</span>
               </Link>
               <Link
-                to="/categories"
+                to="/products"
                 className="btn-secondary px-8 py-4 text-lg flex items-center space-x-2"
               >
                 <Package className="w-5 h-5" />
