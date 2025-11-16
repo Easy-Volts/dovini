@@ -1,4 +1,4 @@
-import React, { Suspense, lazy,useState } from 'react';
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import { ToastProvider } from './context/ToastContext';
@@ -9,7 +9,6 @@ import { ReviewsProvider } from './context/ReviewsContext';
 import { ChatProvider } from './context/ChatContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import LoadingSkeleton from './components/LoadingSkeleton';
 import Chat from './components/Chat';
 import ScrollToTop from './components/ScrollToTop';
 import About from './pages/About'
@@ -19,33 +18,23 @@ import ProtectedRoute from './components/ProtectedRoute';
 import AdminDashBoard from './pages/AdminDashBoard';
 import Privacy from './pages/Privacy';
 import { ProductProvider } from './context/ProductContext';
-
-
-const Home = lazy(() => import('./pages/Home'));
-const Category = lazy(() => import('./pages/Category'));
-const Products = lazy(() => import('./pages/Products'));
+import Home from './pages/Home';
+import Category from './pages/Category';
+import Products from './pages/Products';
 import ProductDetails from './pages/ProductDetails';
 import Terms from './pages/Terms';
-const Wishlist = lazy(() => import('./pages/Wishlist'));
-const Cart = lazy(() => import('./pages/Cart'));
-const Checkout = lazy(() => import('./pages/Checkout'));
-const Login = lazy(() => import('./pages/Login'));
-const Signup = lazy(() => import('./pages/Signup'));
-const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
-const AccountActivation = lazy(() => import('./pages/AccountActivation'));
-const Orders = lazy(() => import('./pages/Orders'));
-const FlashDeals = lazy(() => import('./pages/FlashDeals'));
+import Wishlist from './pages/Wishlist';
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import ForgotPassword from './pages/ForgotPassword';
+import AccountActivation from './pages/AccountActivation';
+import Orders from './pages/Orders';
+import FlashDeals from './pages/FlashDeals';
 import NotFound from './pages/NotFound';
 
-// Loading component for Suspense fallback
-const PageLoader = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <LoadingSkeleton type="page" />
-  </div>
-);
-
 const App = () => {
-
   return (
     <AuthProvider>
       <ChatProvider>
@@ -58,30 +47,28 @@ const App = () => {
                   <div className="min-h-screen flex flex-col">
                     <Header />
                     <main className="flex-grow pb-16 lg:pb-0">
-                      <Suspense fallback={<PageLoader />}>
-                        <Routes>
-                          <Route path="/" element={<Home />} />
-                          <Route path="/category/:id" element={<Category />} />
-                          <Route path="/products" element={<Products />} />
-                          <Route path="/product/:id" element={<ProductDetails/>} />
-                          <Route path="/wishlist" element={<Wishlist />} />
-                          <Route path="/cart" element={<Cart />} />
-                          <Route path="/checkout" element={<Checkout />} />
-                          <Route path="/login" element={<Login />} />
-                          <Route path="/signup" element={<Signup />} />
-                          <Route path="/admin" element={<AdminDashBoard />} />
-                          <Route path="/my-account" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-                          <Route path="/myaccount/settings" element={<ProtectedRoute><AccountSettingsPage /></ProtectedRoute>} />
-                          <Route path="/forgot-password" element={<ForgotPassword />} />
-                          <Route path="/privacy-policies" element={<Privacy />} />
-                          <Route path="/terms" element={<Terms />} />
-                          <Route path="/account-activation" element={<AccountActivation />} />
-                          <Route path="/orders" element={<Orders />} />
-                          <Route path="/flash-deals" element={<FlashDeals />} />
-                          <Route path="/about" element={<About />} />
-                          <Route path="*" element={<NotFound />} />
-                        </Routes>
-                      </Suspense>
+                      <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/category/:id" element={<Category />} />
+                        <Route path="/products" element={<Products />} />
+                        <Route path="/product/:id" element={<ProductDetails/>} />
+                        <Route path="/wishlist" element={<Wishlist />} />
+                        <Route path="/cart" element={<Cart />} />
+                        <Route path="/checkout" element={<Checkout />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/signup" element={<Signup />} />
+                        <Route path="/admin" element={<AdminDashBoard />} />
+                        <Route path="/my-account" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                        <Route path="/myaccount/settings" element={<ProtectedRoute><AccountSettingsPage /></ProtectedRoute>} />
+                        <Route path="/forgot-password" element={<ForgotPassword />} />
+                        <Route path="/privacy-policies" element={<Privacy />} />
+                        <Route path="/terms" element={<Terms />} />
+                        <Route path="/account-activation" element={<AccountActivation />} />
+                        <Route path="/orders" element={<Orders />} />
+                        <Route path="/flash-deals" element={<FlashDeals />} />
+                        <Route path="/about" element={<About />} />
+                        <Route path="*" element={<NotFound />} />
+                      </Routes>
                     </main>
                     <Footer />
                     <Chat />
