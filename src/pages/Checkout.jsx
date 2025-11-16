@@ -128,13 +128,51 @@ const Checkout = () => {
 
     setIsProcessing(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    try {
+      // Get authentication token
+      const token = localStorage.getItem('dovini_token');
+      if (!token) {
+        throw new Error('Authentication required');
+      }
 
-    setOrderPlaced(true);
-    showSuccess("Order placed successfully! 🎉", 1000);
-    clearCart();
-    setIsProcessing(false);
+      // Format order data according to API specification
+      const orderData = {
+        user_id: user.id,
+        sub_total: total,
+        items: cart.map(item => ({
+          product_id: item.id,
+          quantity: item.quantity,
+          price: item.price
+        }))
+      };
+
+      // Make API call to create order
+      const response = await fetch('https://api.dovinigears.ng/orders/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(orderData)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to create order');
+      }
+
+      // Order created successfully
+      setOrderPlaced(true);
+      showSuccess("Order placed successfully! 🎉", 1000);
+      clearCart();
+      
+    } catch (error) {
+      console.error('Order creation error:', error);
+      showSuccess("Failed to create order. Please try again.", 3000);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   // Order Success Animation Component
