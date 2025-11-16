@@ -139,6 +139,13 @@ const Checkout = () => {
       const orderData = {
         user_id: user.id,
         sub_total: total,
+        name: user?.name || "",
+        email: user?.email || "",
+        phone: "",
+        address: "",
+        city: "",
+        state: "",
+        zipCode: "", 
         items: cart.map(item => ({
           product_id: item.id,
           quantity: item.quantity,

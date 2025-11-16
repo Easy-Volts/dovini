@@ -26,13 +26,18 @@ import {
 const Header = () => {
   const { cart } = useCart();
   const { wishlistCount } = useWishlist();
-  const { user, logout } = useAuth();
+  const { user, logout, isLoading } = useAuth();
   const navigate = useNavigate();
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const userMenuRef = useRef(null);
+
+  useEffect(() => {
+   console.log(user)
+  }, [user])
+  
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -194,18 +199,27 @@ const Header = () => {
               </Link>
               
 
-             {user ? (
+             {!isLoading && user ? (
                <div className="relative" ref={userMenuRef}>
                  <button
                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                    className="flex relative left-6 md:left-0 items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
                  >
                    <img
-                     src={user.avatar}
+                     src={user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=dc2626&color=fff`}
                      alt={user.name}
                      className="w-8 h-8 rounded-full border-2 border-red-200"
+                     onError={(e) => {
+                       e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=dc2626&color=fff`;
+                     }}
                    />
-                   <span className="hidden xl:inline font-medium text-gray-700">{user.name}</span>
+                   {/* Debug: Make text highly visible with bright colors and larger size */}
+                   <span
+                     className="hidden xl:inline font-bold text-red-600 text-lg bg-yellow-200 px-2 py-1 rounded"
+                     style={{display: 'block', background: 'yellow', color: 'red', fontSize: '16px', fontWeight: 'bold'}}
+                   >
+                     NAME: {user.name}
+                   </span>
                  </button>
 
                  {isUserMenuOpen && (
@@ -213,12 +227,18 @@ const Header = () => {
                      <div className="px-4 py-3 border-b border-gray-200">
                        <div className="flex items-center space-x-3">
                          <img
-                           src={user.avatar}
+                           src={user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=dc2626&color=fff`}
                            alt={user.name}
                            className="w-10 h-10 rounded-full border-2 border-red-200"
+                           onError={(e) => {
+                             e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=dc2626&color=fff`;
+                           }}
                          />
                          <div>
-                           <p className="font-semibold text-gray-900">{user.name}</p>
+                           <p className="font-semibold text-gray-900">
+                             {/* Debug: Show what we get for user.name */}
+                             {user.name || 'No Name Found'}
+                           </p>
                            <p className="text-sm text-gray-600">{user.email}</p>
                          </div>
                        </div>
@@ -365,7 +385,7 @@ const Header = () => {
                 {/* Mobile Categories */}
 
 
-                {user ? (
+                {!isLoading && user ? (
                   <div className="border-t border-gray-100 pt-4 space-y-3">
                     <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                       <img

@@ -89,10 +89,18 @@ const login = async (email, password) => {
 
     // Store token and user data
     const { token, ...userData } = data.data;
+    
+    // Ensure both name and full_name are available for compatibility
+    const normalizedUserData = {
+      ...userData,
+      name: userData.full_name || userData.name || userData.email,
+      full_name: userData.full_name || userData.name || userData.email
+    };
+    
     localStorage.setItem('dovini_token', token);
-    localStorage.setItem('dovini_user', JSON.stringify(userData));
+    localStorage.setItem('dovini_user', JSON.stringify(normalizedUserData));
 
-    setUser(userData);
+    setUser(normalizedUserData);
     return { success: true };
   } catch (error) {
     console.error('Login error:', error);
