@@ -30,12 +30,7 @@ import {
   ChevronRight,
   Camera,
   Aperture,
-  Focus,
-  Cpu,
-  Video,
-  Lightbulb,
-  SunMedium,
-  BatteryCharging,
+  
   SlidersHorizontal,
 } from "lucide-react";
 import { useCart } from "../context/CartContext";
@@ -412,89 +407,26 @@ const MobileFlashDealsCarousel = ({ flashDeals }) => {
   );
 };
 
-const Home = () => {
+const Home = ({categories}) => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { showSuccess } = useToast();
   const {products, loading} = useProducts()
 
-  const featuredProducts = products; // Show first 8 products
+  const featuredProducts = products; 
   const flashDeals = products
     .filter((product) => product.isFlashDeal)
     .slice(0, 6);
   const limitedStock = products
     .filter((product) => product.isLimitedStock)
     .slice(0, 6);
-  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  const extraCategoryData = {
-    1: {
-      image:
-        "https://images.openai.com/thumbnails/url/WSbURnicu5meUVJSUGylr5-al1xUWVCSmqJbkpRnoJdeXJJYkpmsl5yfq5-Zm5ieWmxfaAuUsXL0S7F0Tw70cw1NrwoO8Y7MLAkrcNTNKAmszC1zS88xNbNIyc8Ny6kw9jLLTYuPd3VNVyu2NTQAAB6oJYw",
-      icon: SunMedium,
-    },
-    2: {
-      image:
-        "https://images.unsplash.com/photo-1574281813181-02b512471486?fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=3000",
-      icon: Focus,
-    },
-    3: {
-      image:
-        "https://burst.shopifycdn.com/photos/black-microphone-set-against-a-pink-background.jpg?exif=0&format=pjpg&iptc=0&width=1000",
-      icon: Cpu,
-    },
-    4: {
-      image:
-        "https://lumecube.com/cdn/shop/files/Studio_Panel_Lighting_Kit_UCSD-09339-1160x1500-64b44e5_1160x.jpg?v=1704215663",
-      icon: Zap,
-    },
-    5: {
-      image:
-        "https://www.lighting-geek.com/wp-content/uploads/2023/05/14-3-1-e1689965711325.png",
-      icon: Lightbulb,
-    },
-    6: {
-      image:
-        "https://freestockfootagearchive.com/wp-content/uploads/2019/08/Glitchy-Shapes-Strobe-Light-Overlay-Effect.jpeg",
-      icon: BatteryCharging,
-    },
-    7: {
-      image:
-        "https://i.fbcd.co/products/resized/resized-750-500/c-1000-designbundle-studio-lighting-isolated-on-black02-11-10-e852f1a4722511624c5d4d237891e5857f2abad0c0b13f9912f6708d40fc8dfd.jpg",
-      icon: Package,
-    },
-    8: {
-      image: "https://www.ulanzi.com/cdn/shop/files/2_2x-2.png?v=1753167291",
-      icon: Video,
-    }
-  };
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await fetch("https://api.dovinigears.ng/categories");
-        if (!res.ok) {
-          throw new Error();
-        }
-        const data = await res.json();
-        console.log(data);
-        const mergedCategories = data.data.map((cat) => ({
-          ...cat, 
-          image: extraCategoryData[cat.id]?.image, // add frontend image
-          icon: extraCategoryData[cat.id]?.icon, // add frontend icon
-        }));
-        setCategories(mergedCategories);
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-    fetchCategories();
-  }, []);
+ 
 
   const handleBuyNow = (product) => {
     addToCart(product);

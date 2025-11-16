@@ -24,6 +24,8 @@ import {
   MessageCircle,
   Zap,
 } from "lucide-react";
+  import { useSearchParams } from 'react-router-dom';
+
 
 const Checkout = () => {
   const { cart, getTotal, clearCart } = useCart();
@@ -35,7 +37,7 @@ const Checkout = () => {
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState("card");
   const [formData, setFormData] = useState({
-    name: user?.name || "",
+    name: user?.name || "hello",
     email: user?.email || "",
     phone: "",
     address: "",
@@ -49,14 +51,28 @@ const Checkout = () => {
   });
   const [formErrors, setFormErrors] = useState({});
 
+const [searchParams] = useSearchParams();
+  const selectedShipping = searchParams.get('shipping');
+  console.log(selectedShipping)
+  const [shipping, setShipping] = useState(0)
+
    useEffect(() => {
      window.scrollTo({top: 0, behavior: 'smooth'})
    }, [])
   
   const total = getTotal();
-  const shipping = total > 50000 ? 0 : 2500;
-  const tax = Math.round(total * 0.075);
+  const tax = 0
   const finalTotal = total + shipping + tax;
+
+  useEffect(() => {
+    if (selectedShipping === 'express') {
+      setShipping(5000)
+    } else if(selectedShipping === 'standard') {
+       setShipping(2500)
+    } else {
+      setShipping(0)
+    }
+  }, [selectedShipping])
 
   const steps = [
     { id: 1, title: "Shipping", icon: Truck },
@@ -138,18 +154,17 @@ const Checkout = () => {
       // Format order data according to API specification
       const orderData = {
         user_id: user.id,
-        sub_total: total,
-        name: user?.name || "",
-        email: user?.email || "",
-        phone: "",
-        address: "",
-        city: "",
-        state: "",
-        zipCode: "", 
+        sub_total: shipping,
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        city: formData.city,
+        state: formData.state,
+        zipCode: formData.zipCode, 
         items: cart.map(item => ({
           product_id: item.id,
           quantity: item.quantity,
-          price: item.price
         }))
       };
 

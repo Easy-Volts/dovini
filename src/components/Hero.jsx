@@ -25,42 +25,42 @@ const slides = [
   {
     title: "CAPTURE THE MOMENT",
     subtitle: "Up to 40% Off Premium Lenses and Kits.",
-    backgroundImage: "https://images.unsplash.com/photo-1606983340222-685b8ad6a142?q=80&w=870&auto=format&fit=crop",
+    backgroundImage: "https://i.ibb.co/LDcQbPC8/2.jpg",
     tag: "SHUTTER SALE",
     tagColor: "bg-gradient-to-r from-amber-500 via-orange-500 to-red-500",
   },
   {
     title: "NEW DOVINI MARK V",
     subtitle: "Pre-order now and get a free battery grip!",
-    backgroundImage: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=870&auto=format&fit=crop",
+    backgroundImage: "https://i.ibb.co/ZpjbpZhM/6.jpg",
     tag: "PRE-ORDER",
     tagColor: "bg-gray-900",
   },
   {
     title: "DRONE FLYAWAY SALE",
     subtitle: "Massive discounts on all Aerial Gear. Limited stock!",
-    backgroundImage: "https://images.unsplash.com/photo-1473968512647-3e447244af8f?q=80&w=870&auto=format&fit=crop",
+    backgroundImage: "https://i.ibb.co/LX0XYd4b/7.jpg",
     tag: "FLY HIGH",
     tagColor: "bg-gradient-to-r from-amber-500 via-orange-500 to-red-500",
   },
   {
     title: "PROFESSIONAL LIGHTING",
     subtitle: "Studio lights and modifiers at unbeatable prices.",
-    backgroundImage: "https://images.unsplash.com/photo-1552168324-d612d77725e3?q=80&w=870&auto=format&fit=crop",
+    backgroundImage: "https://i.ibb.co/x8CHkRG6/1.jpg",
     tag: "LIGHT UP",
     tagColor: "bg-yellow-600",
   },
   {
     title: "ACCESSORY BUNDLE",
     subtitle: "Complete your kit with essential accessories.",
-    backgroundImage: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=870&auto=format&fit=crop",
+    backgroundImage: "https://i.ibb.co/wZRswpwq/4.jpg",
     tag: "BUNDLE DEAL",
     tagColor: "bg-green-600",
   },
   {
     title: "USED GEAR MARKET",
     subtitle: "Certified pre-owned equipment at great prices.",
-    backgroundImage: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=870&auto=format&fit=crop",
+    backgroundImage: "https://i.ibb.co/fVQqFSZQ/5.jpg",
     tag: "PRE-OWNED",
     tagColor: "bg-blue-600",
   },
@@ -92,9 +92,9 @@ const promoTiles = [
     link: "#",
   },
   {
-    title: "Used Gear Sell",
-    subtitle: "Quick Cash Offer",
-    backgroundImage: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
+    title: "Used Gear Purchase",
+    subtitle: "Quick Offer",
+    backgroundImage: "https://i.ibb.co/9HZ1LqgH/8.jpg",
     overlayColor: "rgba(234, 179, 8, 0.7)", // yellow-500 with opacity
     textColor: "text-white",
     link: "#",
@@ -102,15 +102,15 @@ const promoTiles = [
   {
     title: "Trade-Up Bonus",
     subtitle: "10% Extra Credit",
-    backgroundImage: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
+    backgroundImage: "https://i.ibb.co/BHJDHcDp/9.jpg",
     overlayColor: "rgba(34, 197, 94, 0.7)", // green-500 with opacity
     textColor: "text-white",
     link: "#",
   },
   {
     title: "New Arrivals",
-    subtitle: "Latest Gear",
-    backgroundImage: "https://images.unsplash.com/photo-1606983340222-685b8ad6a142?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
+    subtitle: "Latest Microphones",
+    backgroundImage: "https://i.ibb.co/rGt66zm5/10.jpg",
     overlayColor: "rgba(99, 102, 241, 0.7)", // indigo-500 with opacity
     textColor: "text-white",
     link: "#",
@@ -155,14 +155,12 @@ const Hero = ({categories}) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setCurrentSlide((prevIndex) => (prevIndex + 1) % totalSlides);
-    }, 5000); // Change slide every 5 seconds (5000ms)
-
+    }, 5000); 
     return () => clearTimeout(timer);
   }, [currentSlide, totalSlides]);
 
   const slide = slides[currentSlide];
 
-  // Function to handle horizontal scrolling of the promo tiles
   const scrollContainer = (direction) => {
     const container = document.getElementById("promo-scroll-container");
     if (container) {

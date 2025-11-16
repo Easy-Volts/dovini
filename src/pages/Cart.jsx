@@ -71,7 +71,7 @@ const Cart = () => {
     if (!isAuthenticated) {
       setShowLoginPrompt(true);
     } else {
-      navigate('/checkout');
+      navigate(`/checkout?shipping=${selectedShipping}`);
     }
   };
 

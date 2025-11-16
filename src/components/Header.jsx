@@ -410,12 +410,12 @@ const Header = () => {
                       </Link>
 
                       <Link
-                        to="/profile"
+                        to="/my-account"
                         className="flex items-center space-x-3 w-full px-4 py-3 rounded-lg text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         <User className="w-5 h-5" />
-                        <span>Profile</span>
+                        <span>My Account</span>
                       </Link>
 
                       <button
