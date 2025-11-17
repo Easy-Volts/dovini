@@ -5,6 +5,7 @@ import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
 import HeaderAds from './HeaderAds'
 import { motion } from "framer-motion";
+import { useOrders } from "../context/OrdersContext";
 import {
   Home,
   Grid3X3,
@@ -20,7 +21,14 @@ import {
   Landmark,
   Download,
   Star,
-  Truck
+  Truck,
+  MapPin,
+  Settings,
+  HelpCircle,
+  Shield,
+  MessageCircle,
+  Tag,
+  Package
 } from "lucide-react";
 
 const Header = () => {
@@ -33,6 +41,7 @@ const Header = () => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const userMenuRef = useRef(null);
+  const {orders} = useOrders()
 
   useEffect(() => {
     console.log(user)
@@ -169,7 +178,7 @@ const Header = () => {
 
             {/* Right Side Actions with Text */}
             <div className="flex items-center space-x-2">
-             
+              
               
               {/* Wishlist with Text */}
               <Link
@@ -200,7 +209,7 @@ const Header = () => {
               <Link
                     onClick={() => setIsMobileMenuOpen(false)}
                   to="/cart"
-                  className="flex md:hidden relative items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
+                  className="flex md:hidden relative left-4 items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
                 >
                     <ShoppingCart className="w-5 h-5 lg:w-6 lg:h-6 font-bold" />
                   {cartCount > 0 && (
@@ -280,8 +289,10 @@ const Header = () => {
                      <div className="border-t border-gray-200 mt-2">
                        <button
                          onClick={() => {
-                           logout();
-                           setIsUserMenuOpen(false);
+                           logout(() => {
+                             navigate('/login');
+                             setIsUserMenuOpen(false);
+                           });
                          }}
                          className="flex items-center space-x-3 w-full px-4 py-3 text-red-600 hover:bg-red-50 transition-colors"
                        >
@@ -316,7 +327,7 @@ const Header = () => {
                <Phone className="w-4 h-4" />
                <span className="hidden 2xl:inline">08063971335</span>
              </a>
-            
+             
                
             </div>
           </div>
@@ -367,93 +378,162 @@ const Header = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden bg-white border-t border-gray-200">
-            <div className="px-4 py-6 space-y-4">
+          <div className="lg:hidden bg-white border-t border-gray-200 max-h-[calc(100vh-80px)] overflow-y-auto">
+            <div className="px-4 py-4 space-y-1">
 
-                {/* Mobile Navigation */}
-                <div className="space-y-2">
-           
-
-                  <Link
-                    to="/about"
-                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <Landmark className="w-5 h-5" />
-                    <span>About</span>
-                  </Link>
-                </div>
-
-                {/* Mobile Categories */}
-
-
-                {!isLoading && user ? (
-                  <div className="border-t border-gray-100 pt-4 space-y-3">
-                   
-
-                    <div className="space-y-2">
-                      <Link
-                        to="/orders"
-                        className="flex items-center space-x-3 w-full px-4 py-3 rounded-lg text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        <ShoppingBag className="w-5 h-5" />
-                        <span>My Orders</span>
-                      </Link>
-
-                      <Link
-                        to="/my-account"
-                        className="flex items-center space-x-3 w-full px-4 py-3 rounded-lg text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        <User className="w-5 h-5" />
-                        <span>My Account</span>
-                      </Link>
-
-                      <button
-                        onClick={() => {
-                          logout();
-                          setIsMobileMenuOpen(false);
+              {/* User Profile Section - When Logged In */}
+              {!isLoading && user ? (
+                <div className="mb-6">
+                  <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-lg p-4 text-white mb-4">
+                    <div className="flex items-center space-x-3">
+                      <img
+                        src={user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=f97316&color=fff`}
+                        alt={user.name}
+                        className="w-12 h-12 rounded-full border-2 border-white/20"
+                        onError={(e) => {
+                          e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=f97316&color=fff`;
                         }}
-                        className="flex items-center space-x-3 w-full px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
-                      >
-                        <LogOut className="w-5 h-5" />
-                        <span>Sign Out</span>
-                      </button>
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-white truncate">{user.name}</p>
+                        <p className="text-white/80 text-sm truncate">{user.email}</p>
+                      </div>
                     </div>
                   </div>
-                ) : (
-                  <div className="border-t border-gray-100 pt-4 space-y-3">
-                    <Link
-                      to="/login"
-                      className="flex items-center justify-center w-full py-3 px-4 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white rounded-lg font-medium hover:bg-red-700 transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      Sign In
-                    </Link>
-                    <Link
-                      to="/signup"
-                      className="flex items-center justify-center w-full py-3 px-4 border-2 border-red-600 text-red-600 rounded-lg font-medium hover:bg-red-50 transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      Sign Up
-                    </Link>
-                  </div>
-                )}
 
-                {/* Mobile Contact */}
-                <div className="border-t border-gray-100 pt-4">
-                  <a
-                    href="tel:08063971335"
-                    className="flex items-center justify-center space-x-3 w-full py-3 px-4 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white rounded-lg font-medium hover:bg-red-700 transition-colors"
-                  >
-                    <Phone className="w-5 h-5" />
-                    <span>Call: 08063971335</span>
-                  </a>
+                  {/* Quick Stats */}
+                  <div className="grid grid-cols-3 gap-2 mb-4">
+                    <div className="bg-gray-50 rounded-lg p-3 text-center">
+                      <div className="text-lg font-bold text-gray-800">{cartCount}</div>
+                      <div className="text-xs text-gray-600">Cart</div>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg p-3 text-center">
+                      <div className="text-lg font-bold text-gray-800">{wishlistCount}</div>
+                      <div className="text-xs text-gray-600">Wishlist</div>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg p-3 text-center">
+                      <div className="text-lg font-bold text-gray-800">{orders.length}</div>
+                      <div className="text-xs text-gray-600">Orders</div>
+                    </div>
+                  </div>
                 </div>
+              ) : null}
+
+              {/* Main Navigation */}
+              <div className="space-y-1">
+                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-2">Main Menu</div>
+
+                <Link
+                  to="/about"
+                  className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Landmark className="w-5 h-5" />
+                  <span>About Us</span>
+                </Link>
               </div>
+
+              {/* Account Section */}
+              {!isLoading && user ? (
+                <div className="space-y-1 pt-4 border-t border-gray-200">
+                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-2">My Account</div>
+                  
+                   <Link
+                    to="/my-account"
+                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <User className="w-5 h-5" />
+                    <span>My Account</span>
+                  </Link>
+                  <Link
+                    to="/orders"
+                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <ShoppingBag className="w-5 h-5" />
+                    <span>My Orders</span>
+                  </Link>
+
+                  <Link
+                    to="/wishlist"
+                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Heart className="w-5 h-5" />
+                    <span>Wishlist</span>
+                    {wishlistCount > 0 && (
+                      <span className="ml-auto bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full">
+                        {wishlistCount}
+                      </span>
+                    )}
+                  </Link>
+
+                 
+                </div>
+              ) : (
+                <div className="space-y-1 pt-4 border-t border-gray-200">
+                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-2">Account</div>
+                  
+                  <Link
+                    to="/login"
+                    className="flex items-center justify-center space-x-2 mx-4 py-3 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white rounded-lg font-medium hover:bg-red-700 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <User className="w-4 h-4" />
+                    <span>Sign In</span>
+                  </Link>
+                  
+                  <Link
+                    to="/signup"
+                    className="flex items-center justify-center space-x-2 mx-4 py-3 border-2 border-red-600 text-red-600 rounded-lg font-medium hover:bg-red-50 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <User className="w-4 h-4" />
+                    <span>Create Account</span>
+                  </Link>
+                </div>
+              )}
+
+              {/* Support Section */}
+              <div className="space-y-1 pt-4 border-t border-gray-200">
+                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-2">Support</div>
+                
+                <a
+                  href="tel:08063971335"
+                  className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
+                >
+                  <Phone className="w-5 h-5" />
+                  <span>Call Support</span>
+                </a>
+
+               
+
+             
+              </div>
+
+              {!isLoading && user ? (
+                <div className="space-y-1 pt-4 border-t border-gray-200 ">
+                  <button
+                    onClick={() => {
+                      logout(() => {
+                        navigate('/login');
+                        setIsMobileMenuOpen(false);
+                      });
+                    }}
+                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors w-full text-left"
+                  >
+                    <LogOut className="w-5 h-5" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              ) : null}
+
+              {/* App Promotion */}
+             
             </div>
-          )}
+          </div>
+        )}
       </header>
 
       {/* Mobile Bottom Navigation */}

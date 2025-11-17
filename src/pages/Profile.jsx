@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useOrders } from '../context/OrdersContext';
@@ -30,12 +30,12 @@ import {
 import AddAddressModal from '../components/AddAddressModal';
 
 const Profile = () => {
-  const { user, logout, addAddress, updateAddress, deleteAddress } = useAuth();
+  const navigate = useNavigate();
+  const { user, logout, addAddress, updateAddress } = useAuth();
   const { wishlist, removeFromWishlist } = useWishlist();
   const { orders } = useOrders()
   const [totalSpent, setTotalSpent] = useState(0)
 
-  // Mock data for demonstration - in real app, this would come from API
   const userStats = {
     totalOrders: 24,
     totalSpent: 1250000,
@@ -56,7 +56,6 @@ const Profile = () => {
 
 
 
-  // Mock addresses
   
 
 
@@ -84,7 +83,7 @@ const Profile = () => {
               <h1 className="text-2xl font-bold text-gray-800">My Account</h1>
             </div>
             <button
-              onClick={logout}
+              onClick={() => logout(() => navigate('/login'))}
               className="flex items-center space-x-2 text-gray-600 hover:text-red-600 transition-colors"
             >
               <LogOut className="w-5 h-5" />
@@ -356,7 +355,6 @@ const Profile = () => {
                     </motion.div>
                   ))}
 
-                  {/* Add Address Button - Show if less than 2 addresses */}
                   {(!user?.shippingAddresses || user?.shippingAddresses?.length < 2) && (
                     <motion.div
                       className="border-2 border-dashed border-gray-300 rounded-lg p-8 hover:border-red-300 transition-colors cursor-pointer"

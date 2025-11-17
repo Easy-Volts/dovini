@@ -5,14 +5,16 @@ const AuthContext = createContext();
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    // Return default values instead of throwing error
     return {
       user: null,
       isAuthenticated: false,
       isLoading: true,
       login: () => Promise.resolve({ success: false, error: 'AuthProvider not available' }),
       signup: () => Promise.resolve({ success: false, error: 'AuthProvider not available' }),
-      logout: () => {},
+      logout: (callback) => {
+        console.log('AuthProvider not available');
+        if (callback) callback();
+      },
       updateProfile: () => {},
       addAddress: () => Promise.resolve({ success: false, error: 'AuthProvider not available' }),
       updateAddress: () => Promise.resolve({ success: false, error: 'AuthProvider not available' }),
@@ -150,7 +152,6 @@ const login = async (email, password) => {
       return { success: false, error: data.error || 'Login failed' };
     }
 
-    // Check if user is inactive
     if (data.data && data.data.is_active === false) {
       return { success: false, error: 'User is not active. Please verify your email to activate your account.' };
     }
@@ -158,17 +159,12 @@ const login = async (email, password) => {
     // Store token and user data
     const { token, ...userData } = data.data;
     
-    console.log('Login response data.data:', data.data);
-    console.log('Extracted userData:', userData);
-    
     // Determine the correct user object - handle nested structure
     const actualUserData = userData.user || userData; // Handle nested {user: {...}} or direct {...}
     const userId = actualUserData.id;
+
     
-    console.log('Actual user data:', actualUserData);
-    console.log('User ID for API call:', userId);
-    
-    // Fetch complete user profile data
+
     let completeUserData = actualUserData;
     try {
       const profileResponse = await fetch(`https://api.dovinigears.ng/me?user_id=${userId}`, {
@@ -188,21 +184,18 @@ const login = async (email, password) => {
           setFullUser(profileData.data)
           completeUserData = {
             ...profileData.data,
-            // Preserve any additional fields from original login that might not be in /me response
             token: token
           };
         }
       }
     } catch (profileError) {
       console.error('Error fetching user profile:', profileError);
-      // Fall back to original userData if profile fetch fails
       completeUserData = {
         ...actualUserData,
         token: token
       };
     }
     
-    // Ensure both name and full_name are available for compatibility
     const normalizedUserData = {
       ...completeUserData,
       name: completeUserData.full_name || completeUserData.name || completeUserData.email,
@@ -218,7 +211,6 @@ const login = async (email, password) => {
     return { success: true };
   } catch (error) {
     console.error('Login error:', error);
-    // Check if it's a CORS or network error
     if (error.message.includes('fetch')) {
       return { success: false, error: 'Unable to connect to server. Please check your internet connection.' };
     }
@@ -246,8 +238,6 @@ const login = async (email, password) => {
     }),
   });
 
-  console.log('Signup response status:', response.status);
-  console.log('Signup response headers:', response.headers);
 
   let data;
   try {
@@ -282,10 +272,18 @@ const login = async (email, password) => {
 };
 
 
-  const logout = () => {
+  const logout = (callback) => {
     setUser(null);
     localStorage.removeItem('dovini_token');
     localStorage.removeItem('dovini_user');
+    
+    // Clear wishlist for this user
+    localStorage.removeItem(`dovini-wishlist-user-${user?.id}`);
+    
+    // Execute callback if provided (e.g., for navigation)
+    if (callback) {
+      callback();
+    }
   };
 
   const updateProfile = (updates) => {
@@ -303,7 +301,7 @@ const login = async (email, password) => {
       const newAddress = {
         id: Date.now(),
         ...addressData,
-        isDefault: user.shippingAddresses?.length === 0 // First address is default
+        isDefault: user.shippingAddresses?.length === 0 
       };
 
       const updatedUser = {
@@ -411,9 +409,7 @@ const login = async (email, password) => {
         return { success: false, error: 'Server returned invalid response' };
       }
 
-      // Check account status based on the login response
       if (!loginCheckData.success) {
-        // If the error indicates account is not active
         if (loginCheckData.error && loginCheckData.error.toLowerCase().includes('not active')) {
           console.log(loginCheckData)
           return { success: false, error: 'User is not active. Please verify your email to activate your account.' };
@@ -421,10 +417,9 @@ const login = async (email, password) => {
         else if (loginCheckData.error && (loginCheckData.error.toLowerCase().includes('not found') || loginCheckData.error.toLowerCase().includes('invalid email'))) {
           return { success: false, error: 'No account found with this email address.' };
         }
-        // For other login errors (like wrong password), it means account exists and is active
+      
       }
 
-      // If we get here, the account exists and is active, proceed to send OTP
       const response = await fetch('https://api.dovinigears.ng/send-otp', {
         method: 'POST',
         headers: {
@@ -432,9 +427,6 @@ const login = async (email, password) => {
         },
         body: JSON.stringify({ email }),
       });
-
-      console.log('Send OTP response status:', response.status);
-      console.log('Send OTP response headers:', response.headers);
 
       let data;
       try {
@@ -454,7 +446,6 @@ const login = async (email, password) => {
       return { success: true, data: data.data };
     } catch (error) {
       console.error('Send OTP error:', error);
-      // Check if it's a CORS or network error
       if (error.message.includes('fetch')) {
         return { success: false, error: 'Unable to connect to server. Please check your internet connection.' };
       }
@@ -475,8 +466,6 @@ const login = async (email, password) => {
         body: JSON.stringify({ email, otp, purpose }),
       });
 
-      console.log('Verify OTP response status:', response.status);
-      console.log('Verify OTP response headers:', response.headers);
 
       let data;
       try {
@@ -493,7 +482,6 @@ const login = async (email, password) => {
         return { success: false, error: data.error || 'Invalid OTP' };
       }
 
-      // If this is account activation, return success with message
       if (purpose === 'activation') {
         return {
           success: true,
@@ -528,12 +516,8 @@ const login = async (email, password) => {
         body: JSON.stringify({ email }),
       });
 
-      // If the endpoint doesn't exist, we'll try an alternative approach
       if (!response.ok) {
-        console.log('check-account-status endpoint not available, trying alternative method');
         
-        // Alternative: Try to call the existing login API with dummy credentials
-        // This will give us information about whether the account exists and is active
         try {
           const loginResponse = await fetch('https://api.dovinigears.ng/login', {
             method: 'POST',
@@ -549,7 +533,6 @@ const login = async (email, password) => {
           const loginData = await loginResponse.json();
           
           if (loginData.error && loginData.error.includes('not active')) {
-            // Account exists but is not active
             return {
               success: true,
               data: {
@@ -558,7 +541,6 @@ const login = async (email, password) => {
               }
             };
           } else if (loginData.error && (loginData.error.includes('Invalid email') || loginData.error.includes('not found'))) {
-            // Account doesn't exist
             return {
               success: true,
               data: {
@@ -567,7 +549,6 @@ const login = async (email, password) => {
               }
             };
           } else {
-            // Account exists and is active (got different error like invalid password)
             return {
               success: true,
               data: {
@@ -578,7 +559,6 @@ const login = async (email, password) => {
           }
         } catch (loginError) {
           console.error('Alternative check also failed:', loginError);
-          // If we can't check status, assume account exists and let OTP attempt handle validation
           return { success: true, data: { exists: true, is_active: true } };
         }
       }
@@ -594,12 +574,11 @@ const login = async (email, password) => {
           }
         };
       } else {
-        // If the API call failed, assume account exists and let OTP attempt handle validation
         return { success: true, data: { exists: true, is_active: true } };
       }
     } catch (error) {
       console.error('Check account status error:', error);
-      // If we can't check status (server down), assume account exists and let OTP attempt handle validation
+  
       return { success: true, data: { exists: true, is_active: true } };
     } finally {
       setIsLoading(false);
@@ -628,14 +607,12 @@ const login = async (email, password) => {
       }
 
       if (!data.success) {
-        // Check if the error indicates inactive account
         if (data.error && data.error.toLowerCase().includes('not active')) {
           return { success: false, error: 'User is not active. Please verify your email to activate your account.' };
         }
         return { success: false, error: data.error || 'Login failed' };
       }
 
-      // Check if user is inactive
       if (data.data && data.data.is_active === false) {
         return { success: false, error: 'User is not active. Please verify your email to activate your account.' };
       }

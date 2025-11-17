@@ -7,18 +7,34 @@ import { useToast } from '../context/ToastContext';
 import AccountSettings from '../components/AccountSettings';
 
 const AccountSettingsPage = () => {
-  const { user } = useAuth();
+  const { user,setUser } = useAuth();
   const { showSuccess, showError } = useToast();
 
   // Mock functions for account settings
   const handleUpdateProfile = async (profileData) => {
-    // In a real app, this would make an API call
-    console.log('Updating profile:', profileData);
-    // Simulate API delay
+    const token = localStorage.getItem('dovini_token')
+    if(!token) return 'Authorization required'
+    try {
+      const res = await fetch('https://api.dovinigears.ng/me', {
+        method: 'PUT',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(profileData)
+      })
+      if (!res.ok) {
+        throw new Error('Error')
+      }
+      const data = await res.json()
+      console.log(data)
+     
     await new Promise(resolve => setTimeout(resolve, 1000));
-    // Update user data (in real app, this would come from API response)
     showSuccess('Profile updated successfully!', 1000);
     return Promise.resolve();
+    } catch (error) {
+      console.log(error.message)
+    }  
   };
 
   const handleChangePassword = async (passwordData) => {

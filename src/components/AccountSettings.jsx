@@ -15,19 +15,22 @@ import {
   Shield,
   Globe
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
-const AccountSettings = ({ user, onUpdateProfile, onChangePassword, onUpdatePreferences }) => {
+const AccountSettings = ({ onUpdateProfile, onChangePassword, onUpdatePreferences }) => {
   const [activeTab, setActiveTab] = useState('profile');
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const { user,setUser } = useAuth()    
+
 
   // Form states
   const [profileData, setProfileData] = useState({
-    name: user?.name || '',
+    fullName: user?.name || '',
     email: user?.email || '',
     phone: user?.phone || '',
-    bio: user?.bio || ''
+    address: user?.address || ''
   });
 
   const [passwordData, setPasswordData] = useState({
@@ -54,7 +57,13 @@ const AccountSettings = ({ user, onUpdateProfile, onChangePassword, onUpdatePref
     setMessage({ type: '', text: '' });
 
     try {
-      await onUpdateProfile(profileData);
+      const completeProfileData = {
+  fullName: profileData.fullName,
+  userId: user.id,   // FIXED
+  phone: profileData.phone,
+  address: profileData.address
+}
+      await onUpdateProfile(completeProfileData);
       setMessage({ type: 'success', text: 'Profile updated successfully!' });
     } catch (error) {
       setMessage({ type: 'error', text: 'Failed to update profile. Please try again.' });
@@ -115,7 +124,7 @@ const AccountSettings = ({ user, onUpdateProfile, onChangePassword, onUpdatePref
   return (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-red-600 to-red-700 text-white p-6">
+      <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white p-6">
         <h2 className="text-2xl font-bold mb-2">Account Settings</h2>
         <p className="text-red-100">Manage your account information and preferences</p>
       </div>
@@ -176,16 +185,11 @@ const AccountSettings = ({ user, onUpdateProfile, onChangePassword, onUpdatePref
                   alt={user?.name}
                   className="w-24 h-24 rounded-full object-cover border-4 border-gray-200"
                 />
-                <button
-                  type="button"
-                  className="absolute bottom-0 right-0 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white p-2 rounded-full hover:bg-red-700 transition-colors"
-                >
-                  <Camera className="w-4 h-4" />
-                </button>
+                
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-800">Profile Picture</h3>
-                <p className="text-gray-600 text-sm">Upload a new profile picture</p>
+                <h3 className="text-lg font-semibold text-gray-800">Contact Information</h3>
+                <p className="text-gray-600 text-sm">Upload contact information</p>
               </div>
             </div>
 
@@ -199,8 +203,8 @@ const AccountSettings = ({ user, onUpdateProfile, onChangePassword, onUpdatePref
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <input
                     type="text"
-                    value={profileData.name}
-                    onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+                    value={profileData.fullName}
+                    onChange={(e) => setProfileData({ ...profileData, fullName: e.target.value })}
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors"
                     placeholder="Enter your full name"
                   />
@@ -216,8 +220,9 @@ const AccountSettings = ({ user, onUpdateProfile, onChangePassword, onUpdatePref
                   <input
                     type="email"
                     value={profileData.email}
+                    disabled
                     onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors"
+                    className="disabled:bg-gray-100 w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors"
                     placeholder="Enter your email"
                   />
                 </div>
@@ -239,16 +244,16 @@ const AccountSettings = ({ user, onUpdateProfile, onChangePassword, onUpdatePref
                 </div>
               </div>
 
-              <div className="md:col-span-2">
+              <div className="">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Bio
+                  Address
                 </label>
-                <textarea
-                  value={profileData.bio}
-                  onChange={(e) => setProfileData({ ...profileData, bio: e.target.value })}
-                  rows={4}
+                <input
+                  value={profileData.address}
+                  onChange={(e) => setProfileData({ ...profileData, address: e.target.value })}
+                  type='text'
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors resize-none"
-                  placeholder="Tell us about yourself..."
+                  placeholder="Enter Shipping Address"
                 />
               </div>
             </div>

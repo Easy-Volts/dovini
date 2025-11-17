@@ -39,8 +39,8 @@ const Checkout = () => {
   const [formData, setFormData] = useState({
     name: user?.name || "hello",
     email: user?.email || "",
-    phone: "",
-    address: "",
+    phone: user?.phone || "",
+    address: user?.address || "",
     city: "",
     state: "",
     zipCode: "",
