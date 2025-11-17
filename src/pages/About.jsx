@@ -384,7 +384,7 @@ const About = () => {
               transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
               viewport={{ once: true }}
             >
-              <div className="bg-gradient-to-r from-red-500 to-red-600 p-3 rounded-xl shadow-xl">
+              <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 p-3 rounded-xl shadow-xl">
                 <Trophy className="w-6 h-6 text-white" />
               </div>
             </motion.div>
@@ -396,7 +396,7 @@ const About = () => {
               transition={{ delay: 0.4, duration: 0.8 }}
               viewport={{ once: true }}
             >
-              Why Choose <span className="bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">Dovini</span>?
+              Why Choose <span className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 bg-clip-text text-transparent">Dovini</span>?
             </motion.h2>
           </motion.div>
 
@@ -432,7 +432,7 @@ const About = () => {
               >
                 <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 border border-gray-100">
                   <motion.div
-                    className="inline-flex p-3 rounded-xl bg-gradient-to-br from-red-500 to-red-600 text-white shadow-lg mb-4"
+                    className="inline-flex p-3 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white shadow-lg mb-4"
                     whileHover={{ scale: 1.05, rotate: 3 }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >

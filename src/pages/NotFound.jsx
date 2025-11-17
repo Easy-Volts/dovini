@@ -30,6 +30,10 @@ const NotFound = () => {
     }
   };
 
+    React.useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }, [])
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-red-50/20 to-white overflow-hidden">
       <div className="container mx-auto px-4 py-8">
