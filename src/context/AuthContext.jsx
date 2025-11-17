@@ -29,6 +29,58 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showActivationPrompt, setShowActivationPrompt] = useState(false);
+  const [fullUser, setFullUser] = useState(null)
+
+  // Function to refresh user data from /me endpoint
+  const refreshUserData = async (userData, token) => {
+    // Check if user has valid ID
+    if (!userData || !userData.id) {
+      console.log('No user ID available for profile refresh');
+      return userData;
+    }
+
+    try {
+      console.log('Refreshing user data with ID:', userData.id);
+      const profileResponse = await fetch(`https://api.dovinigears.ng/me?user_id=${userData.user.id}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (profileResponse.ok) {
+        const profileData = await profileResponse.json();
+        console.log('Profile refresh response:', profileData);
+        
+        if (profileData.success && profileData.data) {
+          // Use the complete user data from /me endpoint
+          const refreshedUserData = {
+            ...profileData.data,
+            token: token
+          };
+          
+          // Ensure both name and full_name are available for compatibility
+          const normalizedUserData = {
+            ...refreshedUserData,
+            name: refreshedUserData.full_name || refreshedUserData.name || refreshedUserData.email,
+            full_name: refreshedUserData.full_name || refreshedUserData.name || refreshedUserData.email
+          };
+          
+          console.log('Updated user data:', normalizedUserData);
+          setUser(normalizedUserData);
+          localStorage.setItem('dovini_user', JSON.stringify(normalizedUserData));
+          return normalizedUserData;
+        }
+      } else {
+        console.log('Profile refresh failed with status:', profileResponse.status);
+      }
+    } catch (error) {
+      console.error('Error refreshing user data:', error);
+    }
+    // Return original user data if refresh fails
+    return userData;
+  };
 
   useEffect(() => {
     // Check for stored token and user data on app load
@@ -38,11 +90,27 @@ export const AuthProvider = ({ children }) => {
     if (storedToken && storedUser) {
       try {
         const userData = JSON.parse(storedUser);
+        console.log('Loaded user data from storage:', userData);
+        
+        // Validate user data has required fields
+        if (!userData || !userData.id) {
+          console.log('Invalid user data detected - missing ID. Cleaning up...');
+          localStorage.removeItem('dovini_token');
+          localStorage.removeItem('dovini_user');
+          setUser(null);
+          setIsLoading(false);
+          return;
+        }
+        
         setUser(userData);
+        
+        // Refresh user data from /me endpoint if user is authenticated
+        refreshUserData(userData, storedToken);
       } catch (error) {
         console.error('Error parsing stored user data:', error);
         localStorage.removeItem('dovini_token');
         localStorage.removeItem('dovini_user');
+        setUser(null);
       }
     }
     setIsLoading(false);
@@ -90,12 +158,58 @@ const login = async (email, password) => {
     // Store token and user data
     const { token, ...userData } = data.data;
     
+    console.log('Login response data.data:', data.data);
+    console.log('Extracted userData:', userData);
+    
+    // Determine the correct user object - handle nested structure
+    const actualUserData = userData.user || userData; // Handle nested {user: {...}} or direct {...}
+    const userId = actualUserData.id;
+    
+    console.log('Actual user data:', actualUserData);
+    console.log('User ID for API call:', userId);
+    
+    // Fetch complete user profile data
+    let completeUserData = actualUserData;
+    try {
+      const profileResponse = await fetch(`https://api.dovinigears.ng/me?user_id=${userId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (profileResponse.ok) {
+        const profileData = await profileResponse.json();
+        console.log('/me endpoint response:', profileData);
+        
+        if (profileData.success && profileData.data) {
+          // Use the complete user data from /me endpoint
+          setFullUser(profileData.data)
+          completeUserData = {
+            ...profileData.data,
+            // Preserve any additional fields from original login that might not be in /me response
+            token: token
+          };
+        }
+      }
+    } catch (profileError) {
+      console.error('Error fetching user profile:', profileError);
+      // Fall back to original userData if profile fetch fails
+      completeUserData = {
+        ...actualUserData,
+        token: token
+      };
+    }
+    
     // Ensure both name and full_name are available for compatibility
     const normalizedUserData = {
-      ...userData,
-      name: userData.full_name || userData.name || userData.email,
-      full_name: userData.full_name || userData.name || userData.email
+      ...completeUserData,
+      name: completeUserData.full_name || completeUserData.name || completeUserData.email,
+      full_name: completeUserData.full_name || completeUserData.name || completeUserData.email
     };
+    
+    console.log('Final normalized user data:', normalizedUserData);
     
     localStorage.setItem('dovini_token', token);
     localStorage.setItem('dovini_user', JSON.stringify(normalizedUserData));
@@ -546,6 +660,7 @@ const login = async (email, password) => {
     signup,
     logout,
     updateProfile,
+    fullUser,
     addAddress,
     updateAddress,
     deleteAddress,

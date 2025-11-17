@@ -35,7 +35,7 @@ const Header = () => {
   const userMenuRef = useRef(null);
 
   useEffect(() => {
-   console.log(user)
+    console.log(user)
   }, [user])
   
 
@@ -197,55 +197,73 @@ const Header = () => {
                   </span>
                 )}
               </Link>
-              
+              <Link
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  to="/cart"
+                  className="flex md:hidden relative items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
+                >
+                    <ShoppingCart className="w-5 h-5 lg:w-6 lg:h-6 font-bold" />
+                  {cartCount > 0 && (
+                    <motion.span
+                      className="absolute -top-0.5 left-6 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 500 }}
+                    >
+                      {cartCount}
+                    </motion.span>
+                  )}
+                  </Link>
 
              {!isLoading && user ? (
-               <div className="relative" ref={userMenuRef}>
+               <div className="relative border border-gray-200 rounded-lg shadow-xs hover:shadow-md transition-shadow duration-200" ref={userMenuRef}>
                  <button
                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                   className="flex relative left-6 md:left-0 items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                   className="flex items-center justify-center space-x-2 p-2 md:p-3 rounded-lg hover:bg-gray-50 transition-all duration-200 group w-full md:max-w-[200px]"
                  >
                    <img
-                     src={user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=dc2626&color=fff`}
+                     src={user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=f97316&color=fff`}
                      alt={user.name}
-                     className="w-8 h-8 rounded-full border-2 border-red-200"
+                     className="w-7 h-7 md:w-8 md:h-8 rounded-full border-2 border-red-200 group-hover:border-red-300 transition-colors flex-shrink-0"
                      onError={(e) => {
-                       e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=dc2626&color=fff`;
+                       e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=f97316&color=fff`;
                      }}
                    />
-                   {/* Debug: Make text highly visible with bright colors and larger size */}
-                   <span
-                     className="hidden xl:inline font-bold text-red-600 text-lg bg-yellow-200 px-2 py-1 rounded"
-                     style={{display: 'block', background: 'yellow', color: 'red', fontSize: '16px', fontWeight: 'bold'}}
-                   >
-                     NAME: {user.name}
+                   {/* Desktop name display */}
+                   <span className="hidden md:inline lg:inline xl:inline font-semibold text-sm text-gray-800 bg-gray-100 group-hover:bg-gray-200 px-2 py-1 md:px-3 md:py-1.5 rounded-full transition-all duration-200 border border-gray-200 group-hover:border-gray-300 truncate max-w-[80px] md:max-w-none">
+                     {user.name}
+                   </span>
+                   
+                   {/* Mobile-friendly short name with proper containment */}
+                   <span className="md:hidden lg:hidden xl:hidden font-semibold text-xs text-gray-800 bg-red-100 group-hover:bg-red-200 px-2 py-1 rounded-full transition-all duration-200 border border-red-200 truncate max-w-[50px]">
+                     {user.name?.split(' ')[0] || user.name}
                    </span>
                  </button>
 
                  {isUserMenuOpen && (
-                   <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                    <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-[60] overflow-visible">
+                      
                      <div className="px-4 py-3 border-b border-gray-200">
                        <div className="flex items-center space-x-3">
                          <img
-                           src={user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=dc2626&color=fff`}
+                           src={user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=f97316&color=fff`}
                            alt={user.name}
                            className="w-10 h-10 rounded-full border-2 border-red-200"
                            onError={(e) => {
-                             e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=dc2626&color=fff`;
+                             e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=f97316&color=fff`;
                            }}
                          />
-                         <div>
-                           <p className="font-semibold text-gray-900">
-                             {/* Debug: Show what we get for user.name */}
-                             {user.name || 'No Name Found'}
+                         <div className="flex-1 min-w-0">
+                           <p className="font-semibold text-sm sm:text-md text-gray-900 truncate">
+                             {user.name}
                            </p>
-                           <p className="text-sm text-gray-600">{user.email}</p>
+                           <p className="text-sm text-gray-600 truncate">{user.email}</p>
                          </div>
                        </div>
                      </div>
                      <Link
                        to="/orders"
-                       className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
+                       className="flex hidden sm:flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
                        onClick={() => setIsUserMenuOpen(false)}
                      >
                        <ShoppingBag className="w-5 h-5" />
@@ -253,7 +271,7 @@ const Header = () => {
                      </Link>
                      <Link
                        to="/my-account"
-                       className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
+                       className="sm:flex hidden items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
                        onClick={() => setIsUserMenuOpen(false)}
                      >
                        <User className="w-5 h-5" />
@@ -299,23 +317,7 @@ const Header = () => {
                <span className="hidden 2xl:inline">08063971335</span>
              </a>
             
-               <Link
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  to="/cart"
-                  className="flex md:hidden relative items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
-                >
-                    <ShoppingCart className="w-5 h-5 lg:w-6 lg:h-6 font-bold" />
-                  {cartCount > 0 && (
-                    <motion.span
-                      className="absolute -top-0.5 left-6 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", stiffness: 500 }}
-                    >
-                      {cartCount}
-                    </motion.span>
-                  )}
-                  </Link>
+               
             </div>
           </div>
 
@@ -387,17 +389,7 @@ const Header = () => {
 
                 {!isLoading && user ? (
                   <div className="border-t border-gray-100 pt-4 space-y-3">
-                    <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                      <img
-                        src={user.avatar}
-                        alt={user.name}
-                        className="w-10 h-10 rounded-full border-2 border-red-200"
-                      />
-                      <div>
-                        <p className="font-semibold text-gray-900">{user.name}</p>
-                        <p className="text-sm text-gray-600">{user.email}</p>
-                      </div>
-                    </div>
+                   
 
                     <div className="space-y-2">
                       <Link
