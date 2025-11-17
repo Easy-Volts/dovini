@@ -115,7 +115,6 @@ export const WishlistProvider = ({ children }) => {
     toggleWishlist,
     clearWishlist,
     wishlistCount,
-    // Expose current user info for debugging
     currentUserId: user?.id,
     isAuthenticated,
   };
