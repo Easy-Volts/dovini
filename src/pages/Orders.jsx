@@ -14,89 +14,19 @@ import {
   Eye,
   ShoppingBag
 } from 'lucide-react';
+import { useOrders } from '../context/OrdersContext';
 
 const Orders = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const { orders } = useOrders()
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  useEffect(() => {
-    if (!user) {
-      navigate('/login');
-      return;
-    }
-
-    // Load user's orders from localStorage (in a real app, this would be from an API)
-    const storedOrders = localStorage.getItem(`orders_${user.id}`);
-    if (storedOrders) {
-      try {
-        setOrders(JSON.parse(storedOrders));
-      } catch (error) {
-        console.error('Error parsing stored orders:', error);
-      }
-    } else {
-      // Mock orders for demo
-      const mockOrders = [
-        {
-          id: 'ORD-001',
-          date: '2024-01-15T10:30:00Z',
-          status: 'delivered',
-          total: 125000,
-          items: [
-            { id: 1, name: 'Canon EOS R5', quantity: 1, price: 125000, image: '/api/placeholder/100/100' }
-          ],
-          shippingAddress: {
-            name: 'John Doe',
-            address: '123 Main St, Lagos',
-            phone: '+2348012345678'
-          },
-          tracking: {
-            number: 'TRK-123456789',
-            carrier: 'DHL',
-            status: 'delivered',
-            updates: [
-              { date: '2024-01-15T14:30:00Z', status: 'Order placed', location: 'Lagos' },
-              { date: '2024-01-16T09:00:00Z', status: 'Order confirmed', location: 'Lagos' },
-              { date: '2024-01-17T11:30:00Z', status: 'Shipped', location: 'Lagos Warehouse' },
-              { date: '2024-01-19T16:45:00Z', status: 'Out for delivery', location: 'Lagos' },
-              { date: '2024-01-20T10:15:00Z', status: 'Delivered', location: '123 Main St, Lagos' }
-            ]
-          }
-        },
-        {
-          id: 'ORD-002',
-          date: '2024-01-10T15:45:00Z',
-          status: 'shipped',
-          total: 89000,
-          items: [
-            { id: 2, name: 'Nikon Z6 II', quantity: 1, price: 89000, image: '/api/placeholder/100/100' }
-          ],
-          shippingAddress: {
-            name: 'John Doe',
-            address: '123 Main St, Lagos',
-            phone: '+2348012345678'
-          },
-          tracking: {
-            number: 'TRK-987654321',
-            carrier: 'FedEx',
-            status: 'shipped',
-            updates: [
-              { date: '2024-01-10T16:00:00Z', status: 'Order placed', location: 'Lagos' },
-              { date: '2024-01-11T10:30:00Z', status: 'Order confirmed', location: 'Lagos' },
-              { date: '2024-01-12T14:20:00Z', status: 'Shipped', location: 'Lagos Warehouse' }
-            ]
-          }
-        }
-      ];
-      setOrders(mockOrders);
-      localStorage.setItem(`orders_${user.id}`, JSON.stringify(mockOrders));
-    }
-  }, [user, navigate]);
+  
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -162,7 +92,7 @@ const Orders = () => {
               <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-2xl font-bold">Order {selectedOrder.id}</h2>
+                    <h2 className="text-2xl font-bold">Order {selectedOrder.order_code}</h2>
                     <p className="text-red-100">
                       Placed on {new Date(selectedOrder.date).toLocaleDateString()}
                     </p>
@@ -314,7 +244,7 @@ const Orders = () => {
                     <div className="p-6">
                       <div className="flex items-center justify-between mb-4">
                         <div>
-                          <h3 className="text-lg font-semibold text-gray-900">Order {order.id}</h3>
+                          <h3 className="text-lg font-semibold text-gray-900">Order {order.order_code}</h3>
                           <p className="text-gray-600">
                             {new Date(order.date).toLocaleDateString()} • {order.items.length} item{order.items.length !== 1 ? 's' : ''}
                           </p>

@@ -15,6 +15,7 @@ import About from './pages/About'
 import Profile from './pages/Profile';
 import AccountSettingsPage from './pages/AccountSettingsPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import GuestRoute from './components/GuestRoute';
 import AdminDashBoard from './pages/AdminDashBoard';
 import Privacy from './pages/Privacy';
 import { ProductProvider } from './context/ProductContext';
@@ -33,6 +34,7 @@ import AccountActivation from './pages/AccountActivation';
 import Orders from './pages/Orders';
 import FlashDeals from './pages/FlashDeals';
 import NotFound from './pages/NotFound';
+import { OrdersProvider } from './context/OrdersContext';
 import { Focus,
   Cpu,
   Video,
@@ -119,6 +121,7 @@ const App = () => {
               <WishlistProvider>
                 <CartProvider>
                   <ProductProvider>
+                    <OrdersProvider>
                   <div className="min-h-screen flex flex-col">
                     <Header />
                     <main className="flex-grow pb-16 lg:pb-0">
@@ -129,17 +132,17 @@ const App = () => {
                         <Route path="/product/:id" element={<ProductDetails/>} />
                         <Route path="/wishlist" element={<Wishlist />} />
                         <Route path="/cart" element={<Cart />} />
-                        <Route path="/checkout" element={<Checkout />} />
+                        <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<Signup />} />
-                        <Route path="/admin" element={<AdminDashBoard />} />
+                        <Route path="/admin" element={<ProtectedRoute><AdminDashBoard /></ProtectedRoute>} />
                         <Route path="/my-account" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                         <Route path="/myaccount/settings" element={<ProtectedRoute><AccountSettingsPage /></ProtectedRoute>} />
                         <Route path="/forgot-password" element={<ForgotPassword />} />
                         <Route path="/privacy-policies" element={<Privacy />} />
                         <Route path="/terms" element={<Terms />} />
                         <Route path="/account-activation" element={<AccountActivation />} />
-                        <Route path="/orders" element={<Orders />} />
+                        <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
                         <Route path="/flash-deals" element={<FlashDeals />} />
                         <Route path="/about" element={<About />} />
                         <Route path="*" element={<NotFound />} />
@@ -148,7 +151,8 @@ const App = () => {
                     <Footer />
                     <Chat />
                     <ScrollToTop />
-                    </div>
+                      </div>
+                    </OrdersProvider>  
                    </ProductProvider> 
                 </CartProvider>
               </WishlistProvider>
