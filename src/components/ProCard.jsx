@@ -23,15 +23,14 @@ const ProCard = ({ product, index = 0 }) => {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { showSuccess } = useToast();
-  const { getProductRating, getProductReviews } = useReviews();
   const [isHovered, setIsHovered] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
 
 
-  const rating = getProductRating(product.id);
-  const reviewCount = getProductReviews(product.id).length;
+ 
 
-  // Simulate product status (in a real app, this would come from props or API)
+
+
   const isNew = index < 3; // First 3 products are "new"
   const isBestseller = index % 4 === 0; // Every 4th product is bestseller
   const isOnSale = index % 7 === 0; // Every 7th product is on sale
@@ -235,10 +234,10 @@ const ProCard = ({ product, index = 0 }) => {
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-2.5 h-2.5 sm:w-3 sm:h-3 ${i < Math.floor(rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                    className={`w-2.5 h-2.5 sm:w-3 sm:h-3 ${i < Math.floor(product.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
                   />
                 ))}
-                <span className="text-xs text-gray-600 ml-1">({reviewCount})</span>
+                <span className="text-xs text-gray-600 mx-2">({product.reviews})</span>
               </div>
 
               <div className="flex flex-col items-start leading-none min-w-[50%]"> 
