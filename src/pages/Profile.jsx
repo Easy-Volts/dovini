@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useWishlist } from '../context/WishlistContext';
+import { useOrders } from '../context/OrdersContext';
 import {
   User,
   ShoppingBag,
@@ -31,6 +32,8 @@ import AddAddressModal from '../components/AddAddressModal';
 const Profile = () => {
   const { user, logout, addAddress, updateAddress, deleteAddress } = useAuth();
   const { wishlist, removeFromWishlist } = useWishlist();
+  const { orders } = useOrders()
+  const [totalSpent, setTotalSpent] = useState(0)
 
   // Mock data for demonstration - in real app, this would come from API
   const userStats = {
@@ -39,66 +42,28 @@ const Profile = () => {
     wishlistItems: wishlist.length,
     reviewsGiven: 12
   };
+
+  useEffect(() => {
+    let totalSpentCount = 0
+  for (let i = 0; i < orders.length; i++) {
+    totalSpentCount += orders[i].total
+    }
+    setTotalSpent(totalSpentCount)
+ }, [orders])
+
+
  
 
-  // Mock recent orders
-  const recentOrders = [
-    {
-      id: 'ORD-001',
-      date: '2024-01-15',
-      status: 'Delivered',
-      total: 150000,
-      items: [
-        { name: 'Professional Softbox Kit', quantity: 1, price: 150000 }
-      ]
-    },
-    {
-      id: 'ORD-002',
-      date: '2024-01-10',
-      status: 'Shipped',
-      total: 250000,
-      items: [
-        { name: '3-Axis Gimbal Stabilizer', quantity: 1, price: 250000 }
-      ]
-    },
-    {
-      id: 'ORD-003',
-      date: '2024-01-05',
-      status: 'Processing',
-      total: 80000,
-      items: [
-        { name: 'Condenser Microphone', quantity: 1, price: 80000 }
-      ]
-    }
-  ];
+
 
   // Mock addresses
   
 
-  // Mock payment methods
-  const paymentMethods = [
-    {
-      id: 1,
-      type: 'Credit Card',
-      last4: '4242',
-      brand: 'Visa',
-      expiry: '12/26',
-      isDefault: true
-    },
-    {
-      id: 2,
-      type: 'Bank Transfer',
-      account: '****1234',
-      bank: 'GTBank',
-      isDefault: false
-    }
-  ];
 
   const menuItems = [
-    { icon: Package, label: 'My Orders', count: userStats.totalOrders, id: '#orders' },
+    { icon: Package, label: 'My Orders', count: orders.length, id: '#orders' },
     { icon: Heart, label: 'Wishlist', count: userStats.wishlistItems, id: '#wishlist' },
     { icon: MapPin, label: 'Addresses', count: user?.shippingAddresses?.length || 0, id: '#addresses' },
-    { icon: CreditCard, label: 'Payment Methods', count: paymentMethods?.length, id: '#payment-methods' },
     { icon: Settings, label: 'Account Settings', path: '/myaccount/settings' }
   ];
   const [showAddress, setShowAddress] = useState(false)
@@ -203,8 +168,8 @@ const Profile = () => {
             {/* Stats Overview */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {[
-                { icon: ShoppingBag, label: 'Total Orders', value: userStats.totalOrders, color: 'from-blue-500 to-blue-600' },
-                { icon: TrendingUp, label: 'Total Spent', value: `₦${(userStats.totalSpent / 100000).toFixed(1)}M`, color: 'from-green-500 to-green-600' },
+                { icon: ShoppingBag, label: 'Total Orders', value: orders.length, color: 'from-blue-500 to-blue-600' },
+                { icon: TrendingUp, label: 'Total Spent', value: `₦${totalSpent.toLocaleString()}`, color: 'from-green-500 to-green-600' },
                 { icon: Heart, label: 'Wishlist Items', value: userStats.wishlistItems, color: 'from-red-500 to-red-600' },
                 { icon: Award, label: 'Reviews Given', value: userStats.reviewsGiven, color: 'from-yellow-500 to-orange-500' }
               ].map((stat, index) => (
@@ -225,7 +190,7 @@ const Profile = () => {
             </div>
 
             {/* Recent Orders */}
-            <div className="bg-white rounded-2xl shadow-lg p-6" id='orders'>
+            <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6" id='orders'>
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-gray-800">Recent Orders</h2>
                 <Link to="/orders" className="text-red-600 hover:text-red-700 font-medium text-sm">
@@ -233,37 +198,48 @@ const Profile = () => {
                 </Link>
               </div>
               <div className="space-y-4">
-                {recentOrders.map((order, index) => (
+                {orders.slice(0,3).map((order, index) => (
                   <motion.div
                     key={order.id}
-                    className="border border-gray-200 rounded-lg p-4 hover:border-red-300 transition-colors"
+                    className="border border-gray-200 rounded-lg p-3 md:p-4 hover:border-red-300 transition-colors"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
                   >
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center space-x-4">
-                        <div className="text-sm font-medium text-gray-800">Order #{order.id}</div>
+                    {/* Order Header - Responsive Layout */}
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 space-y-2 sm:space-y-0">
+                      {/* Order Info - Stack on mobile, inline on desktop */}
+                      <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-4">
+                        <div className="text-sm font-medium text-gray-800">Order #{order.order_code}</div>
                         <div className="flex items-center space-x-1">
                           <Calendar className="w-4 h-4 text-gray-400" />
                           <span className="text-sm text-gray-600">{order.date}</span>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-3">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      
+                      {/* Status and Total - Stack on mobile, inline on desktop */}
+                      <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium self-start ${
                           order.status === 'Delivered' ? 'bg-green-100 text-green-700' :
                           order.status === 'Shipped' ? 'bg-blue-100 text-blue-700' :
                           'bg-yellow-100 text-yellow-700'
                         }`}>
                           {order.status}
                         </span>
-                        <span className="font-bold text-gray-800">₦{order.total.toLocaleString()}</span>
+                        <span className="font-bold text-gray-800 text-sm sm:text-base">₦{order.total.toLocaleString()}</span>
                       </div>
                     </div>
-                    <div className="text-sm text-gray-600">
-                      {order.items.map((item, i) => (
-                        <span key={i}>{item.quantity}x {item.name}{i < order.items?.length - 1 ? ', ' : ''}</span>
-                      ))}
+                    
+                    {/* Order Items - Better text wrapping */}
+                    <div className="text-sm text-gray-600 leading-relaxed">
+                      <span className="break-words">
+                        {order.items.map((item, i) => (
+                          <span key={i}>
+                            {item.quantity}x {item.name}
+                            {i < order.items?.length - 1 ? ', ' : ''}
+                          </span>
+                        ))}
+                      </span>
                     </div>
                   </motion.div>
                 ))}
@@ -407,50 +383,7 @@ const Profile = () => {
               </div>
             </div>
 
-            {/* Payment Methods */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-800">Payment Methods</h2>
-                <Link to="/payment-methods" className="text-red-600 hover:text-red-700 font-medium text-sm">
-                  Manage
-                </Link>
-              </div>
-              <div className="space-y-4">
-                {paymentMethods.map((method, index) => (
-                  <motion.div
-                    key={method.id}
-                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-red-300 transition-colors"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    <div className="flex items-center space-x-4">
-                      <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                        <CreditCard className="w-5 h-5 text-gray-600" />
-                      </div>
-                      <div>
-                        <div className="font-medium text-gray-800">
-                          {method.brand ? `${method.brand} ****${method.last4}` : method.account}
-                        </div>
-                        <div className="text-sm text-gray-600">
-                          {method.expiry ? `Expires ${method.expiry}` : method.bank}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      {method.isDefault && (
-                        <span className="bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full">
-                          Default
-                        </span>
-                      )}
-                      <button className="text-gray-400 hover:text-red-600">
-                        <Edit className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
+          
 
           </div>
         </div>
