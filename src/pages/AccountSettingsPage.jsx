@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import AccountSettings from '../components/AccountSettings';
 
-const AccountSettingsPage = () => {
+const AccountSettingsPage = ({setShowReactivationModal}) => {
   const { user,setUser } = useAuth();
   const { showSuccess, showError } = useToast();
 
@@ -36,6 +36,10 @@ const AccountSettingsPage = () => {
       console.log(error.message)
     }  
   };
+
+  React.useEffect(() => {
+   window.scrollTo({top: 0, behavior: 'smooth'})
+  }, [])
 
   const handleChangePassword = async (passwordData) => {
     // In a real app, this would make an API call
@@ -88,6 +92,7 @@ const AccountSettingsPage = () => {
             onUpdateProfile={handleUpdateProfile}
             onChangePassword={handleChangePassword}
             onUpdatePreferences={handleUpdatePreferences}
+            setShowReactivationModal={setShowReactivationModal}
           />
         </motion.div>
       </div>

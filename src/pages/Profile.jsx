@@ -62,7 +62,7 @@ const Profile = () => {
   const menuItems = [
     { icon: Package, label: 'My Orders', count: orders.length, id: '#orders' },
     { icon: Heart, label: 'Wishlist', count: userStats.wishlistItems, id: '#wishlist' },
-    { icon: MapPin, label: 'Addresses', count: user?.shippingAddresses?.length || 0, id: '#addresses' },
+    { icon: MapPin, label: 'Addresses', count: user?.address ? 1 : 0, id: '#addresses' },
     { icon: Settings, label: 'Account Settings', path: '/myaccount/settings' }
   ];
   const [showAddress, setShowAddress] = useState(false)
@@ -309,75 +309,166 @@ const Profile = () => {
             <div className="bg-white rounded-2xl shadow-lg p-6" id='address'>
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-gray-800">Shipping Addresses</h2>
-                <Link to="/addresses" className="text-red-600 hover:text-red-700 font-medium text-sm">
+                <Link to="/myaccount/settings" className="text-red-600 hover:text-red-700 font-medium text-sm">
                   Manage
                 </Link>
               </div>
-              <div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {user?.shippingAddresses?.map((address, index) => (
-                    <motion.div
-                      key={address.id}
-                      className="border border-gray-200 rounded-lg p-4 hover:border-red-300 transition-colors"
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: index * 0.1 }}
-                    >
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center space-x-2">
-                          <MapPin className="w-4 h-4 text-red-600" />
-                          <span className="font-medium text-gray-800">{address.type}</span>
-                          {address.isDefault && (
-                            <span className="bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full">
-                              Default
-                            </span>
+              
+              {/* Address Display */}
+              <div className="space-y-4">
+                {user?.shippingAddresses && user.shippingAddresses.length > 0 ? (
+                  <div className="grid gap-4">
+                    {user.shippingAddresses.map((address, index) => (
+                      <motion.div
+                        key={address.id || index}
+                        className="border border-gray-200 rounded-xl p-5 hover:border-red-300 hover:shadow-md transition-all duration-200 group"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                      >
+                        {/* Address Header */}
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center space-x-3">
+                            <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 p-2 rounded-lg">
+                              <MapPin className="w-4 h-4 text-white" />
+                            </div>
+                            <div>
+                              <h3 className="font-semibold text-gray-800 flex items-center space-x-2">
+                                <span>{address.type || (address.isDefault ? 'Default Address' : 'Address')}</span>
+                                {address.isDefault && (
+                                  <span className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+                                    Default
+                                  </span>
+                                )}
+                              </h3>
+                              {address.name && (
+                                <p className="text-sm text-gray-600 mt-1">{address.name}</p>
+                              )}
+                            </div>
+                          </div>
+                          
+                          {/* Edit Button */}
+                          <button
+                            onClick={() => {
+                              setEditingAddress(address);
+                              setShowAddress(true);
+                            }}
+                            className="opacity-0 group-hover:opacity-100 p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
+                        </div>
+                        
+                        {/* Address Details */}
+                        <div className="pl-11 space-y-2">
+                          {/* Street Address */}
+                          {address.street && (
+                            <div className="flex items-start space-x-3">
+                              <div className="w-2 h-2 bg-gray-300 rounded-full mt-2 flex-shrink-0"></div>
+                              <p className="text-gray-700 text-sm leading-relaxed">{address.street}</p>
+                            </div>
+                          )}
+                          
+                          {/* City, State, Zip */}
+                          {(address.city || address.state || address.zip) && (
+                            <div className="flex items-start space-x-3">
+                              <div className="w-2 h-2 bg-gray-300 rounded-full mt-2 flex-shrink-0"></div>
+                              <p className="text-gray-700 text-sm leading-relaxed">
+                                {[address.city, address.state, address.zip].filter(Boolean).join(', ')}
+                              </p>
+                            </div>
+                          )}
+                          
+                          {/* Country */}
+                          {address.country && (
+                            <div className="flex items-start space-x-3">
+                              <div className="w-2 h-2 bg-gray-300 rounded-full mt-2 flex-shrink-0"></div>
+                              <p className="text-gray-700 text-sm leading-relaxed">{address.country}</p>
+                            </div>
+                          )}
+                          
+                          {/* Phone Number */}
+                          {address.phone && (
+                            <div className="flex items-center space-x-3 mt-3 pt-3 border-t border-gray-100">
+                              <Phone className="w-4 h-4 text-gray-400" />
+                              <span className="text-gray-600 text-sm">{address.phone}</span>
+                            </div>
                           )}
                         </div>
-                        <button
-                          onClick={() => {
-                            setEditingAddress(address);
-                            setShowAddress(true);
-                          }}
-                          className="text-gray-400 hover:text-red-600 transition-colors"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </button>
-                      </div>
-                      <div className="text-sm text-gray-600 space-y-1">
-                        <div className="font-medium">{address.name}</div>
-                        <div>{address.street}</div>
-                        <div>{address.city}, {address.state} {address.zip}</div>
-                        <div className="flex items-center space-x-1 mt-2">
-                          <Phone className="w-3 h-3" />
-                          <span>{address.phone}</span>
+                      </motion.div>
+                    ))}
+                    
+                    {/* Add New Address Button */}
+                    {(!user.shippingAddresses || user.shippingAddresses.length < 5) && (
+                      <motion.button
+                        onClick={() => {
+                          setEditingAddress(null);
+                          setShowAddress(true);
+                        }}
+                        className="border-2 border-dashed border-gray-300 rounded-xl p-6 hover:border-red-300 hover:bg-red-50 transition-all duration-200 group w-full"
+                        whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.99 }}
+                      >
+                        <div className="flex flex-col items-center justify-center space-y-3">
+                          <div className="bg-gray-100 group-hover:bg-red-100 p-3 rounded-full transition-colors duration-200">
+                            <PlusCircle className="w-6 h-6 text-gray-400 group-hover:text-red-600" />
+                          </div>
+                          <div className="text-center">
+                            <p className="font-medium text-gray-700 group-hover:text-red-700">
+                              Add {user.shippingAddresses?.length === 0 ? 'Home Address' : 'New Address'}
+                            </p>
+                            <p className="text-sm text-gray-500 mt-1">
+                              {user.shippingAddresses?.length === 0
+                                ? 'Add your primary shipping address'
+                                : 'Add another address for deliveries'
+                              }
+                            </p>
+                          </div>
                         </div>
+                      </motion.button>
+                    )}
+                  </div>
+                ) : user?.address ? (
+                  /* Fallback for legacy single address field */
+                  <motion.div
+                    className="border border-gray-200 rounded-xl p-5"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <div className="flex items-start space-x-3">
+                      <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 p-2 rounded-lg">
+                        <MapPin className="w-4 h-4 text-white" />
                       </div>
-                    </motion.div>
-                  ))}
-
-                  {(!user?.shippingAddresses || user?.shippingAddresses?.length < 2) && (
-                    <motion.div
-                      className="border-2 border-dashed border-gray-300 rounded-lg p-8 hover:border-red-300 transition-colors cursor-pointer"
-                      onClick={() => setShowAddress(true)}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      whileHover={{ scale: 1.02 }}
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-800 mb-2">Address</h3>
+                        <p className="text-gray-700 text-sm leading-relaxed">{user.address}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ) : (
+                  /* Empty State */
+                  <motion.div
+                    className="text-center py-12 border border-gray-200 rounded-xl"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <div className="bg-gray-100 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                      <MapPin className="w-8 h-8 text-gray-400" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-600 mb-2">No addresses yet</h3>
+                    <p className="text-gray-500 mb-6">Add your shipping address to get started</p>
+                    <button
+                      onClick={() => {
+                        setEditingAddress(null);
+                        setShowAddress(true);
+                      }}
+                      className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors flex items-center space-x-2 mx-auto"
                     >
-                      <div className="text-center">
-                        <PlusCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-semibold text-gray-600 mb-2">
-                          Add {user?.shippingAddresses?.length === 0 ? 'Home' : 'Work'} Address
-                        </h3>
-                        <p className="text-gray-500 text-sm">
-                          {user?.shippingAddresses?.length === 0
-                            ? 'Add your primary shipping address'
-                            : 'Add your work address for office deliveries'
-                          }
-                        </p>
-                      </div>
-                    </motion.div>
-                  )}
-                </div>
+                      <PlusCircle className="w-4 h-4" />
+                      <span>Add Address</span>
+                    </button>
+                  </motion.div>
+                )}
               </div>
             </div>
 

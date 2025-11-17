@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import {
   User,
   Mail,
@@ -13,16 +14,18 @@ import {
   Camera,
   Bell,
   Shield,
-  Globe
+  Globe,
+
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const AccountSettings = ({ onUpdateProfile, onChangePassword, onUpdatePreferences }) => {
+const AccountSettings = ({ onUpdateProfile, onChangePassword, onUpdatePreferences,setShowReactivationModal }) => {
+  const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const { user,setUser } = useAuth()    
+  
 
 
   // Form states
@@ -58,12 +61,19 @@ const AccountSettings = ({ onUpdateProfile, onChangePassword, onUpdatePreference
 
     try {
       const completeProfileData = {
-  fullName: profileData.fullName,
-  userId: user.id,   // FIXED
-  phone: profileData.phone,
-  address: profileData.address
-}
+        fullName: profileData.fullName,
+        userId: user.id,
+        phone: profileData.phone,
+        address: profileData.address
+      };
+      
       await onUpdateProfile(completeProfileData);
+      
+      // Log user out and show reactivation modal
+      logout(() => {
+        setShowReactivationModal(true);
+      });
+      
       setMessage({ type: 'success', text: 'Profile updated successfully!' });
     } catch (error) {
       setMessage({ type: 'error', text: 'Failed to update profile. Please try again.' });
@@ -475,6 +485,9 @@ const AccountSettings = ({ onUpdateProfile, onChangePassword, onUpdatePreference
           </motion.form>
         )}
       </div>
+
+      {/* Reactivation Modal */}
+     
     </div>
   );
 };

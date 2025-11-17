@@ -15,6 +15,7 @@ import About from './pages/About'
 import Profile from './pages/Profile';
 import AccountSettingsPage from './pages/AccountSettingsPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import ShowReactivation from './components/ShowReactivation';
 
 import AdminDashBoard from './pages/AdminDashBoard';
 import Privacy from './pages/Privacy';
@@ -45,7 +46,8 @@ import { Focus,
   BatteryCharging, } from 'lucide-react';
 
 const App = () => {
-    const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [showReactivationModal, setShowReactivationModal] = useState(true);
 
    const extraCategoryData = {
     1: {
@@ -123,7 +125,8 @@ const App = () => {
                   <ProductProvider>
                     <OrdersProvider>
                   <div className="min-h-screen flex flex-col">
-                    <Header />
+                        <Header />
+                        <ShowReactivation showReactivationModal={showReactivationModal} setShowReactivationModal={setShowReactivationModal} />
                     <main className="flex-grow pb-16 lg:pb-0">
                       <Routes>
                           <Route path="/" element={<Home categories={categories} />} />
@@ -137,7 +140,7 @@ const App = () => {
                         <Route path="/signup" element={<Signup />} />
                         <Route path="/admin" element={<ProtectedRoute><AdminDashBoard /></ProtectedRoute>} />
                         <Route path="/my-account" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-                        <Route path="/myaccount/settings" element={<ProtectedRoute><AccountSettingsPage /></ProtectedRoute>} />
+                            <Route path="/myaccount/settings" element={<ProtectedRoute><AccountSettingsPage setShowReactivationModal={setShowReactivationModal} /></ProtectedRoute>} />
                         <Route path="/forgot-password" element={<ForgotPassword />} />
                         <Route path="/privacy-policies" element={<Privacy />} />
                         <Route path="/terms" element={<Terms />} />
