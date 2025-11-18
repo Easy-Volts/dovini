@@ -180,7 +180,7 @@ const [searchParams] = useSearchParams();
       
     } catch (error) {
       console.error('Order creation error:', error);
-      showSuccess("Failed to create order. Please try again.", 3000);
+      showSuccess("Failed to confirm order. Please try again.", 3000);
     } finally {
       setIsProcessing(false);
     }
@@ -812,7 +812,7 @@ const [searchParams] = useSearchParams();
                         <p className="text-sm text-gray-600">
                           If you have any issues with the transfer, please contact our support team at{" "}
                           <span className="font-semibold text-blue-600">080-6397-1335</span>{" "}
-                          or email us at <span className="font-semibold text-blue-600">support@dovini.com</span>
+                          or email us at <span className="font-semibold text-blue-600">support@dovinigears.ng</span>
                         </p>
                       </div>
                     </div>
@@ -1147,7 +1147,7 @@ const [searchParams] = useSearchParams();
                 </div>
                 <div className="flex items-center space-x-2">
                   <Mail className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600 flex-shrink-0" />
-                  <span className="break-all">Email: support@dovini.com</span>
+                  <span className="break-all">Email: support@dovinigears.ng</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-purple-600 flex-shrink-0" />

@@ -61,7 +61,7 @@ const Privacy = () => {
     {
       icon: <Mail className="h-5 w-5 text-red-500" />,
       label: "Email",
-      value: "info@dovinigears.ng"
+      value: "support@dovinigears.ng"
     },
     {
       icon: <Phone className="h-5 w-5 text-red-500" />,

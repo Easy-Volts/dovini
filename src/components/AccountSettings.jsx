@@ -12,7 +12,7 @@ import {
   CheckCircle,
   Camera,
   Shield,
- 
+ UserIcon
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 

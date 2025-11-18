@@ -243,56 +243,115 @@ const Orders = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1, duration: 0.5 }}
                   >
-                    <div className="p-4 sm:p-6">
-                      {/* Order Header */}
-                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between space-y-4 sm:space-y-0 mb-4">
-                        <div className="text-center sm:text-left">
-                          <h3 className="text-base sm:text-lg font-semibold text-gray-900">Order {order.order_code}</h3>
-                          <p className="text-gray-600 text-sm">
-                            {new Date(order.date).toLocaleDateString()} • {order.items.length} item{order.items.length !== 1 ? 's' : ''}
-                          </p>
-                        </div>
-                        <div className="text-center sm:text-right">
-                          <p className="text-xl sm:text-2xl font-bold text-red-600">₦{order.total.toLocaleString()}</p>
-                          <div className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
-                            {getStatusIcon(order.status)}
-                            <span className="capitalize">{order.status}</span>
+                    {/* Mobile-first layout - will override for larger screens */}
+                    <div className="p-4 md:p-6">
+                      {/* Mobile Layout: Stacked header */}
+                      <div className="block md:hidden">
+                        {/* Mobile Header */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex-1 min-w-0">
+                            <h3 className="text-lg font-bold text-gray-900 truncate">#{order.order_code}</h3>
+                            <p className="text-sm text-gray-600">
+                              {new Date(order.date).toLocaleDateString()} • {order.items.length} items
+                            </p>
                           </div>
+                          <div className="ml-3 text-right">
+                            <p className="text-xl font-bold text-red-600">₦{order.total.toLocaleString()}</p>
+                            <div className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
+                              {getStatusIcon(order.status)}
+                              <span className="capitalize text-xs">{order.status}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Mobile Product Preview - Horizontal scroll */}
+                        <div className="flex space-x-2 mb-4 overflow-x-auto pb-2">
+                          {order.items.slice(0, 4).map((item) => (
+                            <div key={item.id} className="flex-shrink-0">
+                              <img
+                                src={item.image}
+                                alt={item.name}
+                                className="w-16 h-16 object-cover rounded-lg border border-gray-200"
+                              />
+                            </div>
+                          ))}
+                          {order.items.length > 4 && (
+                            <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center text-sm font-medium text-gray-600">
+                              +{order.items.length - 4}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Mobile Actions */}
+                        <div className="flex items-center justify-between">
+                          {order.tracking && (
+                            <div className="text-sm text-gray-600">
+                              <p className="font-medium text-xs">{order.tracking.carrier}</p>
+                              <p className="text-xs text-gray-500">{order.tracking.number}</p>
+                            </div>
+                          )}
+                          <button
+                            onClick={() => setSelectedOrder(order)}
+                            className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center space-x-2"
+                          >
+                            <Eye className="w-4 h-4" />
+                            <span>View Details</span>
+                          </button>
                         </div>
                       </div>
 
-                      {/* Product Images */}
-                      <div className="flex items-center justify-center sm:justify-start space-x-2 mb-4">
-                        {order.items.slice(0, 3).map((item) => (
-                          <img
-                            key={item.id}
-                            src={item.image}
-                            alt={item.name}
-                            className="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-lg border border-gray-200"
-                          />
-                        ))}
-                        {order.items.length > 3 && (
-                          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg flex items-center justify-center text-sm font-medium text-gray-600">
-                            +{order.items.length - 3}
+                      {/* Desktop Layout: Original design for md+ screens */}
+                      <div className="hidden md:block">
+                        {/* Order Header */}
+                        <div className="flex flex-row sm:items-start sm:justify-between space-y-0 mb-4">
+                          <div className="text-left">
+                            <h3 className="text-lg font-semibold text-gray-900">Order {order.order_code}</h3>
+                            <p className="text-gray-600 text-sm">
+                              {new Date(order.date).toLocaleDateString()} • {order.items.length} item{order.items.length !== 1 ? 's' : ''}
+                            </p>
                           </div>
-                        )}
-                      </div>
+                          <div className="text-right">
+                            <p className="text-2xl font-bold text-red-600">₦{order.total.toLocaleString()}</p>
+                            <div className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
+                              {getStatusIcon(order.status)}
+                              <span className="capitalize">{order.status}</span>
+                            </div>
+                          </div>
+                        </div>
 
-                      {/* Actions */}
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
-                        {order.tracking && (
-                          <div className="text-sm text-gray-600 text-center sm:text-left">
-                            <p className="font-medium">{order.tracking.carrier}</p>
-                            <p className="break-all">{order.tracking.number}</p>
-                          </div>
-                        )}
-                        <button
-                          onClick={() => setSelectedOrder(order)}
-                          className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center justify-center space-x-2 w-full sm:w-auto"
-                        >
-                          <Eye className="w-4 h-4" />
-                          <span>View Details</span>
-                        </button>
+                        {/* Product Images */}
+                        <div className="flex items-center justify-start space-x-2 mb-4">
+                          {order.items.slice(0, 3).map((item) => (
+                            <img
+                              key={item.id}
+                              src={item.image}
+                              alt={item.name}
+                              className="w-12 h-12 object-cover rounded-lg border border-gray-200"
+                            />
+                          ))}
+                          {order.items.length > 3 && (
+                            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-sm font-medium text-gray-600">
+                              +{order.items.length - 3}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex items-center justify-between">
+                          {order.tracking && (
+                            <div className="text-sm text-gray-600 text-left">
+                              <p className="font-medium">{order.tracking.carrier}</p>
+                              <p className="break-all">{order.tracking.number}</p>
+                            </div>
+                          )}
+                          <button
+                            onClick={() => setSelectedOrder(order)}
+                            className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center justify-center space-x-2 w-auto"
+                          >
+                            <Eye className="w-4 h-4" />
+                            <span>View Details</span>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </motion.div>

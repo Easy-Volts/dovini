@@ -180,11 +180,14 @@ const Login = () => {
                 whileTap={{ scale: 0.98 }}
               >
                 {isLoading ? (
-                  <motion.div
+                  <div className='flex items-center justify-center gap-1'>
+                    <motion.div
                     className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
                     animate={{ rotate: 360 }}
                     transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                  />
+                    />
+                    <p>Signin in...</p>
+                  </div>
                 ) : (
                   <>
                     <span>Sign in</span>

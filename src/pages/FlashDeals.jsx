@@ -187,7 +187,7 @@ const FlashDeals = () => {
               </motion.div>
 
               <motion.span
-                className="text-2xl sm:text-3xl font-black"
+                className="text-xl sm:text-2xl font-black"
                 animate={{
                   textShadow: [
                     '0 0 10px rgba(255,255,255,0.5)',
@@ -222,7 +222,7 @@ const FlashDeals = () => {
 
             {/* Main Title */}
             <motion.h1
-              className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-gray-800 mb-4 sm:mb-6"
+              className="text-3xl sm:text-4xl lg:text-5xl xl:text-5xl font-black text-gray-800 mb-4 sm:mb-6"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.8 }}

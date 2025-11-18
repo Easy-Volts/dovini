@@ -127,7 +127,7 @@ const Footer = () => {
               </motion.a>
 
               <motion.a
-                href="mailto:info@dovini.com"
+                href="mailto:support@dovinigears.ng"
                 className="flex items-start space-x-3 p-2.5 sm:p-3 bg-white rounded-lg sm:rounded-xl shadow-sm hover:shadow-md hover:bg-red-50 transition-all duration-300 group"
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
@@ -137,7 +137,7 @@ const Footer = () => {
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="font-semibold text-gray-900 text-xs sm:text-sm">Email Support</p>
-                  <p className="text-gray-600 text-xs sm:text-sm">info@dovini.com</p>
+                  <p className="text-gray-600 text-xs sm:text-sm">support@dovinigears.ng</p>
                 </div>
               </motion.a>
             </div>

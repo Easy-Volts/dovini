@@ -86,7 +86,7 @@ const AccountSettingsPage = ({setShowReactivationModal}) => {
               >
                 <ArrowLeft className="w-6 h-6" />
               </Link>
-              <h1 className="text-2xl font-bold text-gray-800">Back To Account</h1>
+              <h1 className="text-xl font-bold text-gray-700">Back To My Account</h1>
             </div>
           </div>
         </div>

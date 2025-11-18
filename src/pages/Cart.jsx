@@ -697,7 +697,7 @@ const Cart = () => {
                 </div>
                 <div className="flex items-center space-x-3 text-gray-700">
                   <Mail className="w-4 h-4 text-blue-600" />
-                  <span className="text-sm">Email: support@dovini.com</span>
+                  <span className="text-sm">Email: support@dovinigears.ng</span>
                 </div>
                 <div className="flex items-center space-x-3 text-gray-700">
                   <Clock className="w-4 h-4 text-purple-600" />

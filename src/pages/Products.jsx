@@ -621,7 +621,7 @@ transition={{ duration: 0.5 }}
                 <p className="text-gray-600 mb-6">Try adjusting your filters or search terms</p>
                 <button
                   onClick={clearFilters}
-                  className="btn-primary"
+                  className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-4 py-2 rounded-xl font-medium hover:bg-red-700 transition duration-300 shadow-lg hover:scale-[0.95]"
                 >
                   Clear Filters
                 </button>

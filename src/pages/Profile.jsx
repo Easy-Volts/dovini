@@ -223,13 +223,14 @@ const Profile = () => {
 
             {/* Recent Orders */}
             <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6" id='orders'>
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center justify-between mb-6 border-b border-gray-200 pb-2">
                 <h2 className="text-xl font-bold text-gray-800">Recent Orders</h2>
                 <Link to="/orders" className="text-red-600 hover:text-red-700 font-medium text-sm">
                   View All
                 </Link>
               </div>
-              <div className="space-y-4">
+              {orders.length > 0 ? (
+                 <div className="space-y-4">
                 {orders.slice(0,3).map((order, index) => (
                   <motion.div
                     key={order.id}
@@ -276,6 +277,19 @@ const Profile = () => {
                   </motion.div>
                 ))}
               </div>
+              ) : (
+                   <div className="text-center py-16 bg-white rounded-2xl px-4">
+                                  <Package className="w-12 h-12 sm:w-16 sm:h-16 text-gray-300 mx-auto mb-4" />
+                                  <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-2">No orders yet</h2>
+                                  <p className="text-gray-600 mb-6 text-sm sm:text-base">Start shopping to see your order history here</p>
+                                  <button
+                                    onClick={() => navigate('/products')}
+                                    className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
+                                  >
+                                    Browse Products
+                                  </button>
+                                </div>
+             )}
             </div>
 
             {/* Wishlist */}
@@ -481,7 +495,7 @@ const Profile = () => {
                 ) : (
                   /* Empty State */
                   <motion.div
-                    className="text-center py-12 border border-gray-200 rounded-xl"
+                    className="text-center py-12 border border-gray-200 rounded-xl flex flex-col"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                   >
@@ -490,16 +504,13 @@ const Profile = () => {
                     </div>
                     <h3 className="text-lg font-semibold text-gray-600 mb-2">No addresses yet</h3>
                     <p className="text-gray-500 mb-6">Add your shipping address to get started</p>
-                    <button
-                      onClick={() => {
-                        setEditingAddress(null);
-                        setShowAddress(true);
-                      }}
-                      className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors flex items-center space-x-2 mx-auto"
+                    <Link
+                      to='/myaccount/settings'
+                      className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors flex items-center space-x-2 mx-auto justify-center "
                     >
                       <PlusCircle className="w-4 h-4" />
                       <span>Add Address</span>
-                    </button>
+                    </Link>
                   </motion.div>
                 )}
               </div>
