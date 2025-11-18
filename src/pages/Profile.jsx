@@ -85,7 +85,7 @@ const Profile = () => {
               </Link>
               <div>
                 <h1 className="text-xl font-bold text-white">My Account</h1>
-                <p className="text-amber-100 text-sm">Manage your profile and preferences</p>
+                <p className="text-amber-100 text-sm">Manage your profile and account settings</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">

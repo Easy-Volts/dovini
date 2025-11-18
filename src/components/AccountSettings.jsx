@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import {
   User,
   Mail,
@@ -12,14 +11,12 @@ import {
   AlertTriangle,
   CheckCircle,
   Camera,
-  Bell,
   Shield,
-  Globe,
-
+ 
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const AccountSettings = ({ onUpdateProfile, onChangePassword, onUpdatePreferences,setShowReactivationModal }) => {
+const AccountSettings = ({ onUpdateProfile, onChangePassword, setShowReactivationModal }) => {
   const { user, logout, setUser } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
@@ -40,15 +37,6 @@ const AccountSettings = ({ onUpdateProfile, onChangePassword, onUpdatePreference
     currentPassword: '',
     newPassword: '',
     confirmPassword: ''
-  });
-
-  const [preferences, setPreferences] = useState({
-    emailNotifications: user?.preferences?.emailNotifications ?? true,
-    smsNotifications: user?.preferences?.smsNotifications ?? false,
-    orderUpdates: user?.preferences?.orderUpdates ?? true,
-    promotionalEmails: user?.preferences?.promotionalEmails ?? false,
-    language: user?.preferences?.language || 'en',
-    currency: user?.preferences?.currency || 'NGN'
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -76,7 +64,7 @@ const AccountSettings = ({ onUpdateProfile, onChangePassword, onUpdatePreference
     }
       
       setMessage({ type: 'success', text: 'Profile updated successfully!' });
-    } catch (error) {
+    } catch {
       setMessage({ type: 'error', text: 'Failed to update profile. Please try again.' });
     } finally {
       setIsLoading(false);
@@ -104,23 +92,8 @@ const AccountSettings = ({ onUpdateProfile, onChangePassword, onUpdatePreference
       await onChangePassword(passwordData);
       setMessage({ type: 'success', text: 'Password changed successfully!' });
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-    } catch (error) {
+    } catch {
       setMessage({ type: 'error', text: 'Failed to change password. Please check your current password.' });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handlePreferencesUpdate = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setMessage({ type: '', text: '' });
-
-    try {
-      await onUpdatePreferences(preferences);
-      setMessage({ type: 'success', text: 'Preferences updated successfully!' });
-    } catch (error) {
-      setMessage({ type: 'error', text: 'Failed to update preferences. Please try again.' });
     } finally {
       setIsLoading(false);
     }
@@ -128,8 +101,7 @@ const AccountSettings = ({ onUpdateProfile, onChangePassword, onUpdatePreference
 
   const tabs = [
     { id: 'profile', label: 'Profile Information', icon: User },
-    { id: 'security', label: 'Security & Password', icon: Shield },
-    { id: 'preferences', label: 'Preferences', icon: Bell }
+    { id: 'security', label: 'Security & Password', icon: Shield }
   ];
 
   return (
@@ -137,7 +109,7 @@ const AccountSettings = ({ onUpdateProfile, onChangePassword, onUpdatePreference
       {/* Header */}
       <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white p-6">
         <h2 className="text-2xl font-bold mb-2">Account Settings</h2>
-        <p className="text-red-100">Manage your account information and preferences</p>
+        <p className="text-red-100">Manage your account information and settings</p>
       </div>
 
       {/* Tab Navigation */}
@@ -232,7 +204,6 @@ const AccountSettings = ({ onUpdateProfile, onChangePassword, onUpdatePreference
                     type="email"
                     value={profileData.email}
                     disabled
-                    onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
                     className="disabled:bg-gray-100 w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors"
                     placeholder="Enter your email"
                   />
@@ -389,106 +360,10 @@ const AccountSettings = ({ onUpdateProfile, onChangePassword, onUpdatePreference
             </div>
           </motion.form>
         )}
-
-        {/* Preferences Tab */}
-        {activeTab === 'preferences' && (
-          <motion.form
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            onSubmit={handlePreferencesUpdate}
-            className="space-y-6"
-          >
-            {/* Notification Preferences */}
-            <div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Notification Preferences</h3>
-              <div className="space-y-4">
-                {[
-                  { key: 'emailNotifications', label: 'Email Notifications', description: 'Receive order updates and important announcements via email' },
-                  { key: 'smsNotifications', label: 'SMS Notifications', description: 'Get text messages for order status updates' },
-                  { key: 'orderUpdates', label: 'Order Updates', description: 'Notifications about your order status and delivery' },
-                  { key: 'promotionalEmails', label: 'Promotional Emails', description: 'Receive special offers and promotional content' }
-                ].map((pref) => (
-                  <div key={pref.key} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                    <div className="flex-1">
-                      <div className="font-medium text-gray-800">{pref.label}</div>
-                      <div className="text-sm text-gray-600 mt-1">{pref.description}</div>
-                    </div>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={preferences[pref.key]}
-                        onChange={(e) => setPreferences({ ...preferences, [pref.key]: e.target.checked })}
-                        className="sr-only peer"
-                      />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r from-amber-500 via-orange-500 to-red-500"></div>
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Regional Preferences */}
-            <div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Regional Preferences</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Language
-                  </label>
-                  <div className="relative">
-                    <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <select
-                      value={preferences.language}
-                      onChange={(e) => setPreferences({ ...preferences, language: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors"
-                    >
-                      <option value="en">English</option>
-                      <option value="fr">Français</option>
-                      <option value="es">Español</option>
-                      <option value="de">Deutsch</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Currency
-                  </label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 font-medium">₦</span>
-                    <select
-                      value={preferences.currency}
-                      onChange={(e) => setPreferences({ ...preferences, currency: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors"
-                    >
-                      <option value="NGN">NGN (₦)</option>
-                      <option value="USD">USD ($)</option>
-                      <option value="EUR">EUR (€)</option>
-                      <option value="GBP">GBP (£)</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-end">
-              <motion.button
-                type="submit"
-                disabled={isLoading}
-                className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Save className="w-5 h-5" />
-                <span>{isLoading ? 'Saving...' : 'Save Preferences'}</span>
-              </motion.button>
-            </div>
-          </motion.form>
-        )}
       </div>
 
       {/* Reactivation Modal */}
-     
+      
     </div>
   );
 };

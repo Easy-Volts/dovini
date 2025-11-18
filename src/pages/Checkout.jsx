@@ -13,16 +13,11 @@ import {
   User,
   Mail,
   Phone,
-  Gift,
-  Star,
-  ChevronDown,
-  ChevronUp,
   Sparkles,
   Clock,
   Award,
   ShoppingCart,
   MessageCircle,
-  Zap,
 } from "lucide-react";
   import { useSearchParams } from 'react-router-dom';
 
