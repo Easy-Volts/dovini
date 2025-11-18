@@ -28,7 +28,9 @@ import {
   Shield,
   MessageCircle,
   Tag,
-  Package
+  Package,
+  FileText,
+  Lock
 } from "lucide-react";
 
 const Header = () => {
@@ -81,7 +83,7 @@ const Header = () => {
         transition={{ duration: 0.3 }}
       >
         <div className="container mx-auto px-4 py-2">
-          <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center justify-between text-sm z-[2000]">
             <div className="sm:flex hidden items-center space-x-4">
               <motion.div
                 className="flex items-center space-x-2"
@@ -92,22 +94,20 @@ const Header = () => {
               </motion.div>
             </div>
             <div className="flex items-center space-x-4">
-              <motion.a
-                href="#"
+              <Link
+                to="/terms"
                 className="flex items-center space-x-1 hover:text-red-200 transition-colors"
-                whileHover={{ scale: 1.05 }}
               >
-                <Download className="w-4 h-4" />
-                <span>Download App</span>
-              </motion.a>
-              <motion.a
-                href="#"
+                <FileText className="w-4 h-4" />
+                <span>Terms & Conditions</span>
+              </Link>
+              <Link
+                to="/privacy"
                 className="flex items-center space-x-1 hover:text-red-200 transition-colors"
-                whileHover={{ scale: 1.05 }}
               >
-                <Star className="w-4 h-4" />
-                <span>Rate Us</span>
-              </motion.a>
+                <Lock className="w-4 h-4" />
+                <span>Privacy Policy</span>
+              </Link>
             </div>
           </div>
         </div>

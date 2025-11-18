@@ -1,41 +1,42 @@
-import React,{useState, useEffect} from 'react';
-import { Routes, Route } from 'react-router-dom';
-import { CartProvider } from './context/CartContext';
-import { ToastProvider } from './context/ToastContext';
-import { WishlistProvider } from './context/WishlistContext';
-import { RecentlyViewedProvider } from './context/RecentlyViewedContext';
-import { AuthProvider } from './context/AuthContext';
-import { ReviewsProvider } from './context/ReviewsContext';
-import { ChatProvider } from './context/ChatContext';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Chat from './components/Chat';
-import ScrollToTop from './components/ScrollToTop';
-import About from './pages/About'
-import Profile from './pages/Profile';
-import AccountSettingsPage from './pages/AccountSettingsPage';
-import ProtectedRoute from './components/ProtectedRoute';
-import ShowReactivation from './components/ShowReactivation';
-import AdminDashBoard from './pages/AdminDashBoard';
-import Privacy from './pages/Privacy';
-import { ProductProvider } from './context/ProductContext';
-import Home from './pages/Home';
-import Category from './pages/Category';
-import Products from './pages/Products';
-import ProductDetails from './pages/ProductDetails';
-import Terms from './pages/Terms';
-import Wishlist from './pages/Wishlist';
-import Cart from './pages/Cart';
-import Checkout from './pages/Checkout';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import ForgotPassword from './pages/ForgotPassword';
-import AccountActivation from './pages/AccountActivation';
-import Orders from './pages/Orders';
-import FlashDeals from './pages/FlashDeals';
-import NotFound from './pages/NotFound';
-import { OrdersProvider } from './context/OrdersContext';
-import { Focus,
+import React, { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
+import { CartProvider } from "./context/CartContext";
+import { ToastProvider } from "./context/ToastContext";
+import { WishlistProvider } from "./context/WishlistContext";
+import { RecentlyViewedProvider } from "./context/RecentlyViewedContext";
+import { AuthProvider } from "./context/AuthContext";
+import { ReviewsProvider } from "./context/ReviewsContext";
+
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+
+import ScrollToTop from "./components/ScrollToTop";
+import About from "./pages/About";
+import Profile from "./pages/Profile";
+import AccountSettingsPage from "./pages/AccountSettingsPage";
+import ProtectedRoute from "./components/ProtectedRoute";
+import ShowReactivation from "./components/ShowReactivation";
+import AdminDashBoard from "./pages/AdminDashBoard";
+import Privacy from "./pages/Privacy";
+import { ProductProvider } from "./context/ProductContext";
+import Home from "./pages/Home";
+import Category from "./pages/Category";
+import Products from "./pages/Products";
+import ProductDetails from "./pages/ProductDetails";
+import Terms from "./pages/Terms";
+import Wishlist from "./pages/Wishlist";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import ForgotPassword from "./pages/ForgotPassword";
+import AccountActivation from "./pages/AccountActivation";
+import Orders from "./pages/Orders";
+import FlashDeals from "./pages/FlashDeals";
+import NotFound from "./pages/NotFound";
+import { OrdersProvider } from "./context/OrdersContext";
+import {
+  Focus,
   Cpu,
   Video,
   Lightbulb,
@@ -43,18 +44,17 @@ import { Focus,
   Package,
   SunMedium,
   BatteryCharging,
-} from 'lucide-react';
-  import { useLocation } from 'react-router-dom';
+} from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 const App = () => {
   const [categories, setCategories] = useState([]);
-  const [showReactivationModal, setShowReactivationModal] = useState(true);
+  const [showReactivationModal, setShowReactivationModal] = useState(false);
   const location = useLocation();
-  const hideHeaderOn = ["/my-account", "/myaccount/settings"]; 
+  const hideHeaderOn = ["/my-account", "/myaccount/settings"];
   const shouldShowHeader = !hideHeaderOn.includes(location.pathname);
 
-
-   const extraCategoryData = {
+  const extraCategoryData = {
     1: {
       image:
         "https://images.openai.com/thumbnails/url/WSbURnicu5meUVJSUGylr5-al1xUWVCSmqJbkpRnoJdeXJJYkpmsl5yfq5-Zm5ieWmxfaAuUsXL0S7F0Tw70cw1NrwoO8Y7MLAkrcNTNKAmszC1zS88xNbNIyc8Ny6kw9jLLTYuPd3VNVyu2NTQAAB6oJYw",
@@ -93,7 +93,7 @@ const App = () => {
     8: {
       image: "https://www.ulanzi.com/cdn/shop/files/2_2x-2.png?v=1753167291",
       icon: Video,
-    }
+    },
   };
 
   useEffect(() => {
@@ -105,7 +105,7 @@ const App = () => {
         }
         const data = await res.json();
         const mergedCategories = data.data.map((cat) => ({
-          ...cat, 
+          ...cat,
           image: extraCategoryData[cat.id]?.image, // add frontend image
           icon: extraCategoryData[cat.id]?.icon, // add frontend icon
         }));
@@ -117,57 +117,110 @@ const App = () => {
     fetchCategories();
   }, []);
 
-
-
   return (
     <AuthProvider>
-      <ChatProvider>
-        <ReviewsProvider>
-          <ToastProvider>
-            <RecentlyViewedProvider>
-              <WishlistProvider>
-                <CartProvider>
-                  <ProductProvider>
-                    <OrdersProvider>
-                  <div className="min-h-screen flex flex-col">
-                        {shouldShowHeader && <Header />}
-                        <ShowReactivation showReactivationModal={showReactivationModal} setShowReactivationModal={setShowReactivationModal} />
-                    <main className="flex-grow pb-16 lg:pb-0">
-                      <Routes>
-                          <Route path="/" element={<Home categories={categories} />} />
-                        <Route path="/category/:id" element={<Category />} />
-                        <Route path="/products" element={<Products />} />
-                        <Route path="/product/:id" element={<ProductDetails/>} />
-                        <Route path="/wishlist" element={<Wishlist />} />
-                        <Route path="/cart" element={<Cart />} />
-                        <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/signup" element={<Signup />} />
-                        <Route path="/admin" element={<ProtectedRoute><AdminDashBoard /></ProtectedRoute>} />
-                        <Route path="/my-account" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-                            <Route path="/myaccount/settings" element={<ProtectedRoute><AccountSettingsPage setShowReactivationModal={setShowReactivationModal} /></ProtectedRoute>} />
-                        <Route path="/forgot-password" element={<ForgotPassword />} />
-                        <Route path="/privacy-policies" element={<Privacy />} />
-                        <Route path="/terms" element={<Terms />} />
-                        <Route path="/account-activation" element={<AccountActivation />} />
-                        <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
-                        <Route path="/flash-deals" element={<FlashDeals />} />
-                        <Route path="/about" element={<About />} />
-                        <Route path="*" element={<NotFound />} />
-                      </Routes>
-                    </main>
-                    <Footer />
-                    <Chat />
-                    <ScrollToTop />
-                      </div>
-                    </OrdersProvider>  
-                   </ProductProvider> 
-                </CartProvider>
-              </WishlistProvider>
-            </RecentlyViewedProvider>
-          </ToastProvider>
-        </ReviewsProvider>
-      </ChatProvider>
+      <ReviewsProvider>
+        <ToastProvider>
+          <RecentlyViewedProvider>
+            <WishlistProvider>
+              <CartProvider>
+                <ProductProvider>
+                  <OrdersProvider>
+                    <div className="min-h-screen flex flex-col">
+                      {shouldShowHeader && <Header />}
+                      <ShowReactivation
+                        showReactivationModal={showReactivationModal}
+                        setShowReactivationModal={setShowReactivationModal}
+                      />
+                      <main className="flex-grow pb-16 lg:pb-0">
+                        <Routes>
+                          <Route
+                            path="/"
+                            element={<Home categories={categories} />}
+                          />
+                          <Route path="/category/:id" element={<Category />} />
+                          <Route path="/products" element={<Products />} />
+                          <Route
+                            path="/product/:id"
+                            element={<ProductDetails />}
+                          />
+                          <Route path="/wishlist" element={<Wishlist />} />
+                          <Route path="/cart" element={<Cart />} />
+                          <Route
+                            path="/checkout"
+                            element={
+                              <ProtectedRoute>
+                                <Checkout />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route path="/login" element={<Login />} />
+                          <Route path="/signup" element={<Signup />} />
+                          <Route
+                            path="/admin"
+                            element={
+                              <ProtectedRoute>
+                                <AdminDashBoard />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/my-account"
+                            element={
+                              <ProtectedRoute>
+                                <Profile />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/myaccount/settings"
+                            element={
+                              <ProtectedRoute>
+                                <AccountSettingsPage
+                                  setShowReactivationModal={
+                                    setShowReactivationModal
+                                  }
+                                />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/forgot-password"
+                            element={<ForgotPassword />}
+                          />
+                          <Route
+                            path="/privacy-policies"
+                            element={<Privacy />}
+                          />
+                          <Route path="/terms" element={<Terms />} />
+                          <Route
+                            path="/account-activation"
+                            element={<AccountActivation />}
+                          />
+                          <Route
+                            path="/orders"
+                            element={
+                              <ProtectedRoute>
+                                <Orders />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route path="/flash-deals" element={<FlashDeals />} />
+                          <Route path="/about" element={<About />} />
+                          <Route path="*" element={<NotFound />} />
+                        </Routes>
+                      </main>
+                      <Footer />
+
+                      <ScrollToTop />
+                    </div>
+                  </OrdersProvider>
+                </ProductProvider>
+              </CartProvider>
+            </WishlistProvider>
+          </RecentlyViewedProvider>
+        </ToastProvider>
+      </ReviewsProvider>
     </AuthProvider>
   );
 };

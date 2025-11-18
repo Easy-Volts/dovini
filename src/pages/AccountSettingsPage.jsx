@@ -27,14 +27,26 @@ const AccountSettingsPage = ({setShowReactivationModal}) => {
         throw new Error('Error')
       }
       const data = await res.json()
-      console.log(data)
-     
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    showSuccess('Profile updated successfully!', 1000);
-    return data
+      console.log('Profile update response:', data)
+      
+      if (data.success && data.data) {
+        // Update the user state in AuthContext
+        setUser(data.data);
+        
+        // Also update localStorage for persistence
+        localStorage.setItem('dovini_user', JSON.stringify(data.data));
+        
+        showSuccess('Profile updated successfully!', 1000);
+        return data
+      } else {
+        throw new Error('Invalid response format')
+      }
+      
     } catch (error) {
-      console.log(error.message)
-    }  
+      console.log('Profile update error:', error.message)
+      showError('Failed to update profile. Please try again.')
+      throw error
+    }
   };
 
   React.useEffect(() => {
