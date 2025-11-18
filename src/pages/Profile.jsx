@@ -25,7 +25,8 @@ import {
   PlusCircle,
   AlertTriangle,
   X,
-  ShoppingCart
+  ShoppingCart,
+  Home
 } from 'lucide-react';
 import AddAddressModal from '../components/AddAddressModal';
 
@@ -49,55 +50,67 @@ const Profile = () => {
     totalSpentCount += orders[i].total
     }
     setTotalSpent(totalSpentCount)
- }, [orders])
-
-
- 
+  }, [orders])
 
 
 
   
-
+  
 
   const menuItems = [
+    { icon: Home, label: 'Home', path: '/', separator: true },
     { icon: Package, label: 'My Orders', count: orders.length, id: '#orders' },
     { icon: Heart, label: 'Wishlist', count: userStats.wishlistItems, id: '#wishlist' },
     { icon: MapPin, label: 'Addresses', count: user?.address ? 1 : 0, id: '#addresses' },
-    { icon: Settings, label: 'Account Settings', path: '/myaccount/settings' }
+    { icon: Settings, label: 'Account Settings', path: '/myaccount/settings' },
+    { icon: LogOut, label: 'Logout', action: () => logout(() => navigate('/login')), separator: true }
   ];
   const [showAddress, setShowAddress] = useState(false)
   const [editingAddress, setEditingAddress] = useState(null)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-red-50/20 to-white">
-      {/* Header */}
-      <div className="bg-white shadow-lg border-b border-red-100">
-        <div className="container mx-auto px-4 py-6">
+      {/* Colorful Header */}
+      <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 shadow-lg">
+        <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Link to="/" className="text-red-600 hover:text-red-700 transition-colors">
-                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+              <Link to="/" className="text-white hover:text-amber-100 transition-colors bg-white/20 hover:bg-white/30 p-2 rounded-lg backdrop-blur-sm">
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
                 </svg>
               </Link>
-              <h1 className="text-2xl font-bold text-gray-800">My Account</h1>
+              <div>
+                <h1 className="text-xl font-bold text-white">My Account</h1>
+                <p className="text-amber-100 text-sm">Manage your profile and preferences</p>
+              </div>
             </div>
-            <button
-              onClick={() => logout(() => navigate('/login'))}
-              className="flex items-center space-x-2 text-gray-600 hover:text-red-600 transition-colors"
-            >
-              <LogOut className="w-5 h-5" />
-              <span>Logout</span>
-            </button>
+            <div className="flex items-center space-x-3">
+              {/* User Welcome Badge */}
+              <div className="hidden sm:flex items-center space-x-2 bg-white/20 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                  <User className="w-4 h-4 text-orange-600" />
+                </div>
+                <span className="text-white text-sm font-medium">{user?.name?.split(' ')[0] || 'User'}</span>
+              </div>
+              
+              <button
+                onClick={() => logout(() => navigate('/login'))}
+                className="text-white hover:text-amber-100 transition-colors bg-white/20 hover:bg-white/30 p-2 rounded-lg backdrop-blur-sm"
+                title="Logout"
+              >
+                <LogOut className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-24">
+            <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-6">
               {/* User Info */}
               <div className="text-center mb-6">
                 <div className="relative inline-block mb-4">
@@ -117,47 +130,66 @@ const Profile = () => {
 
               {/* Menu Items */}
               <nav className="space-y-2">
-                {menuItems.map((item, index) => (
-                  item.path ? (
-                    <Link
-                      key={index}
-                      to={item.path}
-                      className="flex items-center justify-between p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-all duration-200 group"
-                    >
-                      <div className="flex items-center space-x-3">
-                        <item.icon className="w-5 h-5 text-gray-600 group-hover:text-red-600" />
-                        <span className="font-medium">{item.label}</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        {item.count && (
-                          <span className="bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full">
-                            {item.count}
-                          </span>
-                        )}
-                        <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-red-600" />
-                      </div>
-                    </Link>
-                  ) : (
-                    <a
-                      key={index}
-                      href={item.id}
-                      className="flex items-center justify-between p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-all duration-200 group"
-                    >
-                      <div className="flex items-center space-x-3">
-                        <item.icon className="w-5 h-5 text-gray-600 group-hover:text-red-600" />
-                        <span className="font-medium">{item.label}</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        {item.count && (
-                          <span className="bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full">
-                            {item.count}
-                          </span>
-                        )}
-                        <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-red-600" />
-                      </div>
-                    </a>
-                  )
-                ))}
+                {menuItems.map((item, index) => {
+                  const showSeparator = item.separator && index > 0;
+                  
+                  return (
+                    <React.Fragment key={index}>
+                      {showSeparator && (
+                        <div className="border-t border-gray-200 my-4"></div>
+                      )}
+                      
+                      {item.path ? (
+                        <Link
+                          to={item.path}
+                          className="flex items-center justify-between p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-all duration-200 group"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <item.icon className="w-5 h-5 text-gray-600 group-hover:text-red-600" />
+                            <span className="font-medium">{item.label}</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            {item.count && (
+                              <span className="bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full">
+                                {item.count}
+                              </span>
+                            )}
+                            <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-red-600" />
+                          </div>
+                        </Link>
+                      ) : item.action ? (
+                        <button
+                          onClick={item.action}
+                          className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-all duration-200 group"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <item.icon className="w-5 h-5 text-gray-600 group-hover:text-red-600" />
+                            <span className="font-medium">{item.label}</span>
+                          </div>
+                          <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-red-600" />
+                        </button>
+                      ) : (
+                        <a
+                          href={item.id}
+                          className="flex items-center justify-between p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-all duration-200 group"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <item.icon className="w-5 h-5 text-gray-600 group-hover:text-red-600" />
+                            <span className="font-medium">{item.label}</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            {item.count && (
+                              <span className="bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full">
+                                {item.count}
+                              </span>
+                            )}
+                            <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-red-600" />
+                          </div>
+                        </a>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
               </nav>
             </div>
           </div>
@@ -471,7 +503,6 @@ const Profile = () => {
                 )}
               </div>
             </div>
-
           
 
           </div>

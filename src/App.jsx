@@ -16,7 +16,6 @@ import Profile from './pages/Profile';
 import AccountSettingsPage from './pages/AccountSettingsPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import ShowReactivation from './components/ShowReactivation';
-
 import AdminDashBoard from './pages/AdminDashBoard';
 import Privacy from './pages/Privacy';
 import { ProductProvider } from './context/ProductContext';
@@ -43,11 +42,17 @@ import { Focus,
   Zap,
   Package,
   SunMedium,
-  BatteryCharging, } from 'lucide-react';
+  BatteryCharging,
+} from 'lucide-react';
+  import { useLocation } from 'react-router-dom';
 
 const App = () => {
   const [categories, setCategories] = useState([]);
   const [showReactivationModal, setShowReactivationModal] = useState(true);
+  const location = useLocation();
+  const hideHeaderOn = ["/my-account", "/myaccount/settings"]; 
+  const shouldShowHeader = !hideHeaderOn.includes(location.pathname);
+
 
    const extraCategoryData = {
     1: {
@@ -125,7 +130,7 @@ const App = () => {
                   <ProductProvider>
                     <OrdersProvider>
                   <div className="min-h-screen flex flex-col">
-                        <Header />
+                        {shouldShowHeader && <Header />}
                         <ShowReactivation showReactivationModal={showReactivationModal} setShowReactivationModal={setShowReactivationModal} />
                     <main className="flex-grow pb-16 lg:pb-0">
                       <Routes>
