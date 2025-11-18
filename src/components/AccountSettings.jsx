@@ -20,7 +20,7 @@ import {
 import { useAuth } from '../context/AuthContext';
 
 const AccountSettings = ({ onUpdateProfile, onChangePassword, onUpdatePreferences,setShowReactivationModal }) => {
-  const { user, logout } = useAuth();
+  const { user, logout, setUser } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -67,12 +67,13 @@ const AccountSettings = ({ onUpdateProfile, onChangePassword, onUpdatePreference
         address: profileData.address
       };
       
-      await onUpdateProfile(completeProfileData);
-      
-      // Log user out and show reactivation modal
+      const response = await onUpdateProfile(completeProfileData);
+      setUser(response.data)
+      if (response?.data?.status === false) {
       logout(() => {
         setShowReactivationModal(true);
       });
+    }
       
       setMessage({ type: 'success', text: 'Profile updated successfully!' });
     } catch (error) {

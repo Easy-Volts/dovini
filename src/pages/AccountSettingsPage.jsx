@@ -31,7 +31,7 @@ const AccountSettingsPage = ({setShowReactivationModal}) => {
      
     await new Promise(resolve => setTimeout(resolve, 1000));
     showSuccess('Profile updated successfully!', 1000);
-    return Promise.resolve();
+    return data
     } catch (error) {
       console.log(error.message)
     }  

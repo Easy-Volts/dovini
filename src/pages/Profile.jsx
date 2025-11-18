@@ -44,13 +44,16 @@ const Profile = () => {
     reviewsGiven: 12
   };
 
-  useEffect(() => {
-    let totalSpentCount = 0
-  for (let i = 0; i < orders.length; i++) {
-    totalSpentCount += orders[i].total
-    }
-    setTotalSpent(totalSpentCount)
-  }, [orders])
+ useEffect(() => {
+  if (!orders) return;
+
+  const totalSpentCount = orders
+    .filter(order => order.status === "confirmed")
+    .reduce((sum, order) => sum + order.total, 0);
+
+  setTotalSpent(totalSpentCount);
+}, [orders]);
+
 
 
 
@@ -202,7 +205,7 @@ const Profile = () => {
                 { icon: ShoppingBag, label: 'Total Orders', value: orders.length, color: 'from-blue-500 to-blue-600' },
                 { icon: TrendingUp, label: 'Total Spent', value: `₦${totalSpent.toLocaleString()}`, color: 'from-green-500 to-green-600' },
                 { icon: Heart, label: 'Wishlist Items', value: userStats.wishlistItems, color: 'from-red-500 to-red-600' },
-                { icon: Award, label: 'Reviews Given', value: userStats.reviewsGiven, color: 'from-yellow-500 to-orange-500' }
+                { icon: Award, label: 'Reviews Given', value: 0, color: 'from-yellow-500 to-orange-500' }
               ].map((stat, index) => (
                 <motion.div
                   key={index}
