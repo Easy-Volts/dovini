@@ -251,14 +251,30 @@ const [searchParams] = useSearchParams();
             Order Confirmed! 🎉
           </motion.h2>
 
+          <motion.div
+            className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
+          >
+            <div className="flex items-center space-x-2 mb-2">
+              <Clock className="w-5 h-5 text-blue-600" />
+              <h3 className="font-semibold text-blue-800">Pending Approval</h3>
+            </div>
+            <p className="text-sm text-blue-700">
+              Your order is confirmed but pending payment verification.
+              We'll review your bank transfer and send a confirmation email once approved.
+            </p>
+          </motion.div>
+
           <motion.p
-            className="text-gray-600 mb-6"
+            className="text-gray-600 mb-4"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9 }}
           >
-            Your order has been placed successfully. You'll receive a
-            confirmation email shortly.
+            You'll receive a confirmation email once our team verifies your payment.
+            This usually takes 1-2 business hours during working days.
           </motion.p>
 
           <motion.div
