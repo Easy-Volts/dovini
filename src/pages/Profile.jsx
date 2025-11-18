@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -26,9 +26,16 @@ import {
   AlertTriangle,
   X,
   ShoppingCart,
-  Home
+  Home,
+  Menu,
 } from 'lucide-react';
 import AddAddressModal from '../components/AddAddressModal';
+
+const Close = () => {
+  return (
+    <svg className='fill-white' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" ><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+  )
+}
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -36,6 +43,7 @@ const Profile = () => {
   const { wishlist, removeFromWishlist } = useWishlist();
   const { orders } = useOrders()
   const [totalSpent, setTotalSpent] = useState(0)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const userStats = {
     totalOrders: 24,
@@ -89,6 +97,15 @@ const Profile = () => {
               </div>
             </div>
             <div className="flex items-center space-x-3">
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="md:hidden text-white hover:text-amber-100 transition-colors bg-white/20 hover:bg-white/30 p-2 rounded-lg backdrop-blur-sm flex items-center justify-center"
+                title="Menu"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+
               {/* User Welcome Badge */}
               <div className="hidden sm:flex items-center space-x-2 bg-white/20 px-3 py-1.5 rounded-full backdrop-blur-sm">
                 <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
@@ -99,7 +116,7 @@ const Profile = () => {
               
               <button
                 onClick={() => logout(() => navigate('/login'))}
-                className="text-white hover:text-amber-100 transition-colors bg-white/20 hover:bg-white/30 p-2 rounded-lg backdrop-blur-sm"
+                className="text-white hidden sm:block hover:text-amber-100 transition-colors bg-white/20 hover:bg-white/30 p-2 rounded-lg backdrop-blur-sm"
                 title="Logout"
               >
                 <LogOut className="w-5 h-5" />
@@ -112,7 +129,7 @@ const Profile = () => {
       <div className="container mx-auto px-4 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 hidden sm:block">
             <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-6">
               {/* User Info */}
               <div className="text-center mb-6">
@@ -520,6 +537,128 @@ const Profile = () => {
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu Drawer */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 md:hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+
+            {/* Slide-out Menu */}
+            <motion.div
+              className="fixed left-0 top-0 h-full w-80 bg-white shadow-2xl z-50 md:hidden"
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            >
+              {/* Menu Header */}
+              <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                   
+                  </div>
+                  <button
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-white hover:text-red-200 transition-colors p-1 rounded-lg flex items-center justify-center hover:bg-white/20 bg-white/20"
+                  >
+                    <Close className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* User Info */}
+              <div className="p-4 border-b border-gray-200">
+                <div className="text-center">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 border-4 border-gray-200 flex items-center justify-center mx-auto mb-3">
+                    <User className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-gray-800">{user?.name}</h3>
+                  <p className="text-gray-600 text-sm">{user?.email}</p>
+                  <p className="text-gray-500 text-xs mt-1">Member since {new Date(user.createdAt).getFullYear()}</p>
+                </div>
+              </div>
+
+              {/* Menu Items */}
+              <nav className="p-4">
+                {menuItems.map((item, index) => {
+                  const showSeparator = item.separator && index > 0;
+                  
+                  return (
+                    <React.Fragment key={index}>
+                      {showSeparator && (
+                        <div className="border-t border-gray-200 my-4"></div>
+                      )}
+                      
+                      {item.path ? (
+                        <Link
+                          to={item.path}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="flex items-center justify-between p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-all duration-200 group mb-2"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <item.icon className="w-5 h-5 text-gray-600 group-hover:text-red-600" />
+                            <span className="font-medium">{item.label}</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            {item.count && (
+                              <span className="bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full">
+                                {item.count}
+                              </span>
+                            )}
+                            <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-red-600" />
+                          </div>
+                        </Link>
+                      ) : item.action ? (
+                        <button
+                          onClick={() => {
+                            item.action();
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-all duration-200 group mb-2"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <item.icon className="w-5 h-5 text-gray-600 group-hover:text-red-600" />
+                            <span className="font-medium">{item.label}</span>
+                          </div>
+                          <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-red-600" />
+                        </button>
+                      ) : (
+                        <a
+                          href={item.id}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="flex items-center justify-between p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-all duration-200 group mb-2"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <item.icon className="w-5 h-5 text-gray-600 group-hover:text-red-600" />
+                            <span className="font-medium">{item.label}</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            {item.count && (
+                              <span className="bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full">
+                                {item.count}
+                              </span>
+                            )}
+                            <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-red-600" />
+                          </div>
+                        </a>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+              </nav>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
       <AddAddressModal
         showAddress={showAddress}
         setShowAddress={setShowAddress}
