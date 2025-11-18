@@ -163,12 +163,9 @@ const AccountSettings = ({ onUpdateProfile, onChangePassword, setShowReactivatio
             {/* Profile Picture */}
             <div className="flex items-center space-x-6">
               <div className="relative">
-                <img
-                  src={user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'User')}&background=dc2626&color=fff&size=100`}
-                  alt={user?.name}
-                  className="w-24 h-24 rounded-full object-cover border-4 border-gray-200"
-                />
-                
+                <div className="w-24 h-24 rounded-full bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 border-4 border-gray-200 flex items-center justify-center">
+                  <UserIcon className="w-12 h-12 text-white" />
+                </div>
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-800">Contact Information</h3>

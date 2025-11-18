@@ -117,11 +117,9 @@ const Profile = () => {
               {/* User Info */}
               <div className="text-center mb-6">
                 <div className="relative inline-block mb-4">
-                  <img
-                    src={user?.avatar}
-                    alt={user?.name}
-                    className="w-20 h-20 rounded-full object-cover border-4 border-red-100"
-                  />
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 border-4 border-red-100 flex items-center justify-center">
+                    <User className="w-10 h-10 text-white" />
+                  </div>
                   <button className="absolute bottom-0 right-0 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white p-1.5 rounded-full hover:bg-red-700 transition-colors">
                     <Edit className="w-3 h-3" />
                   </button>

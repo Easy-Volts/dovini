@@ -232,7 +232,7 @@ const Header = () => {
                      }}
                    />
                    {/* Desktop name display */}
-                   <span className="hidden md:inline lg:inline xl:inline font-semibold text-sm text-gray-800 bg-gray-100 group-hover:bg-gray-200 px-2 py-1 md:px-3 md:py-1.5 rounded-full transition-all duration-200 border border-gray-200 group-hover:border-gray-300 truncate max-w-[80px] md:max-w-none">
+                   <span className="hidden md:inline lg:inline xl:inline font-semibold text-sm text-gray-800 group-hover:bg-gray-200 px-2 py-1 md:px-1 md:py-1.5 rounded-full transition-all duration-200  group-hover:border-gray-300 truncate max-w-[80px] md:max-w-none">
                      {user.name}
                    </span>
                    
