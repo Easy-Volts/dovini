@@ -200,7 +200,7 @@ const AccountSettings = ({ onUpdateProfile, onChangePassword, onUpdatePreference
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-800">Contact Information</h3>
-                <p className="text-gray-600 text-sm">Upload contact information</p>
+                <p className="text-gray-600 text-sm">Update contact information</p>
               </div>
             </div>
 

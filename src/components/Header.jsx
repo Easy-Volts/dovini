@@ -99,14 +99,7 @@ const Header = () => {
                 className="flex items-center space-x-1 hover:text-red-200 transition-colors"
               >
                 <FileText className="w-4 h-4" />
-                <span>Terms & Conditions</span>
-              </Link>
-              <Link
-                to="/privacy"
-                className="flex items-center space-x-1 hover:text-red-200 transition-colors"
-              >
-                <Lock className="w-4 h-4" />
-                <span>Privacy Policy</span>
+                <span>Terms & Conditions apply</span>
               </Link>
             </div>
           </div>

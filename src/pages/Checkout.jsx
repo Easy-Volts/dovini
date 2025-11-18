@@ -29,13 +29,12 @@ import {
 
 const Checkout = () => {
   const { cart, getTotal, clearCart } = useCart();
-  const { user, isAuthenticated } = useAuth();
+  const { user } = useAuth();
   const { showSuccess } = useToast();
 
   const [currentStep, setCurrentStep] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
-  const [selectedPayment, setSelectedPayment] = useState("card");
   const [formData, setFormData] = useState({
     name: user?.name || "hello",
     email: user?.email || "",
@@ -102,13 +101,8 @@ const [searchParams] = useSearchParams();
       if (!formData.state.trim()) errors.state = "State is required";
     }
 
-    if (step === 2 && selectedPayment === "card") {
-      if (!formData.cardNumber.trim())
-        errors.cardNumber = "Card number is required";
-      if (!formData.expiryDate.trim())
-        errors.expiryDate = "Expiry date is required";
-      if (!formData.cvv.trim()) errors.cvv = "CVV is required";
-    }
+    // Step 2 validation - Bank transfer (no additional validation needed)
+    // All payment details are displayed to user for manual transfer
 
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -641,10 +635,10 @@ const [searchParams] = useSearchParams();
                 </motion.div>
               )}
 
-              {/* Step 2: Payment Information */}
+              {/* Step 2: Bank Transfer Payment */}
               {currentStep === 2 && (
                 <motion.div
-                  key="payment"
+                  key="bank-transfer"
                   initial={{ opacity: 0, x: 50 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 50 }}
@@ -653,237 +647,165 @@ const [searchParams] = useSearchParams();
                 >
                   <div className="flex items-center space-x-3 mb-8">
                     <div className="bg-green-100 p-3 rounded-xl">
-                      <CreditCard className="w-6 h-6 text-green-600" />
+                      <Award className="w-6 h-6 text-green-600" />
                     </div>
                     <div>
                       <h2 className="text-xl font-bold text-gray-800">
-                        Payment Method
+                        Bank Transfer Payment
                       </h2>
                       <p className="text-gray-600">
-                        Choose how you'd like to pay
+                        Please transfer payment to the account below
                       </p>
                     </div>
                   </div>
 
-                  {/* Payment Method Selection */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
-                    {[
-                      {
-                        id: "card",
-                        name: "Credit Card",
-                        icon: CreditCard,
-                        description: "Visa, Mastercard, etc.",
-                      },
-                      {
-                        id: "bank",
-                        name: "Bank Transfer",
-                        icon: Award,
-                        description: "Direct bank payment",
-                      },
-                      {
-                        id: "paypal",
-                        name: "PayPal",
-                        icon: Shield,
-                        description: "Pay with PayPal",
-                      },
-                    ].map((method) => {
-                      const Icon = method.icon;
-                      return (
-                        <motion.div
-                          key={method.id}
-                          onClick={() => setSelectedPayment(method.id)}
-                          className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
-                            selectedPayment === method.id
-                              ? "border-red-500 bg-red-50 shadow-lg"
-                              : "border-gray-200 hover:border-gray-300 hover:shadow-md"
-                          }`}
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                        >
+                  {/* Bank Transfer Details */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="bg-gradient-to-r from-green-50 to-blue-50 p-8 rounded-2xl border-2 border-green-200 mb-8"
+                  >
+                    {/* Bank Header */}
+                    <div className="text-center mb-6">
+                      <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Award className="w-8 h-8 text-green-600" />
+                      </div>
+                      <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                        Fidelity Bank
+                      </h3>
+                      <p className="text-gray-600">
+                        Secure bank transfer payment
+                      </p>
+                    </div>
+
+                    {/* Account Details Card */}
+                    <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg border border-gray-200">
+                      <div className="space-y-3 sm:space-y-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 bg-gray-50 rounded-lg gap-3 sm:gap-4">
                           <div className="flex items-center space-x-3">
-                            <Icon
-                              className={`w-6 h-6 ${
-                                selectedPayment === method.id
-                                  ? "text-red-600"
-                                  : "text-gray-600"
-                              }`}
-                            />
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                              <User className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+                            </div>
                             <div>
-                              <div
-                                className={`font-semibold ${
-                                  selectedPayment === method.id
-                                    ? "text-red-600"
-                                    : "text-gray-800"
-                                }`}
-                              >
-                                {method.name}
-                              </div>
-                              <div className="text-xs text-gray-600">
-                                {method.description}
-                              </div>
+                              <p className="text-xs sm:text-sm text-gray-600">Account Name</p>
+                              <p className="text-sm sm:text-lg font-bold text-gray-800 break-words">
+                                DOVINI GLOBAL CONCEPT
+                              </p>
                             </div>
                           </div>
-                        </motion.div>
-                      );
-                    })}
-                  </div>
-
-                  {/* Card Payment Form */}
-                  {selectedPayment === "card" && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="space-y-6"
-                    >
-                      <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-6 rounded-xl border">
-                        <div className="flex items-center space-x-2 mb-4">
-                          <CreditCard className="w-5 h-5 text-gray-600" />
-                          <span className="font-semibold text-gray-800">
-                            Card Information
-                          </span>
+                          <motion.button
+                            onClick={() => {
+                              navigator.clipboard.writeText("DOVINI GLOBAL CONCEPT");
+                              showSuccess("Account name copied!", 2000);
+                            }}
+                            className="px-3 sm:px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors text-xs sm:text-sm font-medium w-full sm:w-auto"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            Copy
+                          </motion.button>
                         </div>
 
-                        <div className="space-y-4">
-                          <div className="space-y-2">
-                            <label className="block text-sm font-semibold text-gray-700">
-                              Card Number
-                            </label>
-                            <input
-                              type="text"
-                              name="cardNumber"
-                              value={formData.cardNumber}
-                              onChange={handleInputChange}
-                              className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all ${
-                                formErrors.cardNumber
-                                  ? "border-red-300 focus:ring-red-200"
-                                  : "border-gray-300 focus:ring-red-200 focus:border-red-400"
-                              }`}
-                              placeholder="1234 5678 9012 3456"
-                            />
-                            {formErrors.cardNumber && (
-                              <motion.p
-                                className="text-red-500 text-sm"
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                              >
-                                {formErrors.cardNumber}
-                              </motion.p>
-                            )}
-                          </div>
-
-                          <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                              <label className="block text-sm font-semibold text-gray-700">
-                                Expiry Date
-                              </label>
-                              <input
-                                type="text"
-                                name="expiryDate"
-                                value={formData.expiryDate}
-                                onChange={handleInputChange}
-                                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all ${
-                                  formErrors.expiryDate
-                                    ? "border-red-300 focus:ring-red-200"
-                                    : "border-gray-300 focus:ring-red-200 focus:border-red-400"
-                                }`}
-                                placeholder="MM/YY"
-                              />
-                              {formErrors.expiryDate && (
-                                <motion.p
-                                  className="text-red-500 text-sm"
-                                  initial={{ opacity: 0, y: -10 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                >
-                                  {formErrors.expiryDate}
-                                </motion.p>
-                              )}
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 bg-gray-50 rounded-lg gap-3 sm:gap-4">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                              <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
                             </div>
-
-                            <div className="space-y-2">
-                              <label className="block text-sm font-semibold text-gray-700">
-                                CVV
-                              </label>
-                              <input
-                                type="text"
-                                name="cvv"
-                                value={formData.cvv}
-                                onChange={handleInputChange}
-                                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all ${
-                                  formErrors.cvv
-                                    ? "border-red-300 focus:ring-red-200"
-                                    : "border-gray-300 focus:ring-red-200 focus:border-red-400"
-                                }`}
-                                placeholder="123"
-                              />
-                              {formErrors.cvv && (
-                                <motion.p
-                                  className="text-red-500 text-sm"
-                                  initial={{ opacity: 0, y: -10 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                >
-                                  {formErrors.cvv}
-                                </motion.p>
-                              )}
+                            <div>
+                              <p className="text-xs sm:text-sm text-gray-600">Account Number</p>
+                              <p className="text-lg sm:text-2xl font-black text-gray-800 tracking-wider break-all">
+                                5601188673
+                              </p>
                             </div>
                           </div>
-
-                          <div className="flex items-center space-x-2">
-                            <input
-                              type="checkbox"
-                              id="saveCard"
-                              name="saveCard"
-                              checked={formData.saveCard}
-                              onChange={handleInputChange}
-                              className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
-                            />
-                            <label
-                              htmlFor="saveCard"
-                              className="text-sm text-gray-700"
-                            >
-                              Save card for future purchases
-                            </label>
-                          </div>
+                          <motion.button
+                            onClick={() => {
+                              navigator.clipboard.writeText("5601188673");
+                              showSuccess("Account number copied!", 2000);
+                            }}
+                            className="px-3 sm:px-4 py-2 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 transition-colors text-xs sm:text-sm font-medium w-full sm:w-auto"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            Copy
+                          </motion.button>
                         </div>
                       </div>
-                    </motion.div>
-                  )}
+                    </div>
 
-                  {/* Other Payment Methods */}
-                  {selectedPayment !== "card" && (
+                    {/* Amount to Transfer */}
                     <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl border border-blue-200"
+                      className="mt-6 p-4 sm:p-6 bg-gradient-to-r from-red-50 to-orange-50 rounded-xl border border-red-200"
+                      initial={{ scale: 0.95 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.4 }}
                     >
-                      <div className="text-center">
-                        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                          {selectedPayment === "bank" ? (
-                            <Award className="w-8 h-8 text-blue-600" />
-                          ) : (
-                            <Shield className="w-8 h-8 text-blue-600" />
-                          )}
-                        </div>
-                        <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                          {selectedPayment === "bank"
-                            ? "Bank Transfer"
-                            : "PayPal Payment"}
-                        </h3>
-                        <p className="text-gray-600 mb-4">
-                          {selectedPayment === "bank"
-                            ? "You will be redirected to your bank to complete the payment securely."
-                            : "You will be redirected to PayPal to complete your payment."}
+                      <div className="text-center sm:text-left">
+                        <p className="text-sm text-gray-600 mb-2">Amount to Transfer</p>
+                        <p className="text-2xl sm:text-3xl font-black text-red-600">
+                          ₦{finalTotal.toLocaleString()}
                         </p>
-                        <div className="bg-white p-4 rounded-lg border">
-                          <p className="text-sm text-gray-600">
-                            <strong>Note:</strong>{" "}
-                            {selectedPayment === "bank"
-                              ? "Bank transfers are processed instantly and may take 1-3 business days to reflect."
-                              : "PayPal payments are processed immediately with full buyer protection."}
-                          </p>
-                        </div>
                       </div>
                     </motion.div>
-                  )}
+                  </motion.div>
+
+                  {/* Instructions */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 sm:p-6 mb-6"
+                  >
+                    <div className="flex items-start space-x-3">
+                      <div className="w-6 h-6 sm:w-8 sm:h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-gray-800 mb-2 text-sm sm:text-base">
+                          Important Instructions:
+                        </h4>
+                        <ul className="space-y-2 text-xs sm:text-sm text-gray-700">
+                          <li className="flex items-start space-x-2">
+                            <span className="text-yellow-600 font-bold flex-shrink-0">1.</span>
+                            <span>Transfer the exact amount shown above</span>
+                          </li>
+                          <li className="flex items-start space-x-2">
+                            <span className="text-yellow-600 font-bold flex-shrink-0">2.</span>
+                            <span>Keep your payment receipt/screenshot for confirmation</span>
+                          </li>
+                          <li className="flex items-start space-x-2">
+                            <span className="text-yellow-600 font-bold flex-shrink-0">3.</span>
+                            <span>Click "Next Step" after completing the transfer</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* Confirmation Message */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="bg-blue-50 border border-blue-200 rounded-xl p-6"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <MessageCircle className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-gray-800 mb-1">
+                          Need Help?
+                        </h4>
+                        <p className="text-sm text-gray-600">
+                          If you have any issues with the transfer, please contact our support team at{" "}
+                          <span className="font-semibold text-blue-600">080-6397-1335</span>{" "}
+                          or email us at <span className="font-semibold text-blue-600">support@dovini.com</span>
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
                 </motion.div>
               )}
 
@@ -935,24 +857,27 @@ const [searchParams] = useSearchParams();
                     {/* Payment Info */}
                     <div className="bg-gray-50 p-4 sm:p-6 rounded-xl">
                       <h3 className="font-semibold text-gray-800 mb-3 sm:mb-4 flex items-center space-x-2">
-                        <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+                        <Award className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
                         <span className="text-sm sm:text-base">
                           Payment Method
                         </span>
                       </h3>
-                      <div className="flex items-center space-x-3">
-                        {selectedPayment === "card" && (
-                          <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
-                        )}
-                        {selectedPayment === "bank" && (
-                          <Award className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
-                        )}
-                        {selectedPayment === "paypal" && (
-                          <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
-                        )}
-                        <span className="text-gray-700 capitalize text-sm sm:text-base">
-                          {selectedPayment} Payment
-                        </span>
+                      <div className="bg-white p-4 rounded-lg border border-gray-200">
+                        <div className="flex items-center space-x-3 mb-3">
+                          <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                            <Award className="w-5 h-5 text-green-600" />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-gray-800">Fidelity Bank Transfer</p>
+                            <p className="text-sm text-gray-600">Account: 5601188673</p>
+                          </div>
+                        </div>
+                        <div className="border-t border-gray-200 pt-3">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm text-gray-600">Amount to Transfer:</span>
+                            <span className="font-bold text-green-600">₦{finalTotal.toLocaleString()}</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
 

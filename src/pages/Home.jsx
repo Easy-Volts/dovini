@@ -1247,6 +1247,64 @@ const Home = ({categories}) => {
           </div>
         </div>
       </section>
+
+      {/* WhatsApp Floating Button */}
+      <motion.a
+        href="https://wa.me/2348063971335"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-50 group"
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ delay: 1, type: "spring", stiffness: 260, damping: 20 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        <div className="relative">
+          {/* Background shadow/glow effect */}
+          <div className="absolute inset-0 bg-green-500 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+          
+          {/* Main WhatsApp button */}
+          <div className="relative bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-full shadow-2xl hover:shadow-green-500/25 transition-all duration-300 group-hover:from-green-400 group-hover:to-green-500">
+            <MessageCircle className="w-6 h-6" />
+          </div>
+          
+          {/* Pulse animation ring */}
+          <motion.div
+            className="absolute inset-0 border-2 border-green-400 rounded-full"
+            animate={{
+              scale: [1, 1.4, 1],
+              opacity: [0.7, 0, 0.7],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          
+          {/* Notification dot */}
+          <motion.div
+            className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center"
+            animate={{
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+          </motion.div>
+        </div>
+        
+        {/* Tooltip */}
+        <div className="absolute bottom-full right-0 mb-2 px-3 py-2 bg-gray-800 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
+          Chat with us on WhatsApp
+          <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
+        </div>
+      </motion.a>
     </div>
   );
 };
