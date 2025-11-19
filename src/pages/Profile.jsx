@@ -261,7 +261,7 @@ const Profile = () => {
                     </motion.div>
                   </div>
                   <h3 className="text-2xl font-bold bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 bg-clip-text text-transparent">
-                    Your Shopping Stats
+                   Your Shopping Overview
                   </h3>
                 </motion.div>
 
@@ -322,7 +322,7 @@ const Profile = () => {
                       className="bg-gradient-to-r from-amber-400 to-orange-500 text-white px-2 py-1 rounded-full text-xs font-medium shadow-sm"
                       whileHover={{ scale: 1.05 }}
                     >
-                      🛍️ Active
+                      🛍️ Dovini Filmster
                     </motion.div>
                   )}
                   {totalSpent > 100000 && (
