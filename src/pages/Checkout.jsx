@@ -675,7 +675,7 @@ const [searchParams] = useSearchParams();
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="bg-gradient-to-r from-green-50 to-blue-50 p-8 rounded-2xl border-2 border-green-200 mb-8"
+                    className="bg-gradient-to-r from-green-50 to-blue-50 p-3 sm:p-6 rounded-2xl border-2 border-green-200 mb-8"
                   >
                     {/* Bank Header */}
                     <div className="text-center mb-6">
@@ -953,7 +953,7 @@ const [searchParams] = useSearchParams();
               {currentStep < 3 ? (
                 <motion.button
                   onClick={handleNextStep}
-                  className="px-6 sm:px-8 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 text-sm sm:text-base"
+                  className="px-6 sm:px-8 py-3 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 text-sm sm:text-base"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >

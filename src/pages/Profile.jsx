@@ -261,7 +261,7 @@ const Profile = () => {
                     </motion.div>
                   </div>
                   <h3 className="text-2xl font-bold bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 bg-clip-text text-transparent">
-                    Your Shopping Statistics
+                    Your Shopping Stats
                   </h3>
                 </motion.div>
 

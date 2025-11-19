@@ -178,7 +178,7 @@ const Footer = () => {
 
             {/* Additional Links */}
             <motion.div
-              className="flex items-center justify-center space-x-4 sm:space-x-6 text-sm lg:col-span-1"
+              className="flex items-center justify-center space-x-4 sm:space-x-6 text-sm lg:col-span-1 mb-5 sm:mb-0"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.4 }}
