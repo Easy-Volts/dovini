@@ -214,6 +214,129 @@ const Profile = () => {
 
           {/* Main Content */}
           <div className="lg:col-span-3 space-y-8">
+            {/* Mini Brand Stats Header */}
+            <div className="relative text-center overflow-hidden">
+              {/* Subtle Brand Background */}
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-50 via-orange-50 to-red-50 rounded-2xl"></div>
+              
+              {/* Small Animated Dots */}
+              <div className="absolute inset-0">
+                {[...Array(4)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute w-1.5 h-1.5 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full"
+                    style={{
+                      left: `${15 + i * 20}%`,
+                      top: `${25 + (i % 2) * 50}%`,
+                    }}
+                    animate={{
+                      y: [0, -8, 0],
+                      opacity: [0.4, 1, 0.4],
+                    }}
+                    transition={{
+                      duration: 2 + i * 0.3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: i * 0.3,
+                    }}
+                  />
+                ))}
+              </div>
+
+              {/* Compact Header Content */}
+              <div className="relative z-10 p-4">
+                {/* Mini Title */}
+                <motion.div
+                  className="flex items-center justify-center space-x-3 mb-3"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <div className="bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 p-2 rounded-xl shadow-lg">
+                    <motion.div
+                      animate={{ rotate: [0, 360] }}
+                      transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                    >
+                      <ShoppingBag className="w-4 h-4 text-white" />
+                    </motion.div>
+                  </div>
+                  <h3 className="text-2xl font-bold bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 bg-clip-text text-transparent">
+                    Your Shopping Statistics
+                  </h3>
+                </motion.div>
+
+                {/* Compact Stats Banner */}
+                <motion.div
+                  className="relative inline-flex items-center space-x-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-xl border border-orange-200 shadow-md"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <motion.span
+                    className="text-lg"
+                    animate={{ rotate: [0, 10, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    ✨
+                  </motion.span>
+                  
+                  <div className="flex items-center space-x-3 text-sm">
+                    <motion.span
+                      className="font-bold text-orange-600"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.6 }}
+                    >
+                     {orders.length > 0 ? <p>You've made {orders.length} purchases</p> : <p>You've made no purchase</p> }
+                    </motion.span>
+                    
+                    <motion.span
+                      className="font-bold text-red-600"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.8 }}
+                    >
+                      ₦{totalSpent.toLocaleString()}
+                    </motion.span>
+                  </div>
+                  
+                  <motion.span
+                    className="text-lg"
+                    animate={{ rotate: [0, -10, 10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                  >
+                    🚀
+                  </motion.span>
+                </motion.div>
+
+                {/* Mini Achievement Badges */}
+                <motion.div
+                  className="flex justify-center gap-2 mt-3"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1 }}
+                >
+                  {orders.length > 0 && (
+                    <motion.div
+                      className="bg-gradient-to-r from-amber-400 to-orange-500 text-white px-2 py-1 rounded-full text-xs font-medium shadow-sm"
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      🛍️ Active
+                    </motion.div>
+                  )}
+                  {totalSpent > 100000 && (
+                    <motion.div
+                      className="bg-gradient-to-r from-orange-400 to-red-500 text-white px-2 py-1 rounded-full text-xs font-medium shadow-sm"
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      💎 Premium
+                    </motion.div>
+                  )}
+                </motion.div>
+              </div>
+            </div>
+
             {/* Stats Overview */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {[
