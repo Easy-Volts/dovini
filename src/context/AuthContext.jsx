@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect,useRef } from 'react';
+import InactivityModal from '../components/InactivityModal';
 
 const AuthContext = createContext();
 
@@ -22,6 +23,9 @@ export const useAuth = () => {
       setUser: () => {},
       sendOTP: () => Promise.resolve({ success: false, error: 'AuthProvider not available' }),
       verifyOTP: () => Promise.resolve({ success: false, error: 'AuthProvider not available' }),
+      showInactivityModal: false,
+      countdownTime: 30,
+      cancelLogout: () => {},
     };
   }
   return context;
@@ -32,6 +36,12 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [showActivationPrompt, setShowActivationPrompt] = useState(false);
   const [fullUser, setFullUser] = useState(null)
+  
+  // Inactivity tracking states
+  const [showInactivityModal, setShowInactivityModal] = useState(false);
+  const [countdownTime, setCountdownTime] = useState(30);
+  
+  
 
   // Function to refresh user data from /me endpoint
   const refreshUserData = async (userData, token) => {
@@ -630,6 +640,86 @@ const login = async (email, password) => {
     }
   };
 
+  // Inactivity tracking functions
+  const inactivityTimerRef = useRef(null);
+  const countdownIntervalRef = useRef(null);
+  const [isCountdownActive, setIsCountdownActive] = useState(false);
+
+
+const INACTIVITY_LIMIT = 5 * 60 * 1000; // 5 minutes
+const COUNTDOWN_START = 30; // 30s
+
+// Start inactivity timer
+const startInactivityTimer = () => {
+  clearTimeout(inactivityTimerRef.current);
+  clearInterval(countdownIntervalRef.current);
+
+  setShowInactivityModal(false);
+  setCountdownTime(COUNTDOWN_START);
+
+  inactivityTimerRef.current = setTimeout(() => {
+    setShowInactivityModal(true);
+    startCountdown();
+  }, INACTIVITY_LIMIT - COUNTDOWN_START * 1000);
+};
+
+// Start 30s countdown
+const startCountdown = () => {
+  setIsCountdownActive(true);
+  clearInterval(countdownIntervalRef.current);
+
+  countdownIntervalRef.current = setInterval(() => {
+    setCountdownTime(prev => {
+      if (prev <= 1) {
+        clearInterval(countdownIntervalRef.current);
+        setIsCountdownActive(false);
+        logout();
+        return 0;
+      }
+      return prev - 1;
+    });
+  }, 1000);
+};
+
+
+// User cancels logout
+const cancelLogout = () => {
+  clearInterval(countdownIntervalRef.current);
+  setIsCountdownActive(false);
+  setShowInactivityModal(false);
+  startInactivityTimer();
+};
+
+
+// On any user activity
+const handleUserActivity = () => {
+  if (!user) return;
+
+  // Ignore activity during countdown/modal
+  if (isCountdownActive || showInactivityModal) return;
+
+  // Otherwise reset inactivity
+  startInactivityTimer();
+};
+
+
+ useEffect(() => {
+  if (!user) return;
+
+  startInactivityTimer(); // always start timer
+
+  const events = ["mousedown", "mousemove", "keypress", "scroll", "touchstart"];
+  events.forEach(e => document.addEventListener(e, handleUserActivity, true));
+
+  return () => {
+    events.forEach(e => document.removeEventListener(e, handleUserActivity, true));
+    clearTimeout(inactivityTimerRef.current);
+    clearInterval(countdownIntervalRef.current);
+  };
+}, [user]);
+
+
+
   const value = {
     user,
     isLoading,
@@ -648,12 +738,21 @@ const login = async (email, password) => {
     setShowActivationPrompt,
     validatePassword,
     showActivationPrompt,
+    showInactivityModal,
+    countdownTime,
+    cancelLogout,
     isAuthenticated: !!user,
   };
 
   return (
     <AuthContext.Provider value={value}>
       {children}
+      <InactivityModal
+        isOpen={showInactivityModal}
+        countdownTime={countdownTime}
+        onCancel={cancelLogout}
+        userName={user?.name?.split(' ')[0] || 'User'}
+      />
     </AuthContext.Provider>
   );
 };
