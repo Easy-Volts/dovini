@@ -1079,7 +1079,7 @@ const Home = ({categories}) => {
                       <CategoryCard category={category} />
                     </div>
 
-                    <motion.div className="absolute inset-0 bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <motion.div className="absolute inset-0 bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
                       <ArrowRight className="w-4 h-4 text-orange-600" />
                     </motion.div>
                   </div>

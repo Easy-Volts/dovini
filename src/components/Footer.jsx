@@ -13,7 +13,6 @@ const Footer = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
 
-          {/* Brand Section */}
           <motion.div
             className="sm:col-span-2 lg:col-span-2 space-y-4"
             initial={{ opacity: 0, y: 20 }}
@@ -22,7 +21,7 @@ const Footer = () => {
             viewport={{ once: true }}
           >
             <div className="flex items-center space-x-3">
-              <img src='https://i.ibb.co/ZRrLbMy2/logo-2.png' alt="Dovini Logo" className='w-12 h-12 lg:w-16 lg:h-16 object-contain flex-shrink-0' />
+              <img src='https://i.ibb.co/ZRrLbMy2/logo-2.png' alt="Dovini Logo" className='w-16 h-16 lg:w-30 lg:h-30 object-contain flex-shrink-0' />
             </div>
 
             <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
@@ -30,7 +29,6 @@ const Footer = () => {
               We provide top-quality products for photographers and videographers worldwide.
             </p>
 
-            {/* Social Links */}
             <div className="flex items-center space-x-3">
               <motion.a
                 href="#"
@@ -59,7 +57,6 @@ const Footer = () => {
             </div>
           </motion.div>
 
-          {/* Quick Links */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -98,7 +95,6 @@ const Footer = () => {
             </ul>
           </motion.div>
 
-          {/* Contact & Support */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -142,7 +138,6 @@ const Footer = () => {
               </motion.a>
             </div>
 
-            {/* Trust Indicators */}
             <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 text-xs text-gray-500">
               <div className="flex items-center space-x-1">
                 <Award className="w-3 h-3 text-yellow-500 flex-shrink-0" />
@@ -157,12 +152,10 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Bar */}
       <div className="border-t border-gray-200 bg-white/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-center">
 
-            {/* Copyright */}
             <motion.div
               className="text-center sm:text-left lg:col-span-1"
               initial={{ opacity: 0 }}
@@ -176,7 +169,6 @@ const Footer = () => {
               </p>
             </motion.div>
 
-            {/* Additional Links */}
             <motion.div
               className="flex items-center justify-center space-x-4 sm:space-x-6 text-sm lg:col-span-1 mb-5 sm:mb-0"
               initial={{ opacity: 0 }}
@@ -195,7 +187,6 @@ const Footer = () => {
               </Link>
             </motion.div>
 
-            {/* Rating */}
             <motion.div
               className="flex items-center justify-center space-x-2 lg:col-span-1 lg:justify-end"
               initial={{ opacity: 0 }}
@@ -215,7 +206,6 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Decorative Elements */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
         <motion.div
           className="absolute top-10 left-10 w-20 h-20 bg-red-500/5 rounded-full blur-3xl"

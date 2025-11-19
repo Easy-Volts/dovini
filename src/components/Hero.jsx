@@ -73,7 +73,7 @@ const promoTiles = [
     backgroundImage: "https://images.unsplash.com/photo-1512025316832-8658f04f8a83?q=80&w=871&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     overlayColor: "rgba(239, 68, 68, 0.8)", // red-500 with opacity
     textColor: "text-white",
-    link: "#",
+    
   },
   {
     title: "Clearance",
@@ -81,7 +81,7 @@ const promoTiles = [
     backgroundImage: "https://images.unsplash.com/photo-1552168324-d612d77725e3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
     overlayColor: "rgba(107, 114, 128, 0.6)", // gray-500 with opacity
     textColor: "text-white",
-    link: "#",
+  
   },
   {
     title: "Dovini Pro",
@@ -89,15 +89,15 @@ const promoTiles = [
     backgroundImage: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
     overlayColor: "rgba(0, 0, 0, 0.7)", // black with opacity
     textColor: "text-white",
-    link: "#",
+  
   },
   {
-    title: "Used Gear Purchase",
+    title: "Videography Gear Setup",
     subtitle: "Quick Offer",
-    backgroundImage: "https://i.ibb.co/9HZ1LqgH/8.jpg",
+    backgroundImage: "https://barkingsquirrelmedia.com/wp-content/uploads/2023/04/kushagra-kevat-9ESAufvpgjI-unsplash.jpg",
     overlayColor: "rgba(234, 179, 8, 0.7)", // yellow-500 with opacity
     textColor: "text-white",
-    link: "#",
+
   },
   {
     title: "Trade-Up Bonus",
@@ -105,7 +105,7 @@ const promoTiles = [
     backgroundImage: "https://i.ibb.co/BHJDHcDp/9.jpg",
     overlayColor: "rgba(34, 197, 94, 0.7)", // green-500 with opacity
     textColor: "text-white",
-    link: "#",
+
   },
   {
     title: "New Arrivals",
@@ -113,23 +113,22 @@ const promoTiles = [
     backgroundImage: "https://i.ibb.co/rGt66zm5/10.jpg",
     overlayColor: "rgba(99, 102, 241, 0.7)", // indigo-500 with opacity
     textColor: "text-white",
-    link: "#",
+
   },
   {
-    title: "Accessories",
-    subtitle: "Bags & Straps",
-    backgroundImage: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
-    overlayColor: "rgba(249, 115, 22, 0.7)", // orange-500 with opacity
-    textColor: "text-white",
-    link: "#",
-  },
+  title: "Camera Accessories",
+  subtitle: "Lenses, Tripods & More",
+  backgroundImage: "https://cdn.mos.cms.futurecdn.net/91b9e1fed3cc797650b42eefd0df94e5.jpg", 
+  overlayColor: "rgba(249, 115, 22, 0.7)", // orange-500 with opacity
+  textColor: "text-white",
+},
   {
     title: "Support",
     subtitle: "24/7 Experts",
     backgroundImage: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
     overlayColor: "rgba(236, 72, 153, 0.7)", // pink-500 with opacity
     textColor: "text-white",
-    link: "#",
+    
   },
 ];
 
@@ -144,14 +143,11 @@ const InfoButton = ({ title, description, Icon }) => (
   </div>
 );
 
-// --- Main App Component ---
 
 const Hero = ({categories}) => {
-  // State for the main carousel
   const [currentSlide, setCurrentSlide] = useState(0);
-  const totalSlides = 3; // for desktop carousel
+  const totalSlides = 3; 
 
-  // Auto-advance logic for the carousel (desktop)
   useEffect(() => {
     const timer = setTimeout(() => {
       setCurrentSlide((prevIndex) => (prevIndex + 1) % totalSlides);
@@ -164,7 +160,7 @@ const Hero = ({categories}) => {
   const scrollContainer = (direction) => {
     const container = document.getElementById("promo-scroll-container");
     if (container) {
-      const scrollAmount = container.clientWidth * 0.8; // Scroll 80% of the visible width
+      const scrollAmount = container.clientWidth * 0.8; 
       container.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
@@ -176,7 +172,6 @@ const Hero = ({categories}) => {
     <div className=" bg-gray-100 font-sans">
       <main className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-0 lg:mb-8">
-          {/* 1. Left Categories Sidebar (Jumia-style menu) */}
           <div className="lg:col-span-3 xl:col-span-2 hidden lg:block">
             <div className="bg-white p-4 rounded-xl shadow-lg border border-gray-200">
               <h2 className="text-lg font-bold mb-4 text-gray-800 border-b pb-2">
@@ -362,7 +357,7 @@ const Hero = ({categories}) => {
                             }
                         `}</style>
             {promoTiles.map((tile, index) => (
-              <a
+              <div
                 key={index}
                 href={tile.link}
                 className="flex-shrink-0 w-32 sm:w-40 md:w-48 group cursor-pointer"
@@ -400,7 +395,7 @@ const Hero = ({categories}) => {
                   </p>
                   <p className="text-xs text-gray-500">{tile.subtitle}</p>
                 </div>
-              </a>
+              </div>
             ))}
           </div>
         </div>
