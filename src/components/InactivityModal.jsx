@@ -129,7 +129,7 @@ const InactivityModal = ({
                     {/* Timer Numbers */}
                     <div className="absolute inset-0 flex items-center justify-center">
                       <motion.div
-                        className="text-center"
+                        className="text-center flex flex-col items-center justify-center"
                         animate={{ scale: countdownTime <= 10 ? [1, 1.2, 1] : 1 }}
                         transition={{ duration: 0.5, repeat: countdownTime <= 10 ? Infinity : 0 }}
                       >

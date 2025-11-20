@@ -71,7 +71,6 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [showActivationPrompt, setShowActivationPrompt] = useState(false);
   const [fullUser, setFullUser] = useState(null);
-
   const [showInactivityModal, setShowInactivityModal] = useState(false);
   const [countdownTime, setCountdownTime] = useState(30);
 
