@@ -96,7 +96,7 @@ const Header = () => {
             <div className="flex items-center space-x-4">
               <Link
                 to="/terms"
-                className="flex items-center space-x-1 hover:text-red-200 transition-colors"
+                className="text-xs flex items-center space-x-1 hover:text-red-200 transition-colors"
               >
                 <FileText className="w-4 h-4" />
                 <span>Terms & Conditions apply</span>
