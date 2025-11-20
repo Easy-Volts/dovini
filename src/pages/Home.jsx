@@ -137,12 +137,10 @@ const MobileFlashDealsCarousel = ({ flashDeals }) => {
               }}
               transition={{ duration: 0.5 }}
             >
-              <div className="relative bg-black/25 backdrop-blur-sm rounded-2xl p-3 shadow-xl border border-black/15 overflow-hidden">
-                {/* Dark Overlay Background */}
-                <div className="absolute inset-0 bg-black/30 rounded-2xl"></div>
+              <div className="relative bg-black/25  backdrop-blur-sm rounded-2xl p-3 shadow-xl border border-black/15 overflow-hidden">
+                <div className="absolute inset-0 bg-black/10 rounded-2xl"></div>
 
-                {/* Flash Deal Heading - Moved Up for Better Product Visibility */}
-                <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
+                <div className="absolute top-1/6 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
                   <motion.div
                     className="inline-flex items-center space-x-2 bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2 rounded-full shadow-lg relative overflow-hidden"
                     initial={{ scale: 0 }}
@@ -156,7 +154,6 @@ const MobileFlashDealsCarousel = ({ flashDeals }) => {
                       delay: index * 0.1,
                     }}
                   >
-                    {/* Intense Lightning Flash Background */}
                     <motion.div
                       className="absolute inset-0 bg-gradient-to-r from-yellow-300 via-white to-yellow-400"
                       animate={{
@@ -171,7 +168,6 @@ const MobileFlashDealsCarousel = ({ flashDeals }) => {
                       }}
                     />
 
-                    {/* Secondary Flash Layer */}
                     <motion.div
                       className="absolute inset-0 bg-white"
                       animate={{
@@ -186,7 +182,6 @@ const MobileFlashDealsCarousel = ({ flashDeals }) => {
                       }}
                     />
 
-                    {/* Electric Arc Effect */}
                     <motion.div
                       className="absolute inset-0"
                       style={{
@@ -205,7 +200,6 @@ const MobileFlashDealsCarousel = ({ flashDeals }) => {
                       }}
                     />
 
-                    {/* Animated Flame with Intense Effects */}
                     <motion.div
                       className="relative z-20"
                       animate={{
@@ -227,7 +221,6 @@ const MobileFlashDealsCarousel = ({ flashDeals }) => {
                       }}
                     >
                       <Flame className="w-5 h-5 drop-shadow-lg" />
-                      {/* Flame Glow Effect */}
                       <motion.div
                         className="absolute inset-0 w-5 h-5 bg-orange-400 rounded-full blur-md"
                         animate={{
@@ -243,7 +236,6 @@ const MobileFlashDealsCarousel = ({ flashDeals }) => {
                       />
                     </motion.div>
 
-                    {/* Animated Text with Glow */}
                     <motion.span
                       className="font-black text-sm relative z-20 drop-shadow-lg whitespace-nowrap"
                       animate={{
@@ -264,7 +256,6 @@ const MobileFlashDealsCarousel = ({ flashDeals }) => {
                       FLASH DEALS
                     </motion.span>
 
-                    {/* Animated Lightning Bolt with Intense Effects */}
                     <motion.div
                       className="relative z-20"
                       animate={{
@@ -287,7 +278,6 @@ const MobileFlashDealsCarousel = ({ flashDeals }) => {
                       }}
                     >
                       <Zap className="w-5 h-5 drop-shadow-lg" />
-                      {/* Lightning Glow Effect */}
                       <motion.div
                         className="absolute inset-0 w-5 h-5 bg-yellow-300 rounded-full blur-lg"
                         animate={{
@@ -302,7 +292,6 @@ const MobileFlashDealsCarousel = ({ flashDeals }) => {
                           delay: 0.2,
                         }}
                       />
-                      {/* Electric Spark Effects */}
                       <motion.div
                         className="absolute -top-1 -right-1 w-2 h-2 bg-white rounded-full"
                         animate={{
@@ -335,17 +324,15 @@ const MobileFlashDealsCarousel = ({ flashDeals }) => {
                   </motion.div>
                 </div>
 
-                {/* Flash Deal Badge */}
                 <div className="absolute -top-1 -right-1 z-20 bg-gradient-to-r from-red-500 to-orange-500 text-white px-2 py-0.5 rounded-full text-xs font-bold shadow-lg animate-pulse">
                   -{product.discount}%
                 </div>
 
-                {/* Product Image - Very Small and Faded */}
                 <div className="relative mb-2 mt-4 opacity-60">
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-20 object-cover rounded-lg shadow-md"
+                    className="w-full h-30 object-cover rounded-lg shadow-md"
                   />
                   {/* Overlay gradient */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-lg"></div>

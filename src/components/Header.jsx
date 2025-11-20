@@ -424,6 +424,14 @@ const Header = () => {
                   <Landmark className="w-5 h-5" />
                   <span>About Us</span>
                 </Link>
+                <Link
+                  to="/flash-deals"
+                  className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <span className="text-lg">⚡</span>
+                  <span>Flash Deals</span>
+                </Link>
               </div>
 
               {/* Account Section */}
@@ -534,6 +542,7 @@ const Header = () => {
         <div className="grid grid-cols-5 h-16">
           <Link
             to="/"
+            onClick={() => setIsMobileMenuOpen(false)}
             className="flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-red-600 transition-colors"
           >
             <Home className="w-5 h-5" />
@@ -541,15 +550,17 @@ const Header = () => {
           </Link>
 
           <Link
-            to="/flash-deals"
-            className="flex flex-col items-center justify-center space-y-1 text-red-600 hover:text-red-700 transition-colors mb-2"
+            to="/my-account"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="flex flex-col items-center justify-center space-y-1 hover:text-red-700 transition-colors "
           >
-            <span className="text-lg">⚡</span>
-            <span className="text-xs">Deals</span>
+           <User className="w-5 h-5"/>
+            <span className="text-xs">Account</span>
           </Link>
 
           <Link
             to="/products"
+            onClick={() => setIsMobileMenuOpen(false)}
             className="flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-red-600 transition-colors"
           >
             <Grid3X3 className="w-5 h-5" />
@@ -558,6 +569,7 @@ const Header = () => {
 
           <Link
             to="/wishlist"
+            onClick={() => setIsMobileMenuOpen(false)}
             className="flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-red-600 transition-colors relative"
           >
             <Heart className="w-5 h-5" />
@@ -571,6 +583,7 @@ const Header = () => {
 
           <Link
             to="/cart"
+            onClick={() => setIsMobileMenuOpen(false)}
             className="flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-red-600 transition-colors relative"
           >
             <ShoppingCart className="w-5 h-5" />

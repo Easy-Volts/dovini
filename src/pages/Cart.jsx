@@ -290,11 +290,11 @@ const Cart = () => {
               transition={{ duration: 0.6 }}
             >
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-800 flex items-center space-x-2">
+                <h2 className="text-xl font-bold text-gray-800 flex items-center space-x-2">
                   <ShoppingCart className="w-6 h-6 text-red-600" />
                   <span>Cart Items ({cart.length})</span>
                 </h2>
-                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                <div className="flex items-center space-x-2 text-xs  text-gray-600">
                   <Lock className="w-4 h-4" />
                   <span>Auto-saved</span>
                 </div>
