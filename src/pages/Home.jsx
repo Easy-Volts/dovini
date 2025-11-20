@@ -37,6 +37,7 @@ import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useToast } from "../context/ToastContext";
 import Hero from "../components/Hero";
+import { useAuth } from "../context/AuthContext";
 
 const PhoneIcon = (props) => (
   <svg
@@ -412,7 +413,8 @@ const Home = ({categories}) => {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { showSuccess } = useToast();
-  const {products, loading} = useProducts()
+  const { products, loading } = useProducts()
+
 
   const featuredProducts = products; 
   const flashDeals = products

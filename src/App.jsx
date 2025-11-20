@@ -6,10 +6,8 @@ import { WishlistProvider } from "./context/WishlistContext";
 import { RecentlyViewedProvider } from "./context/RecentlyViewedContext";
 import { AuthProvider } from "./context/AuthContext";
 import { ReviewsProvider } from "./context/ReviewsContext";
-
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-
 import ScrollToTop from "./components/ScrollToTop";
 import About from "./pages/About";
 import Profile from "./pages/Profile";
@@ -47,12 +45,14 @@ import {
 } from "lucide-react";
 import { useLocation } from "react-router-dom";
 
+
 const App = () => {
   const [categories, setCategories] = useState([]);
   const [showReactivationModal, setShowReactivationModal] = useState(false);
   const location = useLocation();
   const hideHeaderOn = ["/my-account", "/myaccount/settings"];
   const shouldShowHeader = !hideHeaderOn.includes(location.pathname);
+ 
 
   const extraCategoryData = {
     1: {
@@ -126,6 +126,7 @@ const App = () => {
               <CartProvider>
                 <ProductProvider>
                   <OrdersProvider>
+                  
                     <div className="min-h-screen flex flex-col">
                       {shouldShowHeader && <Header />}
                       <ShowReactivation

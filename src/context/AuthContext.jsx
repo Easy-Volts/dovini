@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from "react";
 import InactivityModal from "../components/InactivityModal";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -335,6 +336,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const logoutCallbackRef = useRef(null);
+
+const setLogoutCallback = (callback) => {
+  logoutCallbackRef.current = callback;
+};
+
   const logout = (callback) => {
     setUser(null);
     localStorage.removeItem("dovini_token");
@@ -345,6 +352,8 @@ export const AuthProvider = ({ children }) => {
     if (callback) {
       callback();
     }
+      else if (logoutCallbackRef.current) logoutCallbackRef.current();
+
   };
 
   const updateProfile = (updates) => {
@@ -749,6 +758,9 @@ export const AuthProvider = ({ children }) => {
     }, INACTIVITY_LIMIT - COUNTDOWN_START * 1000);
   };
 
+const nav = useNavigate()
+
+
   const startCountdown = () => {
     setIsCountdownActive(true);
     clearInterval(countdownIntervalRef.current);
@@ -759,6 +771,8 @@ export const AuthProvider = ({ children }) => {
           clearInterval(countdownIntervalRef.current);
           setIsCountdownActive(false);
           logout();
+          setShowInactivityModal(false)
+          nav('/login')
           return 0;
         }
         return prev - 1;
@@ -814,9 +828,9 @@ export const AuthProvider = ({ children }) => {
     logout,
     updateProfile,
     fullUser,
-    addAddress,
     updateAddress,
     deleteAddress,
+    setLogoutCallback,
     setUser,
     sendOTP,
     verifyOTP,
