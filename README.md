@@ -65,7 +65,6 @@
 
 ### 🎨 User Experience
 - **Responsive Design**: Optimized for desktop, tablet, and mobile
-- **Dark/Light Themes**: Customizable interface themes
 - **Loading States**: Skeleton screens and loading indicators
 - **Toast Notifications**: Real-time feedback for user actions
 - **Recently Viewed**: Track and display recently browsed products
