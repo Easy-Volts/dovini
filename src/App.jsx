@@ -6,6 +6,7 @@ import { WishlistProvider } from "./context/WishlistContext";
 import { RecentlyViewedProvider } from "./context/RecentlyViewedContext";
 import { AuthProvider } from "./context/AuthContext";
 import { ReviewsProvider } from "./context/ReviewsContext";
+import CookieConsent from "./components/CookieConsent";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
@@ -189,6 +190,7 @@ const App = () => {
                             path="/forgot-password"
                             element={<ForgotPassword />}
                           />
+                          
                           <Route
                             path="/privacy-policies"
                             element={<Privacy />}
@@ -213,6 +215,7 @@ const App = () => {
                       </main>
                       <Footer />
 
+                      <CookieConsent />
                       <ScrollToTop />
                     </div>
                   </OrdersProvider>
