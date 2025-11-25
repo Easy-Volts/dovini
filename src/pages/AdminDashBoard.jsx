@@ -42,11 +42,29 @@ const initialProducts = [
   },
 ];
 
-const initialOrders = [
-  { id: 'ORD001', customer: 'Alice Johnson', amount: 59.99, date: '2025-09-01', status: 'Pending' },
-  { id: 'ORD002', customer: 'Bob Smith', amount: 150.00, date: '2025-08-30', status: 'Approved' },
-  { id: 'ORD003', customer: 'Charlie Brown', amount: 399.00, date: '2025-08-29', status: 'Pending' },
+
+const mockCustomers = [
+  { id: 1, fullName: 'Alice Johnson', email: 'alice@example.com', status: true, createdAt: '2025-10-15' },
+  { id: 2, fullName: 'Bob Smith', email: 'bob@example.com', status: true, createdAt: '2025-10-20' },
+  { id: 3, fullName: 'Charlie Brown', email: 'charlie@example.com', status: false, createdAt: '2025-11-01' },
+  { id: 4, fullName: 'Diana Prince', email: 'diana@example.com', status: true, createdAt: '2025-11-05' },
+  { id: 5, fullName: 'Eddie Murphy', email: 'eddie@example.com', status: true, createdAt: '2025-11-10' },
 ];
+
+// Calculate dashboard metrics from real data
+const calculateDashboardMetrics = (products, orders) => ({
+  totalProducts: products.length,
+  totalOrders: orders.length,
+  pendingOrders: orders.filter(o => o.status === 'pending').length,
+  completedOrders: orders.filter(o => o.status === 'delivered').length,
+  totalCustomers: mockCustomers.length, // Will be updated when customers API is connected
+  activeCustomers: mockCustomers.filter(c => c.status).length, // Will be updated when customers API is connected
+  lowStockItems: products.filter(p => p.stock < 20).length,
+  monthlyRevenue: orders.reduce((sum, order) => sum + (order.total || 0), 0),
+  averageOrderValue: orders.length > 0 ? orders.reduce((sum, order) => sum + (order.total || 0), 0) / orders.length : 0,
+  conversionRate: 3.2, // Mock percentage - will be calculated from analytics
+  flashDeals: products.filter(p => p.isFlashDeal).length,
+});
 
 // --- Sub-Components ---
 
@@ -487,18 +505,76 @@ const ProductForm = ({ editingProduct, handleSave, setActiveView }) => {
   );
 };
 
-// 4. Order Management View (No change)
+// 4. Order Management View (Updated for real API data structure)
 const OrderList = ({ orders, handleApprove }) => {
-    // ... OrderList component implementation (omitted for brevity)
+    // Transform backend data structure to match component expectations
+    const transformedOrders = orders.map(order => ({
+        id: order.order_code || `ORD-${order.id}`,
+        customer: order.shippingAddress?.name || 'Unknown Customer',
+        amount: order.total || 0,
+        date: order.date ? new Date(order.date).toLocaleDateString() : 'N/A',
+        status: order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'Unknown',
+        rawStatus: order.status,
+        orderId: order.id, // Keep original ID for backend operations
+        items: order.items || [],
+        shippingAddress: order.shippingAddress,
+        tracking: order.tracking
+    }));
+
+    const formatDate = (dateString) => {
+        try {
+            return new Date(dateString).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        } catch {
+            return dateString;
+        }
+    };
+
+    const getStatusColor = (status) => {
+        switch (status?.toLowerCase()) {
+            case 'pending': return 'bg-orange-100 text-orange-800';
+            case 'processing': return 'bg-blue-100 text-blue-800';
+            case 'shipped': return 'bg-purple-100 text-purple-800';
+            case 'delivered': return 'bg-green-100 text-green-800';
+            case 'cancelled': return 'bg-red-100 text-red-800';
+            default: return 'bg-gray-100 text-gray-800';
+        }
+    };
+
+    const getActionButton = (order) => {
+        if (order.rawStatus === 'pending') {
+            return (
+                <button 
+                    onClick={() => handleApprove(order.orderId)}
+                    className="text-green-600 hover:text-green-800 flex items-center p-2 rounded-full hover:bg-green-50 transition"
+                    title="Approve Order"
+                >
+                    <CheckCircle className="w-5 h-5 mr-1" /> Approve
+                </button>
+            );
+        }
+        return <span className="text-gray-400 text-sm">Processed</span>;
+    };
+
     return (
         <div className="space-y-6">
-            <h2 className="text-3xl font-bold text-gray-800 pb-4 border-b border-gray-200">Pending Orders</h2>
+            <div className="flex justify-between items-center pb-4 border-b border-gray-200">
+                <h2 className="text-3xl font-bold text-gray-800">Order Management</h2>
+                <div className="text-sm text-gray-500">
+                    Total Orders: {orders.length}
+                </div>
+            </div>
             
             <div className="bg-white p-6 rounded-2xl shadow-xl overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                         <tr>
-                            {['Order ID', 'Customer', 'Amount', 'Date', 'Status', 'Action'].map(header => (
+                            {['Order Code', 'Customer', 'Items', 'Total Amount', 'Order Date', 'Status', 'Shipping Address', 'Tracking', 'Action'].map(header => (
                                 <th key={header} className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                                     {header}
                                 </th>
@@ -506,34 +582,67 @@ const OrderList = ({ orders, handleApprove }) => {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-100">
-                        {orders.map((order) => (
-                            <tr key={order.id} className="hover:bg-amber-50/50 transition">
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order.id}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{order.customer}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${order.amount.toFixed(2)}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.date}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                        order.status === 'Approved' ? 'bg-indigo-100 text-indigo-800' : 'bg-red-100 text-red-800'
-                                    }`}>
-                                        {order.status}
-                                    </span>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    {order.status === 'Pending' ? (
-                                        <button 
-                                            onClick={() => handleApprove(order.id)}
-                                            className="text-green-600 hover:text-green-800 flex items-center p-2 rounded-full hover:bg-green-50 transition"
-                                            title="Approve Order"
-                                        >
-                                            <CheckCircle className="w-5 h-5 mr-1" /> Approve
-                                        </button>
-                                    ) : (
-                                        <span className="text-gray-400 text-sm">Shipped</span>
-                                    )}
+                        {transformedOrders.length > 0 ? (
+                            transformedOrders.map((order) => (
+                                <tr key={order.id} className="hover:bg-amber-50/50 transition">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        {order.id}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="text-sm font-medium text-gray-900">{order.customer}</div>
+                                        {order.shippingAddress?.phone && (
+                                            <div className="text-sm text-gray-500">{order.shippingAddress.phone}</div>
+                                        )}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <div className="text-sm text-gray-900">
+                                            {order.items.length} item(s)
+                                        </div>
+                                        {order.items.length > 0 && (
+                                            <div className="text-xs text-gray-500 mt-1">
+                                                {order.items[0].name}
+                                                {order.items.length > 1 && ` +${order.items.length - 1} more`}
+                                            </div>
+                                        )}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        ${order.amount.toFixed(2)}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {formatDate(order.date)}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order.status)}`}>
+                                            {order.status}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4 text-sm text-gray-500 max-w-xs">
+                                        {order.shippingAddress?.address || 'N/A'}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {order.tracking?.number ? (
+                                            <div>
+                                                <div className="font-medium">{order.tracking.carrier}</div>
+                                                <div className="text-xs">{order.tracking.number}</div>
+                                            </div>
+                                        ) : (
+                                            'Not available'
+                                        )}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        {getActionButton(order)}
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="9" className="px-6 py-8 text-center text-gray-500">
+                                    <ShoppingCart className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                                    <p className="text-lg font-medium">No orders found</p>
+                                    <p className="text-sm">Orders will appear here once customers start purchasing.</p>
                                 </td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
             </div>
@@ -636,14 +745,15 @@ const CustomerList = ({ customers }) => {
 };
 
 
-// --- Main App Component ---
+// --- Main Component ---
 const App = () => {
-  const [activeView, setActiveView] = useState('products');
+  const [activeView, setActiveView] = useState('dashboard');
   const [products, setProducts] = useState(initialProducts);
-  const [orders, setOrders] = useState(initialOrders);
+  const [orders, setOrders] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
   const [customers, setCustomers] = useState([])
-  
+
+
    const token = localStorage.getItem("adminToken")
     React.useEffect(() => {
       const fetchUsers = async () => {
@@ -658,6 +768,22 @@ const App = () => {
         }
       }
       fetchUsers()
+    }, [token])
+
+  React.useEffect(() => {
+      const fetchOrders = async () => {
+        try {
+          const res = await fetch('https://api.dovinigears.ng/admin/orders', {
+            headers: {"Authorization": `Bearer ${token}`}
+          })
+        const data = await res.json()
+          setOrders(data.orders)
+          console.log(data)
+        } catch (error) {
+          console.log(error.message)
+        }
+      }
+      fetchOrders()
     }, [token])
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -720,11 +846,11 @@ const App = () => {
     setEditingProduct(null);
   };
 
-  // --- Order Management Handlers (No change) ---
+  // --- Order Management Handlers (Updated for backend API) ---
 
   const handleApproveOrder = (id) => {
     setOrders(orders.map(order => 
-      order.id === id ? { ...order, status: 'Approved' } : order
+      order.id === id ? { ...order, status: 'approved' } : order
     ));
   };
   
@@ -754,33 +880,234 @@ const App = () => {
           />
         );
       case 'dashboard':
-      default:
-        // Simple dashboard overview
+      default: {
+        // Calculate metrics from real data
+        const dashboardMetrics = calculateDashboardMetrics(products, orders);
+        
+        // Comprehensive dashboard overview
         return (
-          <div className="p-10 bg-white rounded-2xl shadow-xl">
-             <h2 className="text-3xl font-bold text-gray-800 mb-6">Dashboard Overview</h2>
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <DashboardCard title="Total Products" value={products.length} color="bg-red-500" Icon={Package} />
-                <DashboardCard title="Pending Orders" value={orders.filter(o => o.status === 'Pending').length} color="bg-orange-500" Icon={ShoppingCart} />
-                <DashboardCard title="Total Revenue (Mock)" value="$58,450" color="bg-amber-500" Icon={DollarSign} />
-             </div>
-             <p className="mt-8 text-gray-600">
-               Select an option from the sidebar to manage your inventory and orders.
-             </p>
+          <div className="space-y-8">
+            {/* Header */}
+            <div className="pb-4 border-b border-gray-200">
+              <h2 className="text-3xl font-bold text-gray-800">Dashboard Overview</h2>
+              <p className="text-gray-600 mt-2">Welcome back! Here's what's happening with your store today.</p>
+            </div>
+
+            {/* Key Metrics Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <DashboardCard 
+                title="Total Products" 
+                value={dashboardMetrics.totalProducts} 
+                color="bg-blue-500" 
+                icon={Package}
+                trend="+2 this week"
+                trendUp={true}
+              />
+              <DashboardCard 
+                title="Total Orders" 
+                value={dashboardMetrics.totalOrders} 
+                color="bg-green-500" 
+                icon={ShoppingCart}
+                trend="+8% from last month"
+                trendUp={true}
+              />
+              <DashboardCard 
+                title="Total Customers" 
+                value={dashboardMetrics.totalCustomers} 
+                color="bg-purple-500" 
+                icon={Users}
+                trend={`${dashboardMetrics.activeCustomers} active`}
+                trendUp={true}
+              />
+              <DashboardCard 
+                title="Total Revenue" 
+                value={`${dashboardMetrics.monthlyRevenue.toLocaleString()}`} 
+                color="bg-emerald-500" 
+                icon={DollarSign}
+                trend="+12% vs last month"
+                trendUp={true}
+              />
+            </div>
+
+            {/* Secondary Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <DashboardCard 
+                title="Pending Orders" 
+                value={dashboardMetrics.pendingOrders} 
+                color="bg-orange-500" 
+                icon={Activity}
+                trend="Needs attention"
+                trendUp={false}
+              />
+              <DashboardCard 
+                title="Completed Orders" 
+                value={dashboardMetrics.completedOrders} 
+                color="bg-teal-500" 
+                icon={CheckCircle}
+                trend="+15 this week"
+                trendUp={true}
+              />
+              <DashboardCard 
+                title="Low Stock Items" 
+                value={dashboardMetrics.lowStockItems} 
+                color="bg-red-500" 
+                icon={AlertTriangle}
+                trend="Restock needed"
+                trendUp={false}
+              />
+              <DashboardCard 
+                title="Flash Deals Active" 
+                value={dashboardMetrics.flashDeals} 
+                color="bg-pink-500" 
+                icon={Target}
+                trend="Limited time offers"
+                trendUp={true}
+              />
+            </div>
+
+            {/* Additional Analytics Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-800">Average Order Value</h3>
+                  <TrendingUp className="w-6 h-6 text-green-500" />
+                </div>
+                <p className="text-3xl font-bold text-gray-900">${dashboardMetrics.averageOrderValue.toFixed(2)}</p>
+                <p className="text-sm text-green-600 mt-2">↗ 5.2% increase</p>
+              </div>
+
+              <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-800">Conversion Rate</h3>
+                  <Target className="w-6 h-6 text-blue-500" />
+                </div>
+                <p className="text-3xl font-bold text-gray-900">{dashboardMetrics.conversionRate}%</p>
+                <p className="text-sm text-blue-600 mt-2">↗ 0.3% vs last month</p>
+              </div>
+
+              <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-800">Customer Retention</h3>
+                  <Award className="w-6 h-6 text-purple-500" />
+                </div>
+                <p className="text-3xl font-bold text-gray-900">78%</p>
+                <p className="text-sm text-purple-600 mt-2">↗ 2.1% improvement</p>
+              </div>
+            </div>
+
+            {/* Recent Activity Section */}
+            <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100">
+              <h3 className="text-xl font-bold text-gray-800 mb-6">Recent Orders</h3>
+              <div className="overflow-x-auto">
+                <table className="min-w-full">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Order ID</th>
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Customer</th>
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Amount</th>
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {orders.slice(0, 5).map((order) => (
+                      <tr key={order.id} className="hover:bg-gray-50 transition">
+                        <td className="px-4 py-4 text-sm font-medium text-gray-900">{order.order_code || `ORD-${order.id}`}</td>
+                        <td className="px-4 py-4 text-sm text-gray-800">{order.shippingAddress?.name || 'Unknown Customer'}</td>
+                        <td className="px-4 py-4 text-sm text-gray-900">${(order.total || 0).toFixed(2)}</td>
+                        <td className="px-4 py-4">
+                          <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                            order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
+                            order.status === 'approved' ? 'bg-purple-100 text-purple-800' :
+                            'bg-orange-100 text-orange-800'
+                          }`}>
+                            {order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'Unknown'}
+                          </span>
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-500">{new Date(order.date).toLocaleDateString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-6 rounded-2xl text-white shadow-xl">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold">Add New Product</h3>
+                    <p className="text-blue-100 mt-1">Expand your inventory</p>
+                  </div>
+                  <PlusCircle className="w-8 h-8 text-blue-200" />
+                </div>
+                <button 
+                  onClick={() => setActiveView('productForm')}
+                  className="mt-4 bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-lg transition"
+                >
+                  Get Started
+                </button>
+              </div>
+
+              <div className="bg-gradient-to-r from-green-500 to-green-600 p-6 rounded-2xl text-white shadow-xl">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold">Process Orders</h3>
+                    <p className="text-green-100 mt-1">{dashboardMetrics.pendingOrders} orders pending</p>
+                  </div>
+                  <ShoppingBag className="w-8 h-8 text-green-200" />
+                </div>
+                <button 
+                  onClick={() => setActiveView('orders')}
+                  className="mt-4 bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-lg transition"
+                >
+                  Review Orders
+                </button>
+              </div>
+
+              <div className="bg-gradient-to-r from-purple-500 to-purple-600 p-6 rounded-2xl text-white shadow-xl">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold">Manage Customers</h3>
+                    <p className="text-purple-100 mt-1">{dashboardMetrics.totalCustomers} total customers</p>
+                  </div>
+                  <Users className="w-8 h-8 text-purple-200" />
+                </div>
+                <button 
+                  onClick={() => setActiveView('customers')}
+                  className="mt-4 bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-lg transition"
+                >
+                  View Customers
+                </button>
+              </div>
+            </div>
           </div>
         );
+      }
     }
   };
 
-  const DashboardCard = ({ title, value, color, Icon }) => (
-      <div className="p-6 rounded-2xl shadow-lg bg-gray-50 border border-gray-100">
-          <div className={`p-3 rounded-full text-white w-min mb-4 ${color}`}>
-              <Icon className="w-6 h-6" />
+  const DashboardCard = ({ title, value, color, icon, trend, trendUp }) => {
+      const IconComponent = icon;
+      return (
+          <div className="p-6 rounded-2xl shadow-lg bg-gray-50 border border-gray-100 hover:shadow-xl transition-shadow duration-200">
+              <div className={`p-3 rounded-full text-white w-min mb-4 ${color}`}>
+                  <IconComponent className="w-6 h-6" />
+              </div>
+              <p className="text-sm font-medium text-gray-500">{title}</p>
+              <p className="text-3xl font-extrabold text-gray-900 mt-1">{value}</p>
+              {trend && (
+                <div className="mt-2 flex items-center">
+                  <span className={`text-sm ${trendUp ? 'text-green-600' : 'text-red-600'}`}>
+                    {trendUp ? '↗' : '↘'} {trend}
+                  </span>
+                </div>
+              )}
           </div>
-          <p className="text-sm font-medium text-gray-500">{title}</p>
-          <p className="text-3xl font-extrabold text-gray-900 mt-1">{value}</p>
-      </div>
-  );
+      );
+  };
 
   const DollarSign = ({ className }) => (
       <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
