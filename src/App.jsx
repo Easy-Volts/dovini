@@ -56,6 +56,8 @@ const App = () => {
   const location = useLocation();
   const hideHeaderOn = ["/my-account", "/myaccount/settings", "/admin-login", "/admin"];
   const shouldShowHeader = !hideHeaderOn.includes(location.pathname);
+  const hideFooterOn = ["/admin-login", "/admin"];
+  const shouldShowFooter = !hideFooterOn.includes(location.pathname);
   
 
   const extraCategoryData = {
@@ -217,7 +219,7 @@ const App = () => {
                           <Route path="*" element={<NotFound />} />
                         </Routes>
                       </main>
-                      <Footer />
+                      {shouldShowFooter && <Footer />}
 
                       <CookieConsent />
                       <ScrollToTop />
