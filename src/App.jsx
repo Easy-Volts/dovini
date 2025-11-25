@@ -163,7 +163,7 @@ const App = () => {
                         showReactivationModal={showReactivationModal}
                         setShowReactivationModal={setShowReactivationModal}
                       />
-                      <main className="flex-grow pb-16 lg:pb-0">
+                      <main className="flex-grow lg:pb-0">
                         <Routes>
                           <Route
                             path="/"

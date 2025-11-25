@@ -44,7 +44,7 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden py-10">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative flex flex-col py-8 sm:py-16">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
@@ -67,7 +67,7 @@ const AdminLogin = () => {
       </div>
 
       {/* Back to Home Button */}
-      <div className="absolute top-6 left-6 z-20">
+      <div className="absolute top-3 left-3 sm:top-6 sm:left-6 z-20">
         <button
           onClick={() => navigate('/')}
           className="flex items-center space-x-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
@@ -77,7 +77,7 @@ const AdminLogin = () => {
         </button>
       </div>
 
-      <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
+      <div className="relative z-10 flex-1 flex items-center justify-center p-4">
         <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-12 items-center">
           
           {/* Left Side - Branding & Info */}

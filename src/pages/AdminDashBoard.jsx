@@ -219,10 +219,10 @@ const SideBar = ({ activeView, setActiveView, isMobileMenuOpen, setIsMobileMenuO
 
       {/* Mobile Sidebar Overlay */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex md:hidden">
+        <div className="fixed inset-0 z-50 flex md:hidden transition duration-300">
           {/* Backdrop */}
           <div 
-            className="fixed inset-0 bg-black bg-opacity-50" 
+            className="fixed inset-0 bg-black/40 bg-opacity-50" 
             onClick={() => setIsMobileMenuOpen(false)}
           ></div>
           
@@ -281,10 +281,10 @@ const SideBar = ({ activeView, setActiveView, isMobileMenuOpen, setIsMobileMenuO
 const ProductList = ({ products, handleDelete, startEdit, setActiveView }) => (
   <div className="space-y-6">
     <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-      <h2 className="text-3xl font-bold text-gray-800">Product Inventory</h2>
+      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">Product Inventory</h2>
       <button
         onClick={() => setActiveView("productForm")}
-        className="flex items-center px-6 py-3 rounded-xl font-semibold text-white transition duration-200 shadow-md bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 hover:opacity-90"
+        className="flex items-center sm:px-6 sm:py-3 text-sm whitespace-nowrap px-3 py-1 rounded-xl font-semibold text-white transition duration-200 shadow-md bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 hover:opacity-90"
       >
         <PlusCircle className="w-5 h-5 mr-2" />
         Post New Product
@@ -836,8 +836,8 @@ const OrderList = ({ orders, handleApprove }) => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-        <h2 className="text-3xl font-bold text-gray-800">Order Management</h2>
-        <div className="text-sm text-gray-500">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">Order Management</h2>
+        <div className="sm:text-sm text-xs text-gray-700">
           Total Orders: {orders.length}
         </div>
       </div>
@@ -971,10 +971,10 @@ const CustomerList = ({ customers }) => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-        <h2 className="text-3xl font-bold text-gray-800">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
           Customer Management
         </h2>
-        <div className="text-sm text-gray-500">
+        <div className="sm:text-sm text-xs text-gray-700">
           Total Customers: {customers.length}
         </div>
       </div>
@@ -1646,7 +1646,7 @@ const App = ({ sessions }) => {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-12">
               <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-4 sm:p-6 rounded-2xl text-white shadow-xl">
                 <div className="flex items-center justify-between">
                   <div>
@@ -1748,7 +1748,7 @@ const App = ({ sessions }) => {
   );
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-100 antialiased font-sans">
+    <div className="flex h-screen bg-gray-100 antialiased font-sans">
       {/* Custom Confirmation Modal */}
       <ConfirmationModal
         isOpen={isModalOpen}
@@ -1767,9 +1767,9 @@ const App = ({ sessions }) => {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-hidden flex flex-col pb-6">
         {/* Mobile Header */}
-        <div className="md:hidden bg-white border-b border-gray-200 p-4">
+        <div className="md:hidden bg-white border-b border-gray-200 p-4 flex-shrink-0">
           <div className="flex items-center justify-between">
             <button
               onClick={() => setIsMobileMenuOpen(true)}
@@ -1778,13 +1778,13 @@ const App = ({ sessions }) => {
               <Menu className="w-6 h-6" />
             </button>
             <h1 className="text-lg font-bold text-gray-800">Admin Dashboard</h1>
-            <div className="w-10"></div> {/* Spacer for centering */}
+            {/* Spacer for centering */}
           </div>
         </div>
 
         {/* Content */}
-        <div className="p-4 sm:p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto">{renderContent()}</div>
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+          <div className="max-w-7xl mx-auto h-full">{renderContent()}</div>
         </div>
       </main>
     </div>
