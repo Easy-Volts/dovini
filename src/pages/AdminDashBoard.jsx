@@ -1030,12 +1030,6 @@ const App = ({ sessions }) => {
     trendUp: true,
   });
 
-  const [conversionMetrics, setConversionMetrics] = React.useState({
-  conversionRate: 0,
-  trendText: "→ 0% vs last month",
-  trendUp: true
-});
-
   const [completedOrdersMetrics, setCompletedOrdersMetrics] = React.useState({
     completedThisWeek: 0,
     trendText: "→ 0% this week",
@@ -1077,8 +1071,7 @@ const App = ({ sessions }) => {
         setRevenueMetrics(revenueMetrics);
         const aovMetrics = calculateAOVTrend(data.orders);
         setAovMetrics(aovMetrics);
-        const conversionMetrics = calculateConversionRateTrend(data.orders);
-      setConversionMetrics(conversionMetrics);
+        
       } catch (error) {
         console.log(error.message);
       }
@@ -1281,51 +1274,7 @@ const App = ({ sessions }) => {
     return { aov: globalAOV, trendText, trendUp };
   }
 
-  function calculateConversionRateTrend(orders) {
-  const now = new Date();
-  const parseDate = dateStr => new Date(dateStr.replace(" ", "T"));
-
-  // --- Current month period ---
-  const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-
-  // --- Last month period ---
-  const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-  const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-
-  // --- Count orders for each period ---
-  const ordersThisMonth = orders.filter(o => parseDate(o.date) >= startOfThisMonth).length;
-  const ordersLastMonth = orders.filter(
-    o => parseDate(o.date) >= startOfLastMonth && parseDate(o.date) <= endOfLastMonth
-  ).length;
-
-  // --- Sessions (you can pass monthly session counts if available; here we use total as fallback) ---
-  const sessionsThisMonth = sessions; // replace if you track monthly sessions
-  const sessionsLastMonth = sessions; // replace if you track monthly sessions
-
-  const conversionThisMonth = sessionsThisMonth > 0 ? (ordersThisMonth / sessionsThisMonth) * 100 : 0;
-  const conversionLastMonth = sessionsLastMonth > 0 ? (ordersLastMonth / sessionsLastMonth) * 100 : 0;
-
-  // --- Trend calculation ---
-  let trendPercent = 0;
-  let trendSymbol = "→";
-
-  if (conversionLastMonth > 0) {
-    trendPercent = conversionThisMonth - conversionLastMonth;
-    trendSymbol = trendPercent >= 0 ? "↗" : "↘";
-  } else if (conversionThisMonth > 0) {
-    trendPercent = conversionThisMonth;
-    trendSymbol = "↗";
-  }
-
-  const trendText = `${trendSymbol} ${Math.abs(trendPercent.toFixed(2))}% vs last month`;
-  const trendUp = trendSymbol === "↗";
-
-  return {
-    conversionRate: conversionThisMonth.toFixed(2),
-    trendText,
-    trendUp
-  };
-}
+ 
 
   // --- Product CRUD Handlers ---
 
@@ -1543,18 +1492,19 @@ const App = ({ sessions }) => {
               </div>
 
               <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100">
-  <div className="flex items-center justify-between mb-4">
-    <h3 className="text-lg font-semibold text-gray-800">Conversion Rate</h3>
-    <Target className="w-6 h-6 text-blue-500" />
-  </div>
-  <p className="text-3xl font-bold text-gray-900">
-    {conversionMetrics.conversionRate}%
-  </p>
-  <p className={`text-sm mt-2 ${conversionMetrics.trendUp ? "text-blue-600" : "text-red-600"}`}>
-    {conversionMetrics.trendText}
-  </p>
-</div>
-
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    Conversion Rate
+                  </h3>
+                  <Target className="w-6 h-6 text-blue-500" />
+                </div>
+                <p className="text-3xl font-bold text-gray-900">
+                  {dashboardMetrics.conversionRate}%
+                </p>
+                <p className="text-sm text-blue-600 mt-2">
+                  ↗ 0.3% vs last month
+                </p>
+              </div>
 
               
             </div>
@@ -1640,7 +1590,7 @@ const App = ({ sessions }) => {
                 </div>
                 <button
                   onClick={() => setActiveView("productForm")}
-                  className="mt-4 bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-lg transition"
+                  className="mt-4 bg-white bg-opacity-20 hover:bg-opacity-30 text-blue-500 font-medium px-4 py-2 rounded-lg transition"
                 >
                   Get Started
                 </button>
@@ -1658,7 +1608,7 @@ const App = ({ sessions }) => {
                 </div>
                 <button
                   onClick={() => setActiveView("orders")}
-                  className="mt-4 bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-lg transition"
+                  className="mt-4 bg-white bg-opacity-20 hover:bg-opacity-30 text-green-500 font-medium px-4 py-2 rounded-lg transition"
                 >
                   Review Orders
                 </button>
@@ -1676,7 +1626,7 @@ const App = ({ sessions }) => {
                 </div>
                 <button
                   onClick={() => setActiveView("customers")}
-                  className="mt-4 bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-lg transition"
+                  className="mt-4 bg-white bg-opacity-20 hover:bg-opacity-30 text-purple-500 font-medium px-4 py-2 rounded-lg transition"
                 >
                   View Customers
                 </button>
