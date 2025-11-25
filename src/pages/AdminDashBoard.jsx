@@ -1146,6 +1146,22 @@ const App = ({ sessions }) => {
     fetchOrders();
   }, [token]);
 
+  React.useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch('https://api.dovinigears.ng/products')
+        const data = await res.json()
+        if (!res.ok) {
+          throw new Error('Error fetching products')
+        }
+        setProducts(data.data)
+      } catch (error) {
+        console.log(error.message)
+      }
+    }
+    fetchProducts()
+  }, [])
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
 
@@ -1495,7 +1511,7 @@ const App = ({ sessions }) => {
               />
               <DashboardCard
                 title="Total Revenue"
-                value={`$${revenueMetrics.monthlyRevenue.toLocaleString()}`}
+                value={`₦${revenueMetrics.monthlyRevenue.toLocaleString()}`}
                 color="bg-emerald-500"
                 icon={DollarSign}
                 trend={revenueMetrics.trendText}
@@ -1549,7 +1565,7 @@ const App = ({ sessions }) => {
                   <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-green-500" />
                 </div>
                 <p className="text-2xl sm:text-3xl font-bold text-gray-900">
-                  ${dashboardMetrics.averageOrderValue.toFixed(2)}
+                  ₦{dashboardMetrics.averageOrderValue.toFixed(2)}
                 </p>
                 <p
                   className={`text-xs sm:text-sm mt-2 ${
