@@ -72,8 +72,8 @@ const AdminLogin = () => {
           onClick={() => navigate('/')}
           className="flex items-center space-x-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
         >
-          <Home className="h-5 w-5" />
-          <span className="font-medium">Back to Home</span>
+          <Home className="sm:h-5 sm:w-5 w-4 h-4" />
+          <span className="font-medium text-sm">Back to Home</span>
         </button>
       </div>
 
@@ -83,12 +83,12 @@ const AdminLogin = () => {
           {/* Left Side - Branding & Info */}
           <div className="text-center lg:text-left">
             {/* Logo Section */}
-            <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-3xl shadow-2xl mb-8">
+            <div className="inline-flex mt-6 sm:mt-0 items-center justify-center sm:w-24 sm:h-24 h-20 w-20 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-3xl shadow-2xl mb-8">
               <Shield className="h-12 w-12 text-white" />
             </div>
 
             {/* Main Heading */}
-            <h1 className="text-5xl lg:text-6xl font-extrabold text-white mb-6">
+            <h1 className="text-4xl lg:text-6xl font-extrabold text-white mb-6 flex items-center justify-center sm:justify-start gap-2">
               <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-red-400 bg-clip-text text-transparent">
                 Admin
               </span>
@@ -97,7 +97,7 @@ const AdminLogin = () => {
             </h1>
 
             {/* Subtitle */}
-            <p className="text-xl text-gray-300 mb-8 max-w-lg">
+            <p className="sm:text-xl text-gray-300 mb-8 max-w-lg">
               Secure access to Dovini Cameras & Gears ecommerce management platform.
               Control your business with confidence.
             </p>
@@ -113,7 +113,7 @@ const AdminLogin = () => {
                   <div className="text-amber-400">
                     {item.icon}
                   </div>
-                  <span className="text-sm font-medium">{item.text}</span>
+                  <span className="sm:text-sm text-xs font-medium">{item.text}</span>
                 </div>
               ))}
             </div>
