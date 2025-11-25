@@ -25,6 +25,7 @@ import {
   ShoppingBag,
   Target,
   Award,
+  Menu,
 } from "lucide-react";
 import { useAdmin } from "../context/AdminContext";
 
@@ -163,8 +164,8 @@ const ConfirmationModal = ({ isOpen, title, message, onConfirm, onCancel }) => {
   );
 };
 
-// 1. Sidebar Navigation (No change)
-const SideBar = ({ activeView, setActiveView }) => {
+// 1. Sidebar Navigation (Updated for mobile)
+const SideBar = ({ activeView, setActiveView, isMobileMenuOpen, setIsMobileMenuOpen }) => {
   const navItems = [
     { name: "Dashboard", icon: LayoutDashboard, view: "dashboard" },
     { name: "Products", icon: Package, view: "products" },
@@ -173,41 +174,106 @@ const SideBar = ({ activeView, setActiveView }) => {
   ];
   const { logout } = useAdmin();
 
+  const handleNavClick = (view) => {
+    setActiveView(view);
+    setIsMobileMenuOpen(false); // Close mobile menu after navigation
+  };
+
   return (
-    <div className="w-64 flex flex-col p-6 bg-white shadow-xl h-full border-r border-gray-100">
-      <div className="p-4 rounded-xl mb-10 text-xl font-black tracking-wider text-white bg-gradient-to-r from-amber-500 via-orange-500 to-red-500">
-        ADMIN
-      </div>
+    <>
+      {/* Desktop Sidebar */}
+      <div className="hidden md:flex w-64 flex-col p-6 bg-white shadow-xl h-full border-r border-gray-100">
+        <div className="p-4 rounded-xl mb-10 text-xl font-black tracking-wider text-white bg-gradient-to-r from-amber-500 via-orange-500 to-red-500">
+          ADMIN
+        </div>
 
-      <nav className="space-y-3">
-        {navItems.map((item) => (
+        <nav className="space-y-3">
+          {navItems.map((item) => (
+            <button
+              key={item.name}
+              onClick={() => setActiveView(item.view)}
+              className={`w-full flex items-center p-3 rounded-xl font-medium transition duration-200 ${
+                activeView === item.view
+                  ? "bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white shadow-lg shadow-red-200/50"
+                  : "text-gray-600 hover:bg-gray-50"
+              }`}
+            >
+              <item.icon className="w-5 h-5 mr-3" />
+              {item.name}
+            </button>
+          ))}
+        </nav>
+
+        {/* Logout Button */}
+        <div className="mt-auto pt-6">
           <button
-            key={item.name}
-            onClick={() => setActiveView(item.view)}
-            className={`w-full flex items-center p-3 rounded-xl font-medium transition duration-200 ${
-              activeView === item.view
-                ? "bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white shadow-lg shadow-red-200/50"
-                : "text-gray-600 hover:bg-gray-50"
-            }`}
+            onClick={logout}
+            className="w-full flex items-center p-3 rounded-xl font-semibold transition duration-200 text-white bg-gradient-to-r from-red-500 via-red-600 to-red-700 hover:from-red-600 hover:via-red-700 hover:to-red-800 shadow-md hover:shadow-lg transform hover:scale-105"
+            title="Logout"
           >
-            <item.icon className="w-5 h-5 mr-3" />
-            {item.name}
+            <LogOut className="w-5 h-5 mr-3" />
+            Logout
           </button>
-        ))}
-      </nav>
-
-      {/* Logout Button */}
-      <div className="mt-auto pt-6">
-        <button
-          onClick={logout}
-          className="w-full flex items-center p-3 rounded-xl font-semibold transition duration-200 text-white bg-gradient-to-r from-red-500 via-red-600 to-red-700 hover:from-red-600 hover:via-red-700 hover:to-red-800 shadow-md hover:shadow-lg transform hover:scale-105"
-          title="Logout"
-        >
-          <LogOut className="w-5 h-5 mr-3" />
-          Logout
-        </button>
+        </div>
       </div>
-    </div>
+
+      {/* Mobile Sidebar Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 flex md:hidden">
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50" 
+            onClick={() => setIsMobileMenuOpen(false)}
+          ></div>
+          
+          {/* Mobile Sidebar */}
+          <div className="relative flex flex-col w-64 h-full bg-white shadow-xl border-r border-gray-100">
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <div className="p-3 rounded-xl text-lg font-black tracking-wider text-white bg-gradient-to-r from-amber-500 via-orange-500 to-red-500">
+                ADMIN
+              </div>
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Navigation */}
+            <nav className="flex-1 p-4 space-y-2">
+              {navItems.map((item) => (
+                <button
+                  key={item.name}
+                  onClick={() => handleNavClick(item.view)}
+                  className={`w-full flex items-center p-3 rounded-xl font-medium transition duration-200 ${
+                    activeView === item.view
+                      ? "bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white shadow-lg"
+                      : "text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  <item.icon className="w-5 h-5 mr-3" />
+                  {item.name}
+                </button>
+              ))}
+            </nav>
+
+            {/* Logout Button */}
+            <div className="p-4 border-t border-gray-200">
+              <button
+                onClick={logout}
+                className="w-full flex items-center p-3 rounded-xl font-semibold transition duration-200 text-white bg-gradient-to-r from-red-500 via-red-600 to-red-700 hover:from-red-600 hover:via-red-700 hover:to-red-800 shadow-md"
+                title="Logout"
+              >
+                <LogOut className="w-5 h-5 mr-3" />
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
@@ -1010,6 +1076,7 @@ const CustomerList = ({ customers }) => {
 // --- Main Component ---
 const App = ({ sessions }) => {
   const [activeView, setActiveView] = useState("dashboard");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [products, setProducts] = useState(initialProducts);
   const [orders, setOrders] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
@@ -1383,18 +1450,20 @@ const App = ({ sessions }) => {
         return (
           <div className="space-y-8">
             {/* Header */}
-            <div className="pb-4 border-b border-gray-200 flex justify-between">
-              <div>
-                <h2 className="text-3xl font-bold text-gray-800">
-                  Dashboard Overview
-                </h2>
-                <p className="text-gray-600 mt-2">
-                  Welcome back! Here's what's happening with your store today.
-                </p>
-              </div>
-              <div>
-                <div className="font-semibold">Total Sessions: {sessions}</div>
-                <p className="text-xs text-gray-600">(Total visitors)</p>
+            <div className="pb-4 border-b border-gray-200">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+                <div>
+                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
+                    Dashboard Overview
+                  </h2>
+                  <p className="text-gray-600 mt-1 sm:mt-2 text-sm sm:text-base">
+                    Welcome back! Here's what's happening with your store today.
+                  </p>
+                </div>
+                <div className="text-left sm:text-right">
+                  <div className="font-semibold text-sm sm:text-base">Total Sessions: {sessions}</div>
+                  <p className="text-xs text-gray-600">(Total visitors)</p>
+                </div>
               </div>
             </div>
 
@@ -1471,19 +1540,19 @@ const App = ({ sessions }) => {
             </div>
 
             {/* Additional Analytics Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-              <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-xl border border-gray-100">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-gray-800">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-800">
                     Average Order Value
                   </h3>
-                  <TrendingUp className="w-6 h-6 text-green-500" />
+                  <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-green-500" />
                 </div>
-                <p className="text-3xl font-bold text-gray-900">
+                <p className="text-2xl sm:text-3xl font-bold text-gray-900">
                   ${dashboardMetrics.averageOrderValue.toFixed(2)}
                 </p>
                 <p
-                  className={`text-sm mt-2 ${
+                  className={`text-xs sm:text-sm mt-2 ${
                     aovMetrics.trendUp ? "text-green-600" : "text-red-600"
                   }`}
                 >
@@ -1491,22 +1560,20 @@ const App = ({ sessions }) => {
                 </p>
               </div>
 
-              <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100">
+              <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-xl border border-gray-100">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-gray-800">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-800">
                     Conversion Rate
                   </h3>
-                  <Target className="w-6 h-6 text-blue-500" />
+                  <Target className="w-5 h-5 sm:w-6 sm:h-6 text-blue-500" />
                 </div>
-                <p className="text-3xl font-bold text-gray-900">
+                <p className="text-2xl sm:text-3xl font-bold text-gray-900">
                   {dashboardMetrics.conversionRate}%
                 </p>
-                <p className="text-sm text-blue-600 mt-2">
+                <p className="text-xs sm:text-sm text-blue-600 mt-2">
                   ↗ 0.3% vs last month
                 </p>
               </div>
-
-              
             </div>
 
             {/* Recent Activity Section */}
@@ -1579,54 +1646,54 @@ const App = ({ sessions }) => {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-6 rounded-2xl text-white shadow-xl">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+              <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-4 sm:p-6 rounded-2xl text-white shadow-xl">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-lg font-semibold">Add New Product</h3>
-                    <p className="text-blue-100 mt-1">Expand your inventory</p>
+                    <h3 className="text-base sm:text-lg font-semibold">Add New Product</h3>
+                    <p className="text-blue-100 mt-1 text-sm">Expand your inventory</p>
                   </div>
-                  <PlusCircle className="w-8 h-8 text-blue-200" />
+                  <PlusCircle className="w-6 h-6 sm:w-8 sm:h-8 text-blue-200" />
                 </div>
                 <button
                   onClick={() => setActiveView("productForm")}
-                  className="mt-4 bg-white bg-opacity-20 hover:bg-opacity-30 text-blue-500 font-medium px-4 py-2 rounded-lg transition"
+                  className="mt-4 bg-white bg-opacity-20 hover:bg-opacity-30 text-blue-500 font-medium px-3 sm:px-4 py-2 rounded-lg transition text-sm"
                 >
                   Get Started
                 </button>
               </div>
 
-              <div className="bg-gradient-to-r from-green-500 to-green-600 p-6 rounded-2xl text-white shadow-xl">
+              <div className="bg-gradient-to-r from-green-500 to-green-600 p-4 sm:p-6 rounded-2xl text-white shadow-xl">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-lg font-semibold">Process Orders</h3>
-                    <p className="text-green-100 mt-1">
+                    <h3 className="text-base sm:text-lg font-semibold">Process Orders</h3>
+                    <p className="text-green-100 mt-1 text-sm">
                       {dashboardMetrics.pendingOrders} orders pending
                     </p>
                   </div>
-                  <ShoppingBag className="w-8 h-8 text-green-200" />
+                  <ShoppingBag className="w-6 h-6 sm:w-8 sm:h-8 text-green-200" />
                 </div>
                 <button
                   onClick={() => setActiveView("orders")}
-                  className="mt-4 bg-white bg-opacity-20 hover:bg-opacity-30 text-green-500 font-medium px-4 py-2 rounded-lg transition"
+                  className="mt-4 bg-white bg-opacity-20 hover:bg-opacity-30 text-green-500 font-medium px-3 sm:px-4 py-2 rounded-lg transition text-sm"
                 >
                   Review Orders
                 </button>
               </div>
 
-              <div className="bg-gradient-to-r from-purple-500 to-purple-600 p-6 rounded-2xl text-white shadow-xl">
+              <div className="bg-gradient-to-r from-purple-500 to-purple-600 p-4 sm:p-6 rounded-2xl text-white shadow-xl">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-lg font-semibold">Manage Customers</h3>
-                    <p className="text-purple-100 mt-1">
+                    <h3 className="text-base sm:text-lg font-semibold">Manage Customers</h3>
+                    <p className="text-purple-100 mt-1 text-sm">
                       {dashboardMetrics.totalCustomers} total customers
                     </p>
                   </div>
-                  <Users className="w-8 h-8 text-purple-200" />
+                  <Users className="w-6 h-6 sm:w-8 sm:h-8 text-purple-200" />
                 </div>
                 <button
                   onClick={() => setActiveView("customers")}
-                  className="mt-4 bg-white bg-opacity-20 hover:bg-opacity-30 text-purple-500 font-medium px-4 py-2 rounded-lg transition"
+                  className="mt-4 bg-white bg-opacity-20 hover:bg-opacity-30 text-purple-500 font-medium px-3 sm:px-4 py-2 rounded-lg transition text-sm"
                 >
                   View Customers
                 </button>
@@ -1641,16 +1708,16 @@ const App = ({ sessions }) => {
   const DashboardCard = ({ title, value, color, icon, trend, trendUp }) => {
     const IconComponent = icon;
     return (
-      <div className="p-6 rounded-2xl shadow-lg bg-gray-50 border border-gray-100 hover:shadow-xl transition-shadow duration-200">
-        <div className={`p-3 rounded-full text-white w-min mb-4 ${color}`}>
-          <IconComponent className="w-6 h-6" />
+      <div className="p-4 sm:p-6 rounded-2xl shadow-lg bg-gray-50 border border-gray-100 hover:shadow-xl transition-shadow duration-200">
+        <div className={`p-2 sm:p-3 rounded-full text-white w-min mb-3 sm:mb-4 ${color}`}>
+          <IconComponent className="w-5 h-5 sm:w-6 sm:h-6" />
         </div>
-        <p className="text-sm font-medium text-gray-500">{title}</p>
-        <p className="text-3xl font-extrabold text-gray-900 mt-1">{value}</p>
+        <p className="text-xs sm:text-sm font-medium text-gray-500">{title}</p>
+        <p className="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-1">{value}</p>
         {trend && (
           <div className="mt-2 flex items-center">
             <span
-              className={`text-sm ${
+              className={`text-xs sm:text-sm ${
                 trendUp ? "text-green-600" : "text-red-600"
               }`}
             >
@@ -1692,11 +1759,33 @@ const App = ({ sessions }) => {
       />
 
       {/* Sidebar */}
-      <SideBar activeView={activeView} setActiveView={setActiveView} />
+      <SideBar 
+        activeView={activeView} 
+        setActiveView={setActiveView}
+        isMobileMenuOpen={isMobileMenuOpen}
+        setIsMobileMenuOpen={setIsMobileMenuOpen}
+      />
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto p-8">
-        <div className="max-w-7xl mx-auto">{renderContent()}</div>
+      <main className="flex-1 overflow-y-auto">
+        {/* Mobile Header */}
+        <div className="md:hidden bg-white border-b border-gray-200 p-4">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+            <h1 className="text-lg font-bold text-gray-800">Admin Dashboard</h1>
+            <div className="w-10"></div> {/* Spacer for centering */}
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="p-4 sm:p-6 lg:p-8">
+          <div className="max-w-7xl mx-auto">{renderContent()}</div>
+        </div>
       </main>
     </div>
   );
