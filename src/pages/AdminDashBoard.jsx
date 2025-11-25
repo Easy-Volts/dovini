@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { LayoutDashboard, Package, ShoppingCart, Users, X, PlusCircle, Trash2, Edit2, CheckCircle, Save, AlertTriangle, Image, UploadCloud } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingCart, Users, X, PlusCircle, Trash2, Edit2, CheckCircle, Save, AlertTriangle, Image, UploadCloud, LogOut } from 'lucide-react';
+import { useAdmin } from '../context/AdminContext';
 
 
 // --- Mock Data (Updated to use 'images' array) ---
@@ -88,6 +89,7 @@ const SideBar = ({ activeView, setActiveView }) => {
     { name: 'Orders', icon: ShoppingCart, view: 'orders' },
     { name: 'Customers', icon: Users, view: 'customers' },
   ];
+  const {logout} = useAdmin()
 
   return (
     <div className="w-64 flex flex-col p-6 bg-white shadow-xl h-full border-r border-gray-100">
@@ -111,6 +113,18 @@ const SideBar = ({ activeView, setActiveView }) => {
           </button>
         ))}
       </nav>
+
+      {/* Logout Button */}
+      <div className="mt-auto pt-6">
+        <button
+          onClick={logout}
+          className="w-full flex items-center p-3 rounded-xl font-semibold transition duration-200 text-white bg-gradient-to-r from-red-500 via-red-600 to-red-700 hover:from-red-600 hover:via-red-700 hover:to-red-800 shadow-md hover:shadow-lg transform hover:scale-105"
+          title="Logout"
+        >
+          <LogOut className="w-5 h-5 mr-3" />
+          Logout
+        </button>
+      </div>
     </div>
   );
 };
@@ -534,6 +548,7 @@ const App = () => {
   const [products, setProducts] = useState(initialProducts);
   const [orders, setOrders] = useState(initialOrders);
   const [editingProduct, setEditingProduct] = useState(null);
+  
   
   // Auth state (kept simple without Firestore)
  

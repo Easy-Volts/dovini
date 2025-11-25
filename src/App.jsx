@@ -34,6 +34,9 @@ import Orders from "./pages/Orders";
 import FlashDeals from "./pages/FlashDeals";
 import NotFound from "./pages/NotFound";
 import { OrdersProvider } from "./context/OrdersContext";
+import { AdminProvider } from "./context/AdminContext";
+import AdminLogin from "./components/AdminLogin";
+import ProtectedAdmin from "./components/ProtectedAdmin";
 import {
   Focus,
   Cpu,
@@ -51,9 +54,9 @@ const App = () => {
   const [categories, setCategories] = useState([]);
   const [showReactivationModal, setShowReactivationModal] = useState(false);
   const location = useLocation();
-  const hideHeaderOn = ["/my-account", "/myaccount/settings"];
+  const hideHeaderOn = ["/my-account", "/myaccount/settings", "/admin-login", "/admin"];
   const shouldShowHeader = !hideHeaderOn.includes(location.pathname);
- 
+  
 
   const extraCategoryData = {
     1: {
@@ -107,8 +110,8 @@ const App = () => {
         const data = await res.json();
         const mergedCategories = data.data.map((cat) => ({
           ...cat,
-          image: extraCategoryData[cat.id]?.image, // add frontend image
-          icon: extraCategoryData[cat.id]?.icon, // add frontend icon
+          image: extraCategoryData[cat.id]?.image, 
+          icon: extraCategoryData[cat.id]?.icon, 
         }));
         setCategories(mergedCategories);
       } catch (error) {
@@ -127,7 +130,7 @@ const App = () => {
               <CartProvider>
                 <ProductProvider>
                   <OrdersProvider>
-                  
+                  <AdminProvider>
                     <div className="min-h-screen flex flex-col">
                       {shouldShowHeader && <Header />}
                       <ShowReactivation
@@ -161,11 +164,12 @@ const App = () => {
                           <Route
                             path="/admin"
                             element={
-                              <ProtectedRoute>
+                              <ProtectedAdmin>
                                 <AdminDashBoard />
-                              </ProtectedRoute>
+                             </ProtectedAdmin>
                             }
-                          />
+                            />
+                            <Route path='admin-login' element={<AdminLogin/>} />
                           <Route
                             path="/my-account"
                             element={
@@ -217,7 +221,8 @@ const App = () => {
 
                       <CookieConsent />
                       <ScrollToTop />
-                    </div>
+                      </div>
+                      </AdminProvider>
                   </OrdersProvider>
                 </ProductProvider>
               </CartProvider>
