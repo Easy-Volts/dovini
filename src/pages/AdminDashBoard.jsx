@@ -25,86 +25,11 @@ import {
   ShoppingBag,
   Target,
   Award,
+  Zap,
   Menu,
 } from "lucide-react";
 import { useAdmin } from "../context/AdminContext";
 
-// --- Mock Data (Updated to use 'images' array) ---
-const initialProducts = [
-  {
-    id: 1,
-    name: "Condenser Microphone",
-    price: 80000,
-    originalPrice: 95000,
-    discount: 16,
-    images: [
-      "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?q=80&w=870&auto=format&fit=crop", // Main image
-      "https://images.unsplash.com/photo-1588694084365-1d02c6114b3a?q=80&w=870&auto=format&fit=crop", // Secondary image
-    ],
-    description: "Studio-grade condenser microphone for clear audio recording.",
-    category: "Audio Equipment",
-    brand: "Audio-Technica",
-    stock: 15,
-    status: "Active",
-    isFlashDeal: true,
-    flashDealEnd: "2025-10-12T18:00:00",
-  },
-  {
-    id: 2,
-    name: "Smart Watch Series 7",
-    price: 34999,
-    originalPrice: 42000,
-    discount: 17,
-    images: [
-      "https://images.unsplash.com/photo-1546868846-9907f152174c?q=80&w=870&auto=format&fit=crop",
-    ],
-    description: "Advanced smart watch with health monitoring features.",
-    category: "Wearables",
-    brand: "TechGear",
-    stock: 75,
-    status: "Active",
-    isFlashDeal: false,
-    flashDealEnd: "",
-  },
-];
-
-const mockCustomers = [
-  {
-    id: 1,
-    fullName: "Alice Johnson",
-    email: "alice@example.com",
-    status: true,
-    createdAt: "2025-10-15",
-  },
-  {
-    id: 2,
-    fullName: "Bob Smith",
-    email: "bob@example.com",
-    status: true,
-    createdAt: "2025-10-20",
-  },
-  {
-    id: 3,
-    fullName: "Charlie Brown",
-    email: "charlie@example.com",
-    status: false,
-    createdAt: "2025-11-01",
-  },
-  {
-    id: 4,
-    fullName: "Diana Prince",
-    email: "diana@example.com",
-    status: true,
-    createdAt: "2025-11-05",
-  },
-  {
-    id: 5,
-    fullName: "Eddie Murphy",
-    email: "eddie@example.com",
-    status: true,
-    createdAt: "2025-11-10",
-  },
-];
 
 const getConversionRate = (orders, sessions) => {
   if (sessions === 0) return 0;
@@ -112,15 +37,14 @@ const getConversionRate = (orders, sessions) => {
   return ((orders.length / sessions) * 100).toFixed(2);
 };
 
-// Calculate dashboard metrics from real data
 const calculateDashboardMetrics = (products, orders, sessions, customers) => ({
   totalProducts: products.length,
   totalOrders: orders.length,
   pendingOrders: orders.filter((o) => o.status === "pending").length,
   completedOrders: orders.filter((o) => o.status === "delivered").length,
-  totalCustomers: customers.length, // Will be updated when customers API is connected
-  activeCustomers: customers.filter((c) => c.status).length, // Will be updated when customers API is connected
-  lowStockItems: products.filter((p) => p.stock < 20).length,
+  totalCustomers: customers.length, 
+  activeCustomers: customers.filter((c) => c.status).length, 
+  lowStockItems: products.filter((p) => p.stock < 5).length,
   monthlyRevenue: orders.reduce((sum, order) => sum + (order.total || 0), 0),
   averageOrderValue:
     orders.length > 0
@@ -131,9 +55,7 @@ const calculateDashboardMetrics = (products, orders, sessions, customers) => ({
   flashDeals: products.filter((p) => p.isFlashDeal).length,
 });
 
-// --- Sub-Components ---
 
-// Generic Modal for Confirmation
 const ConfirmationModal = ({ isOpen, title, message, onConfirm, onCancel }) => {
   if (!isOpen) return null;
 
@@ -164,7 +86,6 @@ const ConfirmationModal = ({ isOpen, title, message, onConfirm, onCancel }) => {
   );
 };
 
-// 1. Sidebar Navigation (Updated for mobile)
 const SideBar = ({ activeView, setActiveView, isMobileMenuOpen, setIsMobileMenuOpen }) => {
   const navItems = [
     { name: "Dashboard", icon: LayoutDashboard, view: "dashboard" },
@@ -277,7 +198,7 @@ const SideBar = ({ activeView, setActiveView, isMobileMenuOpen, setIsMobileMenuO
   );
 };
 
-// 2. Product Management View (Updated for image array)
+// 2. Product Management View (Updated for backend data structure)
 const ProductList = ({ products, handleDelete, startEdit, setActiveView }) => (
   <div className="space-y-6">
     <div className="flex justify-between items-center pb-4 border-b border-gray-200">
@@ -297,12 +218,13 @@ const ProductList = ({ products, handleDelete, startEdit, setActiveView }) => (
         <thead className="bg-gray-50">
           <tr>
             {[
-              "Name",
-              "Brand",
-              "Price/Discount",
+              "Product",
+              "Category ID",
+              "Pricing",
               "Stock",
-              "Status",
-              "Deal",
+              "Reviews & Rating",
+              "Limited Stock",
+              "Flash Deal",
               "Actions",
             ].map((header) => (
               <th
@@ -317,60 +239,103 @@ const ProductList = ({ products, handleDelete, startEdit, setActiveView }) => (
         <tbody className="bg-white divide-y divide-gray-100">
           {products.map((product) => (
             <tr key={product.id} className="hover:bg-amber-50/50 transition">
+              {/* Product Info */}
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                 <div className="flex items-center">
                   <img
                     src={
                       product.images && product.images.length > 0
                         ? product.images[0]
-                        : "https://placehold.co/40x40/94A3B8/white?text=P"
+                        : product.image || "https://placehold.co/40x40/94A3B8/white?text=P"
                     }
                     alt={product.name}
                     className="w-10 h-10 object-cover rounded-md mr-3"
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src =
-                        "https://placehold.co/40x40/94A3B8/white?text=P";
+                      e.target.src = "https://placehold.co/40x40/94A3B8/white?text=P";
                     }}
                   />
-                  {product.name}
+                  <div>
+                    <div className="font-medium">{product.name}</div>
+                    <div className="text-xs text-gray-500 truncate max-w-[200px]">
+                      {product.description}
+                    </div>
+                  </div>
                 </div>
               </td>
+              
+              {/* Category ID */}
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {product.brand}
+                <div className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
+                  Category {product.categoryId}
+                </div>
               </td>
+              
+              {/* Pricing */}
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                 <div className="font-semibold text-base">
-                  ${product.price.toLocaleString()}
+                  ${product.price?.toFixed(2)}
                 </div>
-                <div className="text-xs text-gray-500">
-                  <del>${product.originalPrice.toLocaleString()}</del> (
-                  {product.discount}%)
-                </div>
+                {product.originalPrice && (
+                  <div className="text-xs text-gray-500">
+                    <del>${product.originalPrice?.toFixed(2)}</del>
+                    {product.discount && ` (${product.discount}% off)`}
+                  </div>
+                )}
               </td>
+              
+              {/* Stock */}
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {product.stock}
+                <div className={`font-medium ${product.stock <= 10 ? 'text-red-600' : product.stock <= 20 ? 'text-yellow-600' : 'text-green-600'}`}>
+                  {product.stock} units
+                </div>
               </td>
+              
+              {/* Reviews & Rating */}
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <div className="flex items-center space-x-2">
+                  <div className="flex items-center">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-4 h-4 ${
+                          i < (product.rating || 0) ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-xs text-gray-600">
+                    ({product.reviews || 0} reviews)
+                  </span>
+                </div>
+              </td>
+              
+              {/* Limited Stock */}
               <td className="px-6 py-4 whitespace-nowrap">
                 <span
                   className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                    product.status === "Active"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-yellow-100 text-yellow-800"
+                    product.isLimitedStock
+                      ? "bg-red-100 text-red-800"
+                      : "bg-green-100 text-green-800"
                   }`}
                 >
-                  {product.status}
+                  {product.isLimitedStock ? "Limited" : "Normal"}
                 </span>
               </td>
+              
+              {/* Flash Deal */}
               <td className="px-6 py-4 whitespace-nowrap">
                 {product.isFlashDeal ? (
-                  <span className="text-red-600 font-semibold text-xs">
+                  <span className="text-red-600 font-semibold text-xs flex items-center">
+                    <Zap className="w-3 h-3 mr-1" />
                     Flash Deal
                   </span>
                 ) : (
                   <span className="text-gray-400 text-xs">Normal</span>
                 )}
               </td>
+              
+              {/* Actions */}
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
                 <button
                   onClick={() => startEdit(product)}
@@ -1077,7 +1042,7 @@ const CustomerList = ({ customers }) => {
 const App = ({ sessions }) => {
   const [activeView, setActiveView] = useState("dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
   const [customers, setCustomers] = useState([]);
