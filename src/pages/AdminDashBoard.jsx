@@ -1681,7 +1681,7 @@ const App = ({ sessions }) => {
                 </button>
               </div>
 
-              <div className="bg-gradient-to-r from-purple-500 to-purple-600 p-4 sm:p-6 rounded-2xl text-white shadow-xl">
+              <div className="bg-gradient-to-r from-purple-500 to-purple-600 p-4 sm:p-6 rounded-2xl text-white shadow-xl mb-8 sm:mb-0">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-base sm:text-lg font-semibold">Manage Customers</h3>
