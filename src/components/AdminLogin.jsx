@@ -40,7 +40,7 @@ const AdminLogin = () => {
     const handleSubmit = async (e) => {
     e.preventDefault();
     const success = await login(formData.email, formData.password);
-    if (success) navigate('/admin');
+    if (success) navigate('/app/admin/dashboard');
   };
 
   return (

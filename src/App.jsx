@@ -54,9 +54,9 @@ const App = () => {
   const [categories, setCategories] = useState([]);
   const [showReactivationModal, setShowReactivationModal] = useState(false);
   const location = useLocation();
-  const hideHeaderOn = ["/my-account", "/myaccount/settings", "/admin-login", "/admin"];
+  const hideHeaderOn = ["/my-account", "/myaccount/settings", "/app/admin/login", "/app/admin/dashboard"];
   const shouldShowHeader = !hideHeaderOn.includes(location.pathname);
-  const hideFooterOn = ["/admin-login", "/admin"];
+  const hideFooterOn = ["/app/admin/login", "/app/admin/dashboard"];
   const shouldShowFooter = !hideFooterOn.includes(location.pathname);
   
 
@@ -164,14 +164,14 @@ const App = () => {
                           <Route path="/login" element={<Login />} />
                           <Route path="/signup" element={<Signup />} />
                           <Route
-                            path="/admin"
+                            path="/app/admin/dashboard"
                             element={
                               <ProtectedAdmin>
                                 <AdminDashBoard />
                              </ProtectedAdmin>
                             }
                             />
-                            <Route path='admin-login' element={<AdminLogin/>} />
+                            <Route path='/app/admin/login' element={<AdminLogin/>} />
                           <Route
                             path="/my-account"
                             element={
