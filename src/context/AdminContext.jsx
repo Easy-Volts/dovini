@@ -8,6 +8,7 @@ export const AdminProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true); // start as true
   const [error, setError] = useState(null);
+  const [users, setUsers] = useState([])
 
   // Derived boolean for role check
   const isAdmin = !!admin; // only true if admin exists (already verified in login)
@@ -61,7 +62,6 @@ export const AdminProvider = ({ children }) => {
     localStorage.removeItem('adminToken');
   };
 
-  // Restore session from localStorage
   useEffect(() => {
     const storedAdmin = localStorage.getItem('admin');
     const storedToken = localStorage.getItem('adminToken');
@@ -73,6 +73,23 @@ export const AdminProvider = ({ children }) => {
 
     setLoading(false); // done restoring, even if nothing was found
   }, []);
+
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     try {
+  //       const res = await fetch('https://api.dovinigears.ng/admin/users', {
+  //         headers: {"Authorization": `Bearer ${token}`}
+  //       })
+  //     const data = await res.json()
+  //       console.log(data)
+  //       setUsers(data.data)
+  //     } catch (error) {
+  //       console.log(error.message)
+  //     }
+  //   }
+  //   fetchUsers()
+  // })
+
 
   return (
     <AdminContext.Provider
