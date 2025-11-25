@@ -58,8 +58,32 @@ const App = () => {
   const shouldShowHeader = !hideHeaderOn.includes(location.pathname);
   const hideFooterOn = ["/app/admin/login", "/app/admin/dashboard"];
   const shouldShowFooter = !hideFooterOn.includes(location.pathname);
-  
+  const [sessions, setSessions] = useState(0);
 
+  
+   const trackSession = () => {
+    const today = new Date().toDateString();
+    const lastSession = localStorage.getItem("lastSessionDate");
+
+    if (lastSession !== today) {
+      let count = JSON.parse(localStorage.getItem("sessions") || "0");
+      count += 1;
+
+      localStorage.setItem("sessions", count);
+      localStorage.setItem("lastSessionDate", today);
+
+      setSessions(count); // update React state
+    } else {
+      // load the existing value into state
+      const current = JSON.parse(localStorage.getItem("sessions") || "0");
+      setSessions(current);
+    }
+  };
+
+  useEffect(() => {
+    trackSession();
+  }, []);
+   
   const extraCategoryData = {
     1: {
       image:
@@ -167,7 +191,7 @@ const App = () => {
                             path="/app/admin/dashboard"
                             element={
                               <ProtectedAdmin>
-                                <AdminDashBoard />
+                                <AdminDashBoard sessions={sessions} />
                              </ProtectedAdmin>
                             }
                             />

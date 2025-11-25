@@ -74,21 +74,6 @@ export const AdminProvider = ({ children }) => {
     setLoading(false); // done restoring, even if nothing was found
   }, []);
 
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     try {
-  //       const res = await fetch('https://api.dovinigears.ng/admin/users', {
-  //         headers: {"Authorization": `Bearer ${token}`}
-  //       })
-  //     const data = await res.json()
-  //       console.log(data)
-  //       setUsers(data.data)
-  //     } catch (error) {
-  //       console.log(error.message)
-  //     }
-  //   }
-  //   fetchUsers()
-  // })
 
 
   return (
