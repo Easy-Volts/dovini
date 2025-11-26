@@ -1797,7 +1797,8 @@ const App = ({ sessions }) => {
   }
 
   return (
-    <div className="flex h-screen bg-gray-100 antialiased font-sans">
+    <div>
+       <div className="flex h-screen bg-gray-100 antialiased font-sans">
       {/* Custom Confirmation Modal */}
       <ConfirmationModal
         isOpen={isModalOpen}
@@ -1816,7 +1817,7 @@ const App = ({ sessions }) => {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-hidden flex flex-col pb-6">
+      <main className="flex-1 overflow-hidden flex flex-col ">
         {/* Mobile Header */}
         <div className="md:hidden bg-white border-b border-gray-200 p-4 flex-shrink-0">
           <div className="flex items-center justify-between">
@@ -1836,7 +1837,27 @@ const App = ({ sessions }) => {
           <div className="max-w-7xl mx-auto h-full">{renderContent()}</div>
         </div>
       </main>
-    </div>
+      
+    
+      </div>
+      <footer className="bg-white border-t border-gray-200 px-4 sm:px-6 lg:px-8 py-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col sm:flex-row justify-between items-center text-sm text-gray-600">
+            <div className="flex items-center space-x-2 mb-2 sm:mb-0">
+              <div className="w-6 h-6 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded flex items-center justify-center">
+                <span className="text-white font-bold text-xs">A</span>
+              </div>
+              <span className="font-medium">Admin Dashboard</span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <span>© 2025 Dovini Gears</span>
+              <span className="text-gray-400">|</span>
+              <span className="text-gray-500">v1.0.0</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+   </div>
   );
 };
 
