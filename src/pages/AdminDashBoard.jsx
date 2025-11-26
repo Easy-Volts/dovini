@@ -103,7 +103,7 @@ const SideBar = ({ activeView, setActiveView, isMobileMenuOpen, setIsMobileMenuO
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className="hidden md:flex w-64 flex-col p-6 bg-white shadow-xl h-full border-r border-gray-100">
+      <div className="hidden md:flex w-64 flex-col p-6 bg-white shadow-r-xl h-full border-r border-gray-100">
         <div className="p-4 rounded-xl mb-10 text-xl font-black tracking-wider text-white bg-gradient-to-r from-amber-500 via-orange-500 to-red-500">
           ADMIN
         </div>
@@ -148,7 +148,7 @@ const SideBar = ({ activeView, setActiveView, isMobileMenuOpen, setIsMobileMenuO
           onClick={() => setIsMobileMenuOpen(false)}
         ></div>
         
-        <div className={`relative flex flex-col w-64 h-full bg-white shadow-xl border-r border-gray-100 transform transition-transform duration-300 ease-in-out ${
+        <div className={`relative flex flex-col w-64 h-full bg-white shadow-r-xl border-r border-gray-100 transform transition-transform duration-300 ease-in-out ${
           isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}>
           {/* Header */}
