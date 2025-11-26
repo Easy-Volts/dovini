@@ -1817,7 +1817,7 @@ const App = ({ sessions }) => {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-hidden flex flex-col ">
+      <main className="flex-1 overflow-hidden flex flex-col min-h-screen">
         {/* Mobile Header */}
         <div className="md:hidden bg-white border-b border-gray-200 p-4 flex-shrink-0">
           <div className="flex items-center justify-between">
@@ -1833,12 +1833,11 @@ const App = ({ sessions }) => {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 min-h-screen">
           <div className="max-w-7xl mx-auto h-full">{renderContent()}</div>
         </div>
       </main>
       
-    
       </div>
       <footer className="bg-white border-t border-gray-200 px-4 sm:px-6 lg:px-8 py-4">
         <div className="max-w-7xl mx-auto">

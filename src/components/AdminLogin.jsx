@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   Lock,
@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '../context/ToastContext';
 
 const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +27,15 @@ const AdminLogin = () => {
     password: '',
     remember: false
   });
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { showSuccess, showError } = useToast();
+
+  // Watch for error changes and show toast notification
+  useEffect(() => {
+    if (error) {
+      showError(error);
+    }
+  }, [error, showError]);
 
 
   const handleInputChange = (e) => {
@@ -40,7 +49,15 @@ const AdminLogin = () => {
     const handleSubmit = async (e) => {
     e.preventDefault();
     const success = await login(formData.email, formData.password);
-    if (success) navigate('/app/admin/dashboard');
+    
+    if (success) {
+      showSuccess('Login successful! Redirecting to dashboard...');
+      // Small delay to show success message before redirecting
+      setTimeout(() => {
+        navigate('/app/admin/dashboard');
+      }, 1500);
+    }
+    // Error handling is done through the error state in the context
   };
 
   return (
@@ -198,7 +215,6 @@ const AdminLogin = () => {
                     Forgot password?
                   </a>
                 </div>
-                 {error && <p style={{ color: 'red' }}>{error}</p>}
 
                 {/* Login Button */}
                 <button
