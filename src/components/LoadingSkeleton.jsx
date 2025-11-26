@@ -73,7 +73,6 @@ export const CategoryGridSkeleton = ({ count = 4 }) => (
   </div>
 );
 
-// Default export for general page loading
 const LoadingSkeleton = ({ type = 'page' }) => {
   if (type === 'page') {
     return (

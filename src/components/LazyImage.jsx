@@ -42,7 +42,6 @@ const LazyImage = ({
 
   return (
     <div ref={imgRef} className={`relative overflow-hidden ${className}`}>
-      {/* Placeholder/Loading state */}
       <motion.img
         src={placeholder}
         alt=""
@@ -54,7 +53,6 @@ const LazyImage = ({
         transition={{ duration: 0.3 }}
       />
 
-      {/* Actual image */}
       {isInView && (
         <motion.img
           src={hasError ? placeholder : src}
@@ -71,7 +69,6 @@ const LazyImage = ({
         />
       )}
 
-      {/* Loading shimmer effect */}
       {!isLoaded && isInView && (
         <motion.div
           className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
