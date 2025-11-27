@@ -15,7 +15,8 @@ import Profile from "./pages/Profile";
 import AccountSettingsPage from "./pages/AccountSettingsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ShowReactivation from "./components/ShowReactivation";
-import AdminDashBoard from "./pages/AdminDashBoard";
+import AdminDashBoard from "./pages/admin/AdminDashBoard";
+import AdminLogin from "./pages/admin/AdminLogin";
 import Privacy from "./pages/Privacy";
 import { ProductProvider } from "./context/ProductContext";
 import Home from "./pages/Home";
@@ -35,7 +36,6 @@ import FlashDeals from "./pages/FlashDeals";
 import NotFound from "./pages/NotFound";
 import { OrdersProvider } from "./context/OrdersContext";
 import { AdminProvider } from "./context/AdminContext";
-import AdminLogin from "./components/AdminLogin";
 import ProtectedAdmin from "./components/ProtectedAdmin";
 import {
   Focus,
