@@ -191,7 +191,7 @@ const App = () => {
                             path="/app/admin/dashboard"
                             element={
                               <ProtectedAdmin>
-                                <AdminDashBoard sessions={sessions} />
+                                <AdminDashBoard sessions={sessions} categories={ categories} />
                              </ProtectedAdmin>
                             }
                             />

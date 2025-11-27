@@ -200,7 +200,8 @@ const SideBar = ({ activeView, setActiveView, isMobileMenuOpen, setIsMobileMenuO
 };
 
 // 2. Product Management View (Updated for backend data structure)
-const ProductList = ({ products, handleDelete, startEdit, setActiveView }) => (
+const ProductList = ({ products, handleDelete, startEdit, setActiveView,categories }) => (
+
   <div className="space-y-6">
     <div className="flex justify-between items-center pb-4 border-b border-gray-200">
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">Product Inventory</h2>
@@ -220,7 +221,7 @@ const ProductList = ({ products, handleDelete, startEdit, setActiveView }) => (
           <tr>
             {[
               "Product",
-              "Category ID",
+              "Category",
               "Pricing",
               "Stock",
               "Reviews & Rating",
@@ -238,8 +239,10 @@ const ProductList = ({ products, handleDelete, startEdit, setActiveView }) => (
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-100">
-          {products.map((product) => (
-            <tr key={product.id} className="hover:bg-amber-50/50 transition">
+          {products.map((product) => {
+            const matchedCategory = categories.find((c) => c.id === product.categoryId)
+            return (
+              <tr key={product.id} className="hover:bg-amber-50/50 transition">
               {/* Product Info */}
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                 <div className="flex items-center">
@@ -265,14 +268,13 @@ const ProductList = ({ products, handleDelete, startEdit, setActiveView }) => (
                 </div>
               </td>
               
-              {/* Category ID */}
+              {/* Category */}
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 <div className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
-                  Category {product.categoryId}
+                  {matchedCategory.name}
                 </div>
               </td>
               
-              {/* Pricing */}
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                 <div className="font-semibold text-base">
                   ${product.price?.toFixed(2)}
@@ -354,7 +356,8 @@ const ProductList = ({ products, handleDelete, startEdit, setActiveView }) => (
                 </button>
               </td>
             </tr>
-          ))}
+            )
+          })}
         </tbody>
       </table>
     </div>
@@ -362,28 +365,50 @@ const ProductList = ({ products, handleDelete, startEdit, setActiveView }) => (
 );
 
 // 3. Product Form View (Updated for Multi-File Preview)
-const ProductForm = ({ editingProduct, handleSave, setActiveView }) => {
+const ProductForm = ({ editingProduct, handleSave, setActiveView, categories }) => {
   const isEditing = !!editingProduct;
   const initialData = editingProduct || {
     name: "",
     category: "",
     price: "",
     stock: "",
-    status: "Active",
     originalPrice: "",
     discount: "",
-    brand: "",
     images: [],
     description: "",
+    isLimitedStock: false,
     isFlashDeal: false,
+    reviews: 0,
+    rating: 0,
     flashDealEnd: "",
   };
 
-  const [formData, setFormData] = useState(initialData);
+  const [formData, setFormData] = useState(() => {
+    if (editingProduct) {
+      return {
+        ...editingProduct,
+        // Ensure proper data types for form inputs
+        price: editingProduct.price?.toString() || "",
+        originalPrice: editingProduct.originalPrice?.toString() || "",
+        discount: editingProduct.discount?.toString() || "",
+        stock: editingProduct.stock?.toString() || "",
+        reviews: editingProduct.reviews?.toString() || "0",
+        rating: editingProduct.rating?.toString() || "0",
+        isLimitedStock: Boolean(editingProduct.isLimitedStock),
+        isFlashDeal: Boolean(editingProduct.isFlashDeal),
+      };
+    }
+    return initialData;
+  });
   // Array to hold the selected file objects (for upload)
   const [selectedFiles, setSelectedFiles] = useState([]);
   // Array to hold the local URLs or existing remote URLs (for preview)
-  const [previewImages, setPreviewImages] = useState(initialData.images);
+  const [previewImages, setPreviewImages] = useState(() => {
+    if (editingProduct && editingProduct.images) {
+      return editingProduct.images;
+    }
+    return initialData.images;
+  });
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -491,7 +516,6 @@ const ProductForm = ({ editingProduct, handleSave, setActiveView }) => {
           <h3 className="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">
             Basic Information
           </h3>
-          {/* ... other form inputs ... */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className={labelClass}>Product Name</label>
@@ -507,42 +531,20 @@ const ProductForm = ({ editingProduct, handleSave, setActiveView }) => {
             </div>
 
             <div>
-              <label className={labelClass}>Brand</label>
-              <input
-                type="text"
-                name="brand"
-                value={formData.brand}
-                onChange={handleChange}
-                required
-                className={inputClass}
-                placeholder="e.g., Audio-Technica"
-              />
-            </div>
-
-            <div>
               <label className={labelClass}>Category</label>
-              <input
-                type="text"
+              <select
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
                 required
                 className={inputClass}
-                placeholder="e.g., Audio Equipment"
-              />
-            </div>
-
-            <div>
-              <label className={labelClass}>Status</label>
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                className={inputClass}
               >
-                <option value="Active">Active</option>
-                <option value="Draft">Draft</option>
-                <option value="Archived">Archived</option>
+                <option value="">Select a category</option>
+                {categories && categories.map((category) => (
+                  <option key={category.id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -554,13 +556,13 @@ const ProductForm = ({ editingProduct, handleSave, setActiveView }) => {
                 onChange={handleChange}
                 rows="3"
                 className={`${inputClass} resize-none`}
-                placeholder="Detailed product description..."
+                placeholder="Description for product"
               ></textarea>
             </div>
           </div>
         </section>
 
-        {/* Pricing & Stock (omitted for brevity) */}
+        {/* Pricing & Stock */}
         <section>
           <h3 className="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">
             Pricing & Inventory
@@ -576,7 +578,7 @@ const ProductForm = ({ editingProduct, handleSave, setActiveView }) => {
                 required
                 className={inputClass}
                 step="1"
-                placeholder="95000"
+                placeholder="12"
               />
             </div>
             <div>
@@ -589,7 +591,7 @@ const ProductForm = ({ editingProduct, handleSave, setActiveView }) => {
                 required
                 className={inputClass}
                 step="1"
-                placeholder="80000"
+                placeholder="10.99"
               />
             </div>
             <div>
@@ -604,10 +606,10 @@ const ProductForm = ({ editingProduct, handleSave, setActiveView }) => {
                 min="0"
                 max="100"
                 step="1"
-                placeholder="16"
+                placeholder="10"
               />
             </div>
-            <div className="md:col-span-3">
+            <div>
               <label className={labelClass}>Stock Quantity</label>
               <input
                 type="number"
@@ -616,7 +618,35 @@ const ProductForm = ({ editingProduct, handleSave, setActiveView }) => {
                 onChange={handleChange}
                 required
                 className={inputClass}
-                placeholder="15"
+                placeholder="10"
+              />
+            </div>
+            <div>
+              <label className={labelClass}>Reviews Count</label>
+              <input
+                type="number"
+                name="reviews"
+                value={formData.reviews}
+                onChange={handleChange}
+                required
+                className={inputClass}
+                min="0"
+                placeholder="111"
+              />
+            </div>
+            <div>
+              <label className={labelClass}>Rating (0-5)</label>
+              <input
+                type="number"
+                name="rating"
+                value={formData.rating}
+                onChange={handleChange}
+                required
+                className={inputClass}
+                min="0"
+                max="5"
+                step="0.1"
+                placeholder="4"
               />
             </div>
           </div>
@@ -691,36 +721,55 @@ const ProductForm = ({ editingProduct, handleSave, setActiveView }) => {
           </div>
 
           {/* Flash Deal Section */}
-          <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
-            <input
-              type="checkbox"
-              id="isFlashDeal"
-              name="isFlashDeal"
-              checked={formData.isFlashDeal}
-              onChange={handleChange}
-              className="w-5 h-5 text-amber-500 rounded border-gray-300 focus:ring-amber-500"
-            />
-            <label
-              htmlFor="isFlashDeal"
-              className="text-base font-medium text-gray-900"
-            >
-              Enable Flash Deal
-            </label>
-          </div>
-
-          {formData.isFlashDeal && (
-            <div className="mt-4">
-              <label className={labelClass}>Flash Deal End Date/Time</label>
+          <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
+            <div className="flex items-center space-x-4">
               <input
-                type="datetime-local"
-                name="flashDealEnd"
-                value={formData.flashDealEnd}
+                type="checkbox"
+                id="isFlashDeal"
+                name="isFlashDeal"
+                checked={formData.isFlashDeal}
                 onChange={handleChange}
-                required={formData.isFlashDeal}
-                className={inputClass}
+                className="w-5 h-5 text-amber-500 rounded border-gray-300 focus:ring-amber-500"
               />
+              <label
+                htmlFor="isFlashDeal"
+                className="text-base font-medium text-gray-900"
+              >
+                Enable Flash Deal
+              </label>
             </div>
-          )}
+
+            <div className="flex items-center space-x-4">
+              <input
+                type="checkbox"
+                id="isLimitedStock"
+                name="isLimitedStock"
+                checked={formData.isLimitedStock}
+                onChange={handleChange}
+                className="w-5 h-5 text-red-500 rounded border-gray-300 focus:ring-red-500"
+              />
+              <label
+                htmlFor="isLimitedStock"
+                className="text-base font-medium text-gray-900"
+              >
+                Limited Stock Item
+              </label>
+            </div>
+
+            {formData.isFlashDeal && (
+              <div className="mt-4">
+                <label className={labelClass}>Flash Deal End Date/Time</label>
+                <input
+                  type="datetime-local"
+                  name="flashDealEnd"
+                  value={formData.flashDealEnd}
+                  onChange={handleChange}
+                  required={formData.isFlashDeal}
+                  className={inputClass}
+                />
+              </div>
+            )}
+          </div>
         </section>
 
         <button
@@ -1040,7 +1089,7 @@ const CustomerList = ({ customers }) => {
 };
 
 // --- Main Component ---
-const App = ({ sessions }) => {
+const App = ({ sessions,categories }) => {
   const [activeView, setActiveView] = useState("dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [products, setProducts] = useState([]);
@@ -1364,6 +1413,10 @@ const App = ({ sessions }) => {
       originalPrice: parseFloat(formData.originalPrice),
       discount: parseInt(formData.discount, 10),
       stock: parseInt(formData.stock, 10),
+      reviews: parseInt(formData.reviews, 10),
+      rating: parseFloat(formData.rating),
+      isLimitedStock: Boolean(formData.isLimitedStock),
+      isFlashDeal: Boolean(formData.isFlashDeal),
     };
 
     // In a real application, you would ensure the `savedData.images` array
@@ -1409,6 +1462,7 @@ const App = ({ sessions }) => {
             handleDelete={handleDeleteProduct}
             startEdit={startEditProduct}
             setActiveView={setActiveView}
+            categories={categories}
           />
         );
       case "orders":
@@ -1421,6 +1475,7 @@ const App = ({ sessions }) => {
             editingProduct={editingProduct}
             handleSave={handleSaveProduct}
             setActiveView={setActiveView}
+            categories={categories}
           />
         );
       case "dashboard":
