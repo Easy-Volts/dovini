@@ -32,6 +32,7 @@ import {
   FileText,
   Lock
 } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 const Header = () => {
   const { cart } = useCart();
@@ -43,7 +44,8 @@ const Header = () => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const userMenuRef = useRef(null);
-  const {orders} = useOrders()
+  const { orders } = useOrders()
+  const location = useLocation()
 
   useEffect(() => {
     console.log(user)
@@ -72,6 +74,10 @@ const Header = () => {
     }
   };
 
+  const isActive = (prop) => {
+    const isActive = location.pathname === prop
+    return isActive
+  }
 
 
   return (
@@ -543,7 +549,7 @@ const Header = () => {
           <Link
             to="/"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-red-600 transition-colors"
+            className={`${isActive('/') ? 'bg-black' : ''} flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-red-600 transition-colors`}
           >
             <Home className="w-5 h-5" />
             <span className="text-xs">Home</span>
@@ -552,7 +558,7 @@ const Header = () => {
           <Link
             to="/my-account"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="flex flex-col items-center justify-center space-y-1 hover:text-red-700 transition-colors "
+            className={`${isActive("/my-account")} flex flex-col items-center justify-center space-y-1 hover:text-red-700 transition-colors `}
           >
            <User className="w-5 h-5"/>
             <span className="text-xs">Account</span>
@@ -561,7 +567,7 @@ const Header = () => {
           <Link
             to="/products"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-red-600 transition-colors"
+            className={`${isActive("/products")} flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-red-600 transition-colors`}
           >
             <Grid3X3 className="w-5 h-5" />
             <span className="text-xs">Products</span>
@@ -570,7 +576,7 @@ const Header = () => {
           <Link
             to="/wishlist"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-red-600 transition-colors relative"
+            className={`${isActive("/wishlist")} flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-red-600 transition-colors relative`}
           >
             <Heart className="w-5 h-5" />
             <span className="text-xs">Wishlist</span>
@@ -584,7 +590,7 @@ const Header = () => {
           <Link
             to="/cart"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-red-600 transition-colors relative"
+            className={`${isActive("/cart")} flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-red-600 transition-colors relative`}
           >
             <ShoppingCart className="w-5 h-5" />
             <span className="text-xs">Cart</span>

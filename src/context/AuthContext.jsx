@@ -211,7 +211,7 @@ export const AuthProvider = ({ children }) => {
           error: "Admin can't login here. Please use the admin portal.",
         };
       }
-
+       console.log(data)
       if (data.data && data.data.is_active === false) {
         return {
           success: false,

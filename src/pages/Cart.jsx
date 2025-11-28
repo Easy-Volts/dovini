@@ -444,7 +444,7 @@ const Cart = () => {
 
                       <motion.button
                         onClick={() => handleMoveToCart(item)}
-                        className="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 cursor-pointer w-full sm:w-auto text-sm"
+                        className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 cursor-pointer w-full sm:w-auto text-sm"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
