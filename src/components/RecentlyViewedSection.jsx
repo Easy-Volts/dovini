@@ -27,7 +27,7 @@ const RecentlyViewedSection = ({ limit = 6 }) => {
           <p className="text-gray-400 text-xs mt-1">Products you view will appear here</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {recentlyViewed.map((product) => (
              <motion.div
                     key={product.id}
