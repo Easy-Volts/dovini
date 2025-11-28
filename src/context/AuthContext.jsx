@@ -204,6 +204,13 @@ export const AuthProvider = ({ children }) => {
         }
         return { success: false, error: data.error || "Login failed" };
       }
+        
+      if (data.data && data.data.user.role === "admin") {
+        return {
+          success: false,
+          error: "Admin can't login here. Please use the admin portal.",
+        };
+      }
 
       if (data.data && data.data.is_active === false) {
         return {
@@ -337,9 +344,9 @@ export const AuthProvider = ({ children }) => {
 
   const logoutCallbackRef = useRef(null);
 
-const setLogoutCallback = (callback) => {
-  logoutCallbackRef.current = callback;
-};
+  const setLogoutCallback = (callback) => {
+    logoutCallbackRef.current = callback;
+  };
 
   const logout = (callback) => {
     setUser(null);
@@ -350,9 +357,7 @@ const setLogoutCallback = (callback) => {
 
     if (callback) {
       callback();
-    }
-      else if (logoutCallbackRef.current) logoutCallbackRef.current();
-
+    } else if (logoutCallbackRef.current) logoutCallbackRef.current();
   };
 
   const updateProfile = (updates) => {
@@ -757,8 +762,7 @@ const setLogoutCallback = (callback) => {
     }, INACTIVITY_LIMIT - COUNTDOWN_START * 1000);
   };
 
-const nav = useNavigate()
-
+  const nav = useNavigate();
 
   const startCountdown = () => {
     setIsCountdownActive(true);
@@ -770,8 +774,8 @@ const nav = useNavigate()
           clearInterval(countdownIntervalRef.current);
           setIsCountdownActive(false);
           logout();
-          setShowInactivityModal(false)
-          nav('/login')
+          setShowInactivityModal(false);
+          nav("/login");
           return 0;
         }
         return prev - 1;
