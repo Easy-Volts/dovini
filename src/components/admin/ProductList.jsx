@@ -79,7 +79,7 @@ const ProductList = ({ products, handleDelete, startEdit, setActiveView, categor
               
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                 <div className="font-semibold text-base">
-                  ${product.price?.toFixed(2)}
+                  ₦{product.price?.toFixed(2)}
                 </div>
                 {product.originalPrice && (
                   <div className="text-xs text-gray-500">
