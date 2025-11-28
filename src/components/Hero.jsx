@@ -169,7 +169,7 @@ const Hero = ({categories}) => {
   };
 
   return (
-    <div className=" bg-gray-100 font-sans">
+    <div className=" bg-gray-100">
       <main className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-0 lg:mb-8">
           <div className="lg:col-span-3 xl:col-span-2 hidden lg:block">

@@ -157,7 +157,6 @@ const Header = () => {
               </Link>
             </div>
 
-            {/* Desktop Navigation with Icons */}
             <nav className="hidden lg:flex items-center space-x-4">
               <Link
                 to="/"

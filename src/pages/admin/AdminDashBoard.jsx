@@ -1223,7 +1223,7 @@ const App = ({ sessions,categories }) => {
 
   return (
     <div>
-       <div className="flex h-screen bg-gray-100 antialiased font-sans">
+       <div className="flex h-screen bg-gray-100 antialiased">
       {/* Custom Confirmation Modal */}
       <ConfirmationModal
         isOpen={isModalOpen}
