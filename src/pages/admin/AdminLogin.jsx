@@ -52,16 +52,14 @@ const AdminLogin = () => {
     
     if (success) {
       showSuccess('Login successful! Redirecting to dashboard...');
-      // Small delay to show success message before redirecting
       setTimeout(() => {
         navigate('/app/admin/dashboard');
       }, 1500);
     }
-    // Error handling is done through the error state in the context
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative flex flex-col py-8 sm:py-16">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative flex flex-col py-16 sm:py-16">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>

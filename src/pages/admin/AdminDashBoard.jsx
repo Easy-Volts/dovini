@@ -18,13 +18,12 @@ import {
   ShoppingBag,
   Target,
 } from "lucide-react";
-import CustomerList from "../../components/admin/CustomerList"
-import ProductList from "../../components/admin/ProductList"
-import OrderList from "../../components/admin/OrderList"
-import SideBar from "../../components/admin/SideBar"
+import CustomerList from "../../components/admin/CustomerList";
+import ProductList from "../../components/admin/ProductList";
+import OrderList from "../../components/admin/OrderList";
+import SideBar from "../../components/admin/SideBar";
 import AdminLoadingSPinner from "../../components/admin/AdminLoadingSPinner";
 // import ProductForm from "../../components/admin/ProductForm"
-
 
 const getConversionRate = (orders, sessions) => {
   if (sessions === 0) return 0;
@@ -37,8 +36,8 @@ const calculateDashboardMetrics = (products, orders, sessions, customers) => ({
   totalOrders: orders.length,
   pendingOrders: orders.filter((o) => o.status === "pending").length,
   completedOrders: orders.filter((o) => o.status === "delivered").length,
-  totalCustomers: customers.length, 
-  activeCustomers: customers.filter((c) => c.status).length, 
+  totalCustomers: customers.length,
+  activeCustomers: customers.filter((c) => c.status).length,
   lowStockItems: products.filter((p) => p.stock < 5).length,
   monthlyRevenue: orders.reduce((sum, order) => sum + (order.total || 0), 0),
   averageOrderValue:
@@ -49,7 +48,6 @@ const calculateDashboardMetrics = (products, orders, sessions, customers) => ({
   conversionRate: getConversionRate(orders, sessions),
   flashDeals: products.filter((p) => p.isFlashDeal).length,
 });
-
 
 const ConfirmationModal = ({ isOpen, title, message, onConfirm, onCancel }) => {
   if (!isOpen) return null;
@@ -81,7 +79,12 @@ const ConfirmationModal = ({ isOpen, title, message, onConfirm, onCancel }) => {
   );
 };
 
-const ProductForm = ({ editingProduct, handleSave, setActiveView, categories }) => {
+const ProductForm = ({
+  editingProduct,
+  handleSave,
+  setActiveView,
+  categories,
+}) => {
   const isEditing = !!editingProduct;
   const initialData = editingProduct || {
     name: "",
@@ -256,11 +259,12 @@ const ProductForm = ({ editingProduct, handleSave, setActiveView, categories }) 
                 className={inputClass}
               >
                 <option value="">Select a category</option>
-                {categories && categories.map((category) => (
-                  <option key={category.id} value={category.name}>
-                    {category.name}
-                  </option>
-                ))}
+                {categories &&
+                  categories.map((category) => (
+                    <option key={category.id} value={category.name}>
+                      {category.name}
+                    </option>
+                  ))}
               </select>
             </div>
 
@@ -500,63 +504,60 @@ const ProductForm = ({ editingProduct, handleSave, setActiveView, categories }) 
   );
 };
 
-  const DashboardCard = ({ title, value, color, icon, trend, trendUp }) => {
-    const IconComponent = icon;
-    return (
-      <div className="p-4 sm:p-6 rounded-2xl shadow-lg bg-gray-50 border border-gray-100 hover:shadow-xl transition-shadow duration-200">
-        <div className={`p-2 sm:p-3 rounded-full text-white w-min mb-3 sm:mb-4 ${color}`}>
-          <IconComponent className="w-5 h-5 sm:w-6 sm:h-6" />
-        </div>
-        <p className="text-xs sm:text-sm font-medium text-gray-500">{title}</p>
-        <p className="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-1">{value}</p>
-        {trend && (
-          <div className="mt-2 flex items-center">
-            <span
-              className={`text-xs sm:text-sm ${
-                trendUp ? "text-green-600" : "text-red-600"
-              }`}
-            >
-              {trendUp ? "↗" : "↘"} {trend}
-            </span>
-          </div>
-        )}
+const DashboardCard = ({ title, value, color, icon, trend, trendUp }) => {
+  const IconComponent = icon;
+  return (
+    <div className="p-4 sm:p-6 rounded-2xl shadow-lg bg-gray-50 border border-gray-100 hover:shadow-xl transition-shadow duration-200">
+      <div
+        className={`p-2 sm:p-3 rounded-full text-white w-min mb-3 sm:mb-4 ${color}`}
+      >
+        <IconComponent className="w-5 h-5 sm:w-6 sm:h-6" />
       </div>
-    );
-  };
-
-  const DollarSign = ({ className }) => (
-    <svg
-      className={className}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <line x1="12" x2="12" y1="2" y2="22" />
-      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-    </svg>
+      <p className="text-xs sm:text-sm font-medium text-gray-500">{title}</p>
+      <p className="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-1">
+        {value}
+      </p>
+      {trend && (
+        <div className="mt-2 flex items-center">
+          <span
+            className={`text-xs sm:text-sm ${
+              trendUp ? "text-green-600" : "text-red-600"
+            }`}
+          >
+            {trendUp ? "↗" : "↘"} {trend}
+          </span>
+        </div>
+      )}
+    </div>
   );
+};
 
+const DollarSign = ({ className }) => (
+  <svg
+    className={className}
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="12" x2="12" y1="2" y2="22" />
+    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+  </svg>
+);
 
-
-
-
-
-
-
-const App = ({ sessions,categories }) => {
+const App = ({ sessions, categories }) => {
   const [activeView, setActiveView] = useState("dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
   const [customers, setCustomers] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [orderMetrics, setOrderMetrics] = useState({
     totalOrders: 0,
     trendText: "→ 0%",
@@ -583,15 +584,15 @@ const App = ({ sessions,categories }) => {
   React.useEffect(() => {
     const fetchUsers = async () => {
       try {
-        setLoading(true)
+        setLoading(true);
         const res = await fetch("https://api.dovinigears.ng/admin/users", {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
         setTimeout(() => {
           setCustomers(data.users);
-          setLoading(false)
-        }, 2000)
+          setLoading(false);
+        }, 2000);
         console.log(data);
       } catch (error) {
         console.log(error.message);
@@ -618,7 +619,6 @@ const App = ({ sessions,categories }) => {
         setRevenueMetrics(revenueMetrics);
         const aovMetrics = calculateAOVTrend(data.orders);
         setAovMetrics(aovMetrics);
-        
       } catch (error) {
         console.log(error.message);
       }
@@ -629,18 +629,18 @@ const App = ({ sessions,categories }) => {
   React.useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch('https://api.dovinigears.ng/products')
-        const data = await res.json()
+        const res = await fetch("https://api.dovinigears.ng/products");
+        const data = await res.json();
         if (!res.ok) {
-          throw new Error('Error fetching products')
+          throw new Error("Error fetching products");
         }
-        setProducts(data.data)
+        setProducts(data.data);
       } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
       }
-    }
-    fetchProducts()
-  }, [])
+    };
+    fetchProducts();
+  }, []);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
@@ -648,7 +648,7 @@ const App = ({ sessions,categories }) => {
   function calculateOrderTrend(orders) {
     const now = new Date();
 
-    const parseDate = (dateStr) => new Date(dateStr.replace(" ", "T")); 
+    const parseDate = (dateStr) => new Date(dateStr.replace(" ", "T"));
 
     const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
@@ -833,9 +833,6 @@ const App = ({ sessions,categories }) => {
     return { aov: globalAOV, trendText, trendUp };
   }
 
-
- 
-
   // --- Product CRUD Handlers ---
 
   const handleDeleteProduct = (id) => {
@@ -862,40 +859,99 @@ const App = ({ sessions,categories }) => {
     setActiveView("productForm");
   };
 
-  const handleSaveProduct = (formData, isEditing) => {
-    // Ensure numeric fields are parsed correctly
-    const savedData = {
-      ...formData,
-      price: parseFloat(formData.price),
-      originalPrice: parseFloat(formData.originalPrice),
-      discount: parseInt(formData.discount, 10),
-      stock: parseInt(formData.stock, 10),
-      reviews: parseInt(formData.reviews, 10),
-      rating: parseFloat(formData.rating),
-      isLimitedStock: Boolean(formData.isLimitedStock),
-      isFlashDeal: Boolean(formData.isFlashDeal),
-    };
-
-    // In a real application, you would ensure the `savedData.images` array
-    // contains permanent, public URLs after a successful upload.
-
-    if (isEditing) {
-      // Update existing product
-      setProducts(
-        products.map((p) =>
-          p.id === savedData.id ? { ...p, ...savedData } : p
-        )
-      );
-    } else {
-      // Create new product
-      const newProduct = {
-        ...savedData,
-        id:
-          products.length > 0 ? Math.max(...products.map((p) => p.id)) + 1 : 1,
+  const handleSaveProduct = async (formData, isEditing) => {
+    const categoryObj = categories.find((c) => c.name.toLowerCase() === formData.category.toLowerCase())
+    console.log(categoryObj)
+    try {
+      // Prepare the data for API submission
+      const apiData = {
+        name: formData.name,
+        categoryId: categoryObj.id,
+        price: parseFloat(formData.price),
+        originalPrice: parseFloat(formData.originalPrice),
+        discount: parseInt(formData.discount, 10),
+        stock: parseInt(formData.stock, 10),
+        reviews: parseInt(formData.reviews, 10),
+        rating: parseFloat(formData.rating),
+        description: formData.description,
+        isLimitedStock: Boolean(formData.isLimitedStock),
+        isFlashDeal: Boolean(formData.isFlashDeal),
+        images: formData.images || [], // Array of image URLs
+        image: formData.images[0]
       };
-      setProducts([...products, newProduct]);
+
+      let response;
+      let responseData;
+
+      if (isEditing && formData.id) {
+        // UPDATE existing product
+        console.log("Updating product:", formData.id);
+        response = await fetch(
+          `https://api.dovinigears.ng/products/${formData.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(apiData),
+          }
+        );
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Update failed: ${response.status} - ${errorText}`);
+        }
+
+        responseData = await response.json();
+        console.log("Product updated successfully:", responseData);
+
+        // Update local state with the response data
+        if (responseData.success && responseData.data) {
+          setProducts(
+            products.map((p) =>
+              p.id === formData.id ? { ...p, ...responseData.data } : p
+            )
+          );
+        }
+      } else {
+        // CREATE new product
+        console.log("Creating new product");
+        response = await fetch("https://api.dovinigears.ng/products", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(apiData),
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Creation failed: ${response.status} - ${errorText}`);
+        }
+
+        responseData = await response.json();
+        console.log("Product created successfully:", responseData);
+
+        // Add the new product to local state
+        if (responseData.success && responseData.data) {
+          setProducts([...products, responseData.data]);
+        }
+      }
+
+      // Reset editing state and navigate back
+      setEditingProduct(null);
+      setActiveView("products");
+
+      // You might want to show a success toast here
+      console.log("Product saved successfully!");
+    } catch (error) {
+      console.error("Error saving product:", error);
+
+      // You might want to show an error toast here
+      alert(`Failed to save product: ${error.message}`);
     }
-    setEditingProduct(null);
   };
 
   // --- Order Management Handlers (Updated for backend API) ---
@@ -960,7 +1016,9 @@ const App = ({ sessions,categories }) => {
                   </p>
                 </div>
                 <div className="text-left sm:text-right">
-                  <div className="font-semibold text-sm sm:text-base">Total Sessions: {sessions}</div>
+                  <div className="font-semibold text-sm sm:text-base">
+                    Total Sessions: {sessions}
+                  </div>
                   <p className="text-xs text-gray-600">(Total visitors)</p>
                 </div>
               </div>
@@ -994,11 +1052,14 @@ const App = ({ sessions,categories }) => {
               />
               <DashboardCard
                 title="Total Revenue"
-                value={`${Number(revenueMetrics.monthlyRevenue).toLocaleString("en-NG", {
-  style: "currency",
-  currency: "NGN",
-  minimumFractionDigits: 2
-})}`}
+                value={`${Number(revenueMetrics.monthlyRevenue).toLocaleString(
+                  "en-NG",
+                  {
+                    style: "currency",
+                    currency: "NGN",
+                    minimumFractionDigits: 2,
+                  }
+                )}`}
                 color="bg-emerald-500"
                 icon={DollarSign}
                 trend={revenueMetrics.trendText}
@@ -1052,12 +1113,14 @@ const App = ({ sessions,categories }) => {
                   <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-green-500" />
                 </div>
                 <p className="text-2xl sm:text-3xl font-bold text-gray-900">
-                  {`${Number(dashboardMetrics.averageOrderValue).toLocaleString("en-NG", {
-  style: "currency",
-  currency: "NGN",
-  minimumFractionDigits: 2
-})}`}
-                  
+                  {`${Number(dashboardMetrics.averageOrderValue).toLocaleString(
+                    "en-NG",
+                    {
+                      style: "currency",
+                      currency: "NGN",
+                      minimumFractionDigits: 2,
+                    }
+                  )}`}
                 </p>
                 <p
                   className={`text-xs sm:text-sm mt-2 ${
@@ -1158,8 +1221,12 @@ const App = ({ sessions,categories }) => {
               <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-4 sm:p-6 rounded-2xl text-white shadow-xl">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-base sm:text-lg font-semibold">Add New Product</h3>
-                    <p className="text-blue-100 mt-1 text-sm">Expand your inventory</p>
+                    <h3 className="text-base sm:text-lg font-semibold">
+                      Add New Product
+                    </h3>
+                    <p className="text-blue-100 mt-1 text-sm">
+                      Expand your inventory
+                    </p>
                   </div>
                   <PlusCircle className="w-6 h-6 sm:w-8 sm:h-8 text-blue-200" />
                 </div>
@@ -1174,7 +1241,9 @@ const App = ({ sessions,categories }) => {
               <div className="bg-gradient-to-r from-green-500 to-green-600 p-4 sm:p-6 rounded-2xl text-white shadow-xl">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-base sm:text-lg font-semibold">Process Orders</h3>
+                    <h3 className="text-base sm:text-lg font-semibold">
+                      Process Orders
+                    </h3>
                     <p className="text-green-100 mt-1 text-sm">
                       {dashboardMetrics.pendingOrders} orders pending
                     </p>
@@ -1192,7 +1261,9 @@ const App = ({ sessions,categories }) => {
               <div className="bg-gradient-to-r from-purple-500 to-purple-600 p-4 sm:p-6 rounded-2xl text-white shadow-xl mb-8 sm:mb-0">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-base sm:text-lg font-semibold">Manage Customers</h3>
+                    <h3 className="text-base sm:text-lg font-semibold">
+                      Manage Customers
+                    </h3>
                     <p className="text-purple-100 mt-1 text-sm">
                       {dashboardMetrics.totalCustomers} total customers
                     </p>
@@ -1213,58 +1284,55 @@ const App = ({ sessions,categories }) => {
     }
   };
 
-
-
   if (loading) {
-    return (
-      <AdminLoadingSPinner/>
-    )
+    return <AdminLoadingSPinner />;
   }
 
   return (
     <div>
-       <div className="flex h-screen bg-gray-100 antialiased">
-      {/* Custom Confirmation Modal */}
-      <ConfirmationModal
-        isOpen={isModalOpen}
-        title="Confirm Deletion"
-        message={`Are you sure you want to delete product "${productToDelete?.name}"? This action cannot be undone.`}
-        onConfirm={confirmDelete}
-        onCancel={cancelDelete}
-      />
+      <div className="flex h-screen bg-gray-100 antialiased">
+        {/* Custom Confirmation Modal */}
+        <ConfirmationModal
+          isOpen={isModalOpen}
+          title="Confirm Deletion"
+          message={`Are you sure you want to delete product "${productToDelete?.name}"? This action cannot be undone.`}
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
 
-      {/* Sidebar */}
-      <SideBar 
-        activeView={activeView} 
-        setActiveView={setActiveView}
-        isMobileMenuOpen={isMobileMenuOpen}
-        setIsMobileMenuOpen={setIsMobileMenuOpen}
-      />
+        {/* Sidebar */}
+        <SideBar
+          activeView={activeView}
+          setActiveView={setActiveView}
+          isMobileMenuOpen={isMobileMenuOpen}
+          setIsMobileMenuOpen={setIsMobileMenuOpen}
+        />
 
-      {/* Main Content Area */}
-      <main className="flex-1 overflow-hidden flex flex-col">
-        {/* Mobile Header */}
-        <div className="md:hidden bg-white border-b border-gray-200 p-4 flex-shrink-0">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => setIsMobileMenuOpen(true)}
-              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              <Menu className="w-6 h-6" />
-            </button>
-            <h1 className="text-lg font-bold text-gray-800">Admin Dashboard</h1>
-            {/* Spacer for centering */}
+        {/* Main Content Area */}
+        <main className="flex-1 overflow-hidden flex flex-col">
+          {/* Mobile Header */}
+          <div className="md:hidden bg-white border-b border-gray-200 p-4 flex-shrink-0">
+            <div className="flex items-center justify-between">
+              <button
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <Menu className="w-6 h-6" />
+              </button>
+              <h1 className="text-lg font-bold text-gray-800">
+                Admin Dashboard
+              </h1>
+              {/* Spacer for centering */}
+            </div>
           </div>
-        </div>
 
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="p-4 sm:p-6 lg:p-8 pb-16 sm:pb-20 lg:pb-24">
-            <div className="max-w-7xl mx-auto">{renderContent()}</div>
+          {/* Content */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="p-4 sm:p-6 lg:p-8 pb-16 sm:pb-20 lg:pb-24">
+              <div className="max-w-7xl mx-auto">{renderContent()}</div>
+            </div>
           </div>
-        </div>
-      </main>
-      
+        </main>
       </div>
       <footer className="bg-white border-t border-gray-200 px-4 sm:px-6 lg:px-8 py-4">
         <div className="max-w-7xl mx-auto">
@@ -1283,7 +1351,7 @@ const App = ({ sessions,categories }) => {
           </div>
         </div>
       </footer>
-   </div>
+    </div>
   );
 };
 

@@ -1,7 +1,12 @@
 import React, { useState } from "react";
-import { X,UploadCloud ,Save  } from "lucide-react";
+import { X, UploadCloud, Save, Image } from "lucide-react";
 
-const ProductForm = ({ editingProduct, handleSave, setActiveView, categories }) => {
+const ProductForm = ({
+  editingProduct,
+  handleSave,
+  setActiveView,
+  categories,
+}) => {
   const isEditing = !!editingProduct;
   const initialData = editingProduct || {
     name: "",
@@ -38,6 +43,7 @@ const ProductForm = ({ editingProduct, handleSave, setActiveView, categories }) 
   });
   // Array to hold the selected file objects (for upload)
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   // Array to hold the local URLs or existing remote URLs (for preview)
   const [previewImages, setPreviewImages] = useState(() => {
     if (editingProduct && editingProduct.images) {
@@ -103,25 +109,117 @@ const ProductForm = ({ editingProduct, handleSave, setActiveView, categories }) 
     }));
   };
 
-  const handleSubmit = (e) => {
+  // Upload images to server and get permanent URLs
+  const uploadImages = async (files) => {
+    const uploadPromises = files.map(async (file, index) => {
+      const formData_upload = new FormData();
+      formData_upload.append("image", file); // ← The actual file
+
+      try {
+        console.log(`Uploading file ${index + 1}: ${file.name}`);
+
+        const response = await fetch("https://api.dovinigears.ng/upload", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          },
+          body: formData_upload, // ← File data sent here
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(
+            `Upload failed for ${file.name}: ${response.status} - ${errorText}`
+          );
+        }
+
+        const result = await response.json();
+
+        // Check if the response has the expected structure
+        if (result.success && result.url) {
+          console.log(`✅ Uploaded ${file.name}: ${result.url}`);
+          return result.url; // ← Get permanent URL back
+        } else {
+          throw new Error(`Invalid response format for ${file.name}`);
+        }
+      } catch (error) {
+        console.error(`❌ Error uploading ${file.name}:`, error);
+        throw error;
+      }
+    });
+
+    // Wait for all uploads to complete (or fail)
+    const uploadedUrls = await Promise.all(uploadPromises);
+    return uploadedUrls;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (selectedFiles.length > 0) {
-      // --- YOUR CUSTOM UPLOAD LOGIC STARTS HERE ---
-      console.log("--- Ready to Upload: ---");
-      console.log(`Total files to upload: ${selectedFiles.length}`);
-      // This is the array of File objects you would send to your server/storage:
-      console.log("Files to Upload:", selectedFiles);
-      console.log("-----------------------");
-      // --- YOUR CUSTOM UPLOAD LOGIC ENDS HERE ---
-    } else {
-      console.log("No new files selected for upload.");
+    // Validate required fields
+    if (
+      !formData.name ||
+      !formData.category ||
+      !formData.price ||
+      !formData.stock
+    ) {
+      alert("Please fill in all required fields");
+      return;
     }
 
-    // In a real app, you would wait for upload completion, collect the
-    // permanent URLs, and then pass them in the savedData.
-    handleSave(formData, isEditing);
-    setActiveView("products");
+    setIsSubmitting(true);
+
+    try {
+      let finalFormData = { ...formData };
+
+      // Handle image upload if there are new files
+      if (selectedFiles.length > 0) {
+        console.log("🚀 Starting image upload process...");
+        console.log(`📁 Files to upload: ${selectedFiles.length}`);
+
+        try {
+          // Upload all selected files and get permanent URLs
+          const uploadedUrls = await uploadImages(selectedFiles);
+
+          // Keep existing images that are NOT blob URLs, add new uploaded URLs
+          const existingUrls = previewImages.filter(
+            (url) => !url.startsWith("blob:")
+          );
+          finalFormData.images = [...existingUrls, ...uploadedUrls];
+
+          console.log("✅ All images uploaded successfully!");
+          console.log("📸 Uploaded URLs:", uploadedUrls);
+          console.log("🖼️  All product images:", finalFormData.images);
+        } catch (uploadError) {
+          console.error("❌ Some images failed to upload:", uploadError);
+          // Continue without the new images, but inform the user
+          alert(
+            `Some images failed to upload: ${uploadError.message}. Product will be saved without new images.`
+          );
+
+          // Use only existing non-blob images
+          const existingUrls = previewImages.filter(
+            (url) => !url.startsWith("blob:")
+          );
+          finalFormData.images = existingUrls;
+        }
+      }
+
+      // Call the save function (now async)
+      console.log("💾 Saving product to database...");
+      await handleSave(finalFormData, isEditing);
+
+      // Reset form state after successful save
+      setSelectedFiles([]);
+      setPreviewImages([]);
+
+      console.log("✅ Product saved successfully!");
+    } catch (error) {
+      console.error("❌ Error submitting form:", error);
+      alert(`Failed to save product: ${error.message}`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputClass =
@@ -176,11 +274,12 @@ const ProductForm = ({ editingProduct, handleSave, setActiveView, categories }) 
                 className={inputClass}
               >
                 <option value="">Select a category</option>
-                {categories && categories.map((category) => (
-                  <option key={category.id} value={category.name}>
-                    {category.name}
-                  </option>
-                ))}
+                {categories &&
+                  categories.map((category) => (
+                    <option key={category.id} value={category.name}>
+                      {category.name}
+                    </option>
+                  ))}
               </select>
             </div>
 
@@ -410,14 +509,26 @@ const ProductForm = ({ editingProduct, handleSave, setActiveView, categories }) 
 
         <button
           type="submit"
-          className="w-full flex justify-center items-center px-6 py-3 mt-8 rounded-xl font-semibold text-white transition duration-200 shadow-md bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 hover:opacity-90"
+          disabled={isSubmitting}
+          className={`w-full flex justify-center items-center px-6 py-3 mt-8 rounded-xl font-semibold text-white transition duration-200 shadow-md bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 hover:opacity-90 ${
+            isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         >
-          <Save className="w-5 h-5 mr-2" />
-          {isEditing ? "Save Changes" : "Create Product"}
+          {isSubmitting ? (
+            <>
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+              {isEditing ? "Saving Changes..." : "Creating Product..."}
+            </>
+          ) : (
+            <>
+              <Save className="w-5 h-5 mr-2" />
+              {isEditing ? "Save Changes" : "Create Product"}
+            </>
+          )}
         </button>
       </form>
     </div>
   );
 };
 
-export default ProductForm
+export default ProductForm;
