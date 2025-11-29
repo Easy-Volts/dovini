@@ -33,6 +33,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import AccountActivation from "./pages/AccountActivation";
 import Orders from "./pages/Orders";
 import FlashDeals from "./pages/FlashDeals";
+import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import { OrdersProvider } from "./context/OrdersContext";
 import { AdminProvider } from "./context/AdminContext";
@@ -240,6 +241,7 @@ const App = () => {
                           />
                           <Route path="/flash-deals" element={<FlashDeals />} />
                           <Route path="/about" element={<About />} />
+                          <Route path="/contact" element={<Contact />} />
                           <Route path="*" element={<NotFound />} />
                         </Routes>
                       </main>

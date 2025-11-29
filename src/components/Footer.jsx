@@ -67,7 +67,7 @@ const Footer = () => {
               <Grid3X3 className="w-5 h-5 mr-2 text-red-600" />
               Quick Links
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-3 ">
               <li>
                 <Link to="/" className="flex items-center text-gray-600 hover:text-red-600 transition-colors group">
                   <Home className="w-4 h-4 mr-3 group-hover:scale-110 transition-transform" />
@@ -78,6 +78,18 @@ const Footer = () => {
                 <Link to="/products" className="flex items-center text-gray-600 hover:text-red-600 transition-colors group">
                   <Grid3X3 className="w-4 h-4 mr-3 group-hover:scale-110 transition-transform" />
                   <span className="font-medium">Products</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" className="flex items-center text-gray-600 hover:text-red-600 transition-colors group">
+                  <Grid3X3 className="w-4 h-4 mr-3 group-hover:scale-110 transition-transform" />
+                  <span className="font-medium">About</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="flex items-center text-gray-600 hover:text-red-600 transition-colors group">
+                  <Phone className="w-4 h-4 mr-3 group-hover:scale-110 transition-transform" />
+                  <span className="font-medium">Contact</span>
                 </Link>
               </li>
               <li>
@@ -178,6 +190,9 @@ const Footer = () => {
             >
               <Link to="/about" className="text-gray-600 hover:text-red-600 transition-colors font-medium">
                 About
+              </Link>
+              <Link to="/contact" className="text-gray-600 hover:text-red-600 transition-colors font-medium">
+                Contact
               </Link>
               <Link to="/privacy-policies" className="text-gray-600 hover:text-red-600 transition-colors font-medium">
                 Privacy

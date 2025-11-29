@@ -157,49 +157,57 @@ const Header = () => {
               </Link>
             </div>
 
-            <nav className="hidden lg:flex items-center space-x-4">
+            <nav className="hidden lg:flex items-center space-x-2">
               <Link
                 to="/"
-                className="flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-colors font-medium px-3 py-2 rounded-lg hover:bg-red-50"
+                className="flex items-center space-x-1 text-gray-700 hover:text-red-600 transition-colors font-medium px-2 py-2 rounded-md hover:bg-red-50"
               >
-                <Home className="w-5 h-5" />
-                <span>Home</span>
+                <Home className="w-4 h-4" />
+                <span className="text-sm">Home</span>
               </Link>
 
               <Link
                 to="/flash-deals"
-                className="flex items-center space-x-2 text-red-600 hover:text-red-700 transition-colors font-semibold px-3 py-2 rounded-lg bg-red-50"
+                className="flex items-center space-x-1 text-red-600 hover:text-red-700 transition-colors font-semibold px-2 py-2 rounded-md bg-red-50"
               >
-                <span className="text-lg">⚡</span>
-                <span>Flash Deals</span>
+                <span className="text-sm">⚡</span>
+                <span className="text-sm">Flash Deals</span>
               </Link>
 
               <Link
                 to="/products"
-                className="flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-colors font-medium px-3 py-2 rounded-lg hover:bg-red-50"
+                className="flex items-center space-x-1 text-gray-700 hover:text-red-600 transition-colors font-medium px-2 py-2 rounded-md hover:bg-red-50"
               >
-                <Grid3X3 className="w-5 h-5" />
-                <span>Products</span>
+                <Grid3X3 className="w-4 h-4" />
+                <span className="text-sm">Products</span>
               </Link>
 
               <Link
                 to="/about"
-                className="flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-colors font-medium px-3 py-2 rounded-lg hover:bg-red-50"
+                className="flex items-center space-x-1 text-gray-700 hover:text-red-600 transition-colors font-medium px-2 py-2 rounded-md hover:bg-red-50"
               >
-                <Landmark className="w-5 h-5" />
-                <span>About</span>
+                <Landmark className="w-4 h-4" />
+                <span className="text-sm">About</span>
+              </Link>
+
+              <Link
+                to="/contact"
+                className="flex items-center space-x-1 text-gray-700 hover:text-red-600 transition-colors font-medium px-2 py-2 rounded-md hover:bg-red-50"
+              >
+                <Phone className="w-4 h-4" />
+                <span className="text-sm">Contact</span>
               </Link>
             </nav>
 
-            {/* Right Side Actions with Text */}
-            <div className="flex items-center space-x-2">
-              {/* Wishlist with Text */}
+            {/* Right Side Actions - Icon Only */}
+            <div className="flex items-center space-x-1">
+              {/* Wishlist Icon Only */}
               <Link
                 to="/wishlist"
-                className="relative hidden sm:flex items-center space-x-2 px-3 py-2 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all font-medium"
+                className="relative p-2 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all hidden sm:flex"
+                title="Wishlist"
               >
                 <Heart className="w-5 h-5" />
-                <span className="hidden lg:inline">Wishlist</span>
                 {wishlistCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
                     {wishlistCount}
@@ -209,10 +217,10 @@ const Header = () => {
 
               <Link
                 to="/cart"
-                className="relative hidden sm:flex items-center space-x-2 px-3 py-2 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all font-medium"
+                className="relative p-2 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all hidden sm:flex"
+                title="Cart"
               >
                 <ShoppingCart className="w-5 h-5" />
-                <span className="hidden lg:inline">Cart</span>
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
                     {cartCount}
@@ -244,7 +252,8 @@ const Header = () => {
                 >
                   <button
                     onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                    className="flex items-center justify-center space-x-2 p-2 md:p-3 rounded-lg hover:bg-gray-50 transition-all duration-200 group w-full md:max-w-[200px]"
+                    className="flex items-center p-2 rounded-lg hover:bg-gray-50 transition-all duration-200 group"
+                    title="User Menu"
                   >
                     <img
                       src={
@@ -254,22 +263,13 @@ const Header = () => {
                         )}&background=f97316&color=fff`
                       }
                       alt={user.name}
-                      className="w-7 h-7 md:w-8 md:h-8 rounded-full border-2 border-red-200 group-hover:border-red-300 transition-colors flex-shrink-0"
+                      className="w-7 h-7 rounded-full border-2 border-red-200 group-hover:border-red-300 transition-colors"
                       onError={(e) => {
                         e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
                           user.name
                         )}&background=f97316&color=fff`;
                       }}
                     />
-                    {/* Desktop name display */}
-                    <span className="hidden md:inline lg:inline xl:inline font-semibold text-sm text-gray-800 group-hover:bg-gray-200 px-2 py-1 md:px-1 md:py-1.5 rounded-full transition-all duration-200  group-hover:border-gray-300 truncate max-w-[80px] md:max-w-none">
-                      {user.name}
-                    </span>
-
-                    {/* Mobile-friendly short name with proper containment */}
-                    <span className="md:hidden lg:hidden xl:hidden font-semibold text-xs text-gray-800 bg-red-100 group-hover:bg-red-200 px-2 py-1 rounded-full transition-all duration-200 border border-red-200 truncate max-w-[50px]">
-                      {user.name?.split(" ")[0] || user.name}
-                    </span>
                   </button>
 
                   {isUserMenuOpen && (
@@ -335,16 +335,16 @@ const Header = () => {
                   )}
                 </div>
               ) : (
-                <div className="hidden lg:flex items-center space-x-2">
+                <div className="hidden lg:flex items-center space-x-1">
                   <Link
                     to="/login"
-                    className="text-gray-700 hover:text-red-600 font-medium transition-colors"
+                    className="text-gray-700 hover:text-red-600 font-medium transition-colors px-2 py-1 rounded-md hover:bg-red-50"
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/signup"
-                    className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-4 py-2 rounded-xl font-medium hover:bg-red-700 transition-colors"
+                    className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-3 py-1.5 rounded-lg font-medium hover:bg-red-700 transition-colors text-sm"
                   >
                     Sign Up
                   </Link>
@@ -353,31 +353,32 @@ const Header = () => {
 
               <a
                 href="tel:08063971335"
-                className="hidden xl:flex items-center space-x-2 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors"
+                className="hidden 2xl:flex items-center space-x-1 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-3 py-1.5 rounded-lg font-medium hover:bg-red-700 transition-colors"
+                title="Call us: 080-6397-1335"
               >
                 <Phone className="w-4 h-4" />
-                <span className="hidden 2xl:inline">08063971335</span>
+                <span className="text-sm">08063971335</span>
               </a>
             </div>
           </div>
 
           {/* Search Bar Row - Desktop */}
-          <div className="hidden md:flex justify-center py-4 border-t border-gray-100">
-            <div className="w-full max-w-2xl">
+          <div className="hidden md:flex justify-center py-2 border-t border-gray-100">
+            <div className="w-full max-w-xl">
               <form onSubmit={handleSearch} className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Search className="w-5 h-5 text-gray-400" />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Search className="w-4 h-4 text-gray-400" />
                 </div>
                 <input
                   type="text"
-                  placeholder="Search for premium photography equipment..."
+                  placeholder="Search premium photography equipment..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all text-sm bg-gray-50 hover:bg-white"
+                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all text-sm bg-gray-50 hover:bg-white"
                 />
                 <button
                   type="submit"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium"
+                  className="absolute right-1.5 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white px-4 py-1.5 rounded-md hover:bg-red-700 transition-colors font-medium text-sm"
                 >
                   Search
                 </button>
@@ -477,6 +478,14 @@ const Header = () => {
                 >
                   <Landmark className="w-5 h-5" />
                   <span>About Us</span>
+                </Link>
+                <Link
+                  to="/contact"
+                  className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Phone className="w-5 h-5" />
+                  <span>Contact</span>
                 </Link>
                 <Link
                   to="/flash-deals"
