@@ -302,10 +302,10 @@ const FlashDeals = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
                 viewport={{ once: true }}
-                className="group cursor-pointer"
+                className="group cursor-pointer relative"
                 onClick={() => navigate(`/product/${product.id}`)}
               >
-                <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-red-100">
+                <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-red-100 relative">
                   {/* Flash Deal Badge */}
                   <div className="absolute top-3 left-3 z-20 bg-gradient-to-r from-red-500 to-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg animate-pulse-slow">
                     -{product.discount}% OFF
