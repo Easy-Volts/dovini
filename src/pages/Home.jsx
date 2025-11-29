@@ -37,6 +37,7 @@ import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useToast } from "../context/ToastContext";
 import Hero from "../components/Hero";
+import CurvedDivider from "../components/CurvedDivider";
 import { useAuth } from "../context/AuthContext";
 
 const PhoneIcon = (props) => (
@@ -1122,6 +1123,9 @@ const Home = ({categories}) => {
           </motion.div>
         </div>
       </section>
+
+      {/* Curved Divider */}
+      <CurvedDivider />
 
       <section className="py-8 sm:py-12 lg:py-16 bg-gradient-to-br from-gray-50 to-red-50 px-2 sm:px-8 lg:px-12">
         <div className="max-w-7xl mx-auto px-1 sm:px-6 lg:px-8">
