@@ -4,7 +4,7 @@ import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
 import HeaderAds from "./HeaderAds";
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion'
 import { useOrders } from "../context/OrdersContext";
 import {
   Home,
@@ -408,8 +408,8 @@ const Header = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden bg-white border-t border-gray-200 max-h-[calc(100vh-80px)] overflow-y-auto">
-            <div className="px-4 py-4 space-y-1">
+          <div className="lg:hidden bg-white border-t border-gray-200 max-h-[calc(100vh-144px)] overflow-y-auto pb-20">
+            <div className="px-4 py-3 space-y-0.5">
               {/* User Profile Section - When Logged In */}
               {!isLoading && user ? (
                 <div className="mb-6">
@@ -442,21 +442,21 @@ const Header = () => {
                   </div>
 
                   {/* Quick Stats */}
-                  <div className="grid grid-cols-3 gap-2 mb-4">
-                    <div className="bg-gray-50 rounded-lg p-3 text-center">
-                      <div className="text-lg font-bold text-gray-800">
+                  <div className="grid grid-cols-3 gap-2 mb-3">
+                    <div className="bg-gray-50 rounded-lg p-2 text-center">
+                      <div className="text-base font-bold text-gray-800">
                         {cartCount}
                       </div>
                       <div className="text-xs text-gray-600">Cart</div>
                     </div>
-                    <div className="bg-gray-50 rounded-lg p-3 text-center">
-                      <div className="text-lg font-bold text-gray-800">
+                    <div className="bg-gray-50 rounded-lg p-2 text-center">
+                      <div className="text-base font-bold text-gray-800">
                         {wishlistCount}
                       </div>
                       <div className="text-xs text-gray-600">Wishlist</div>
                     </div>
-                    <div className="bg-gray-50 rounded-lg p-3 text-center">
-                      <div className="text-lg font-bold text-gray-800">
+                    <div className="bg-gray-50 rounded-lg p-2 text-center">
+                      <div className="text-base font-bold text-gray-800">
                         {orders.length}
                       </div>
                       <div className="text-xs text-gray-600">Orders</div>
@@ -467,13 +467,13 @@ const Header = () => {
 
               {/* Main Navigation */}
               <div className="space-y-1">
-                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-2">
+                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-1.5">
                   Main Menu
                 </div>
 
                 <Link
                   to="/about"
-                  className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
+                  className="flex items-center space-x-3 px-4 py-2.5 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <Landmark className="w-5 h-5" />
@@ -481,7 +481,7 @@ const Header = () => {
                 </Link>
                 <Link
                   to="/contact"
-                  className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
+                  className="flex items-center space-x-3 px-4 py-2.5 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <Phone className="w-5 h-5" />
@@ -489,7 +489,7 @@ const Header = () => {
                 </Link>
                 <Link
                   to="/flash-deals"
-                  className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
+                  className="flex items-center space-x-3 px-4 py-2.5 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <span className="text-lg">⚡</span>
@@ -499,14 +499,14 @@ const Header = () => {
 
               {/* Account Section */}
               {!isLoading && user ? (
-                <div className="space-y-1 pt-4 border-t border-gray-200">
-                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-2">
+                <div className="space-y-0.5 pt-3 border-t border-gray-200">
+                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-1.5">
                     My Account
                   </div>
 
                   <Link
                     to="/my-account"
-                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
+                    className="flex items-center space-x-3 px-4 py-2.5 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <User className="w-5 h-5" />
@@ -514,7 +514,7 @@ const Header = () => {
                   </Link>
                   <Link
                     to="/orders"
-                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
+                    className="flex items-center space-x-3 px-4 py-2.5 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <ShoppingBag className="w-5 h-5" />
@@ -523,7 +523,7 @@ const Header = () => {
 
                   <Link
                     to="/wishlist"
-                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
+                    className="flex items-center space-x-3 px-4 py-2.5 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Heart className="w-5 h-5" />
@@ -536,14 +536,14 @@ const Header = () => {
                   </Link>
                 </div>
               ) : (
-                <div className="space-y-1 pt-4 border-t border-gray-200">
-                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-2">
+                <div className="space-y-0.5 pt-3 border-t border-gray-200">
+                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-1.5">
                     Account
                   </div>
 
                   <Link
                     to="/login"
-                    className="flex items-center justify-center space-x-2 mx-4 py-3 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white rounded-lg font-medium hover:bg-red-700 transition-colors"
+                    className="flex items-center justify-center space-x-2 mx-4 py-2.5 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white rounded-lg font-medium hover:bg-red-700 transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <User className="w-4 h-4" />
@@ -552,7 +552,7 @@ const Header = () => {
 
                   <Link
                     to="/signup"
-                    className="flex items-center justify-center space-x-2 mx-4 py-3 border-2 border-red-600 text-red-600 rounded-lg font-medium hover:bg-red-50 transition-colors"
+                    className="flex items-center justify-center space-x-2 mx-4 py-2.5 border-2 border-red-600 text-red-600 rounded-lg font-medium hover:bg-red-50 transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <User className="w-4 h-4" />
@@ -562,14 +562,14 @@ const Header = () => {
               )}
 
               {/* Support Section */}
-              <div className="space-y-1 pt-4 border-t border-gray-200">
-                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-2">
+              <div className="space-y-0.5 pt-3 border-t border-gray-200">
+                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-1.5">
                   Support
                 </div>
 
                 <a
                   href="tel:08063971335"
-                  className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
+                  className="flex items-center space-x-3 px-4 py-2.5 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
                 >
                   <Phone className="w-5 h-5" />
                   <span>Call Support</span>
@@ -577,7 +577,7 @@ const Header = () => {
               </div>
 
               {!isLoading && user ? (
-                <div className="space-y-1 pt-4 border-t border-gray-200 ">
+                <div className="space-y-0.5 pt-3 border-t border-gray-200">
                   <button
                     onClick={() => {
                       logout(() => {
@@ -585,7 +585,7 @@ const Header = () => {
                         setIsMobileMenuOpen(false);
                       });
                     }}
-                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors w-full text-left"
+                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors w-full text-left font-medium"
                   >
                     <LogOut className="w-5 h-5" />
                     <span>Sign Out</span>

@@ -442,8 +442,8 @@ const Contact = () => {
                 </p>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="font-semibold text-gray-900">Dovini Photography Equipment</p>
-                  <p className="text-gray-600 text-sm">Victoria Island, Lagos, Nigeria</p>
-                  <p className="text-gray-600 text-sm">Monday - Saturday: 9 AM - 6 PM</p>
+                  <p className="text-gray-600 text-sm">16 NTA Rd, Rumuokwuta, Port Harcourt, Nigeria 500272</p>
+                  <p className="text-gray-600 text-sm">Monday - Saturday: 7 AM - 7:30 PM</p>
                 </div>
               </div>
 
