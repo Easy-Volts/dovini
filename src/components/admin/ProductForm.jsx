@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { X, UploadCloud, Save, Image } from "lucide-react";
+import { useToast } from "../../context/ToastContext";
 
 const ProductForm = ({
   editingProduct,
@@ -7,6 +8,7 @@ const ProductForm = ({
   setActiveView,
   categories,
 }) => {
+  const { showSuccess, showError } = useToast();
   const isEditing = !!editingProduct;
   const initialData = editingProduct || {
     name: "",
@@ -102,55 +104,10 @@ const ProductForm = ({
       URL.revokeObjectURL(urlToRemove); // Clean up the temporary URL
     }
 
-    // 3. Update the formData's images array
     setFormData((prev) => ({
       ...prev,
       images: prev.images.filter((_, index) => index !== indexToRemove),
     }));
-  };
-
-  // Upload images to server and get permanent URLs
-  const uploadImages = async (files) => {
-    const uploadPromises = files.map(async (file, index) => {
-      const formData_upload = new FormData();
-      formData_upload.append("image", file); // ← The actual file
-
-      try {
-        console.log(`Uploading file ${index + 1}: ${file.name}`);
-
-        const response = await fetch("https://api.dovinigears.ng/upload", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
-          },
-          body: formData_upload, // ← File data sent here
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(
-            `Upload failed for ${file.name}: ${response.status} - ${errorText}`
-          );
-        }
-
-        const result = await response.json();
-
-        // Check if the response has the expected structure
-        if (result.success && result.url) {
-          console.log(`✅ Uploaded ${file.name}: ${result.url}`);
-          return result.url; // ← Get permanent URL back
-        } else {
-          throw new Error(`Invalid response format for ${file.name}`);
-        }
-      } catch (error) {
-        console.error(`❌ Error uploading ${file.name}:`, error);
-        throw error;
-      }
-    });
-
-    // Wait for all uploads to complete (or fail)
-    const uploadedUrls = await Promise.all(uploadPromises);
-    return uploadedUrls;
   };
 
   const handleSubmit = async (e) => {
@@ -163,60 +120,64 @@ const ProductForm = ({
       !formData.price ||
       !formData.stock
     ) {
-      alert("Please fill in all required fields");
+      showError("Please fill in all required fields");
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      let finalFormData = { ...formData };
+      // Prepare FormData instead of JSON
+      const formDataToSend = new FormData();
 
-      // Handle image upload if there are new files
-      if (selectedFiles.length > 0) {
-        console.log("🚀 Starting image upload process...");
-        console.log(`📁 Files to upload: ${selectedFiles.length}`);
+      // Add all product data fields
+      formDataToSend.append("name", formData.name);
 
-        try {
-          // Upload all selected files and get permanent URLs
-          const uploadedUrls = await uploadImages(selectedFiles);
-
-          // Keep existing images that are NOT blob URLs, add new uploaded URLs
-          const existingUrls = previewImages.filter(
-            (url) => !url.startsWith("blob:")
-          );
-          finalFormData.images = [...existingUrls, ...uploadedUrls];
-
-          console.log("✅ All images uploaded successfully!");
-          console.log("📸 Uploaded URLs:", uploadedUrls);
-          console.log("🖼️  All product images:", finalFormData.images);
-        } catch (uploadError) {
-          console.error("❌ Some images failed to upload:", uploadError);
-          // Continue without the new images, but inform the user
-          alert(
-            `Some images failed to upload: ${uploadError.message}. Product will be saved without new images.`
-          );
-
-          // Use only existing non-blob images
-          const existingUrls = previewImages.filter(
-            (url) => !url.startsWith("blob:")
-          );
-          finalFormData.images = existingUrls;
-        }
+      const categoryObj = categories.find(
+        (c) => c.name.toLowerCase() === formData.category.toLowerCase()
+      );
+      formDataToSend.append("category_id", categoryObj?.id || "");
+      formDataToSend.append("price", formData.price);
+      formDataToSend.append("originalPrice", formData.originalPrice);
+      formDataToSend.append("discount", formData.discount);
+      formDataToSend.append("stock", formData.stock);
+      formDataToSend.append("rating", formData.rating);
+      formDataToSend.append("description", formData.description);
+      formDataToSend.append(
+        "isLimitedStock",
+        formData.isLimitedStock.toString()
+      );
+      formDataToSend.append("isFlashDeal", formData.isFlashDeal.toString());
+      if (formData.flashDealEnd) {
+        formDataToSend.append("flashDealEnd", formData.flashDealEnd);
       }
 
-      // Call the save function (now async)
+      // Add images with "file" key name as requested
+      selectedFiles.forEach((file) => {
+        formDataToSend.append("image", file);
+      });
+
+      // For editing mode, include the product ID
+      if (isEditing && formData.id) {
+        formDataToSend.append("id", formData.id);
+      }
+
+      // Call the save function
       console.log("💾 Saving product to database...");
-      await handleSave(finalFormData, isEditing);
+      await handleSave(formDataToSend, isEditing);
 
       // Reset form state after successful save
       setSelectedFiles([]);
       setPreviewImages([]);
 
-      console.log("✅ Product saved successfully!");
+      showSuccess(
+        isEditing
+          ? "Product updated successfully!"
+          : "Product created successfully!"
+      );
     } catch (error) {
       console.error("❌ Error submitting form:", error);
-      alert(`Failed to save product: ${error.message}`);
+      showError(`Failed to save product: ${error.message}`);
     } finally {
       setIsSubmitting(false);
     }
