@@ -28,6 +28,9 @@ const ProductForm = ({
 
   const [formData, setFormData] = useState(() => {
     if (editingProduct) {
+      const categoryObj = categories.find(
+        (c) => c.id === editingProduct.categoryId
+      );
       return {
         ...editingProduct,
         // Ensure proper data types for form inputs
@@ -39,6 +42,7 @@ const ProductForm = ({
         rating: editingProduct.rating?.toString() || "0",
         isLimitedStock: Boolean(editingProduct.isLimitedStock),
         isFlashDeal: Boolean(editingProduct.isFlashDeal),
+        category: categoryObj.name,
       };
     }
     return initialData;
@@ -62,10 +66,45 @@ const ProductForm = ({
     }));
   };
 
+  // Helper function to calculate total file size in bytes
+  const getTotalFileSize = (files) => {
+    return files.reduce((total, file) => total + file.size, 0);
+  };
+
+  // Helper function to format bytes to human readable format
+  const formatBytes = (bytes) => {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+  };
+
   const handleFileChange = (e) => {
     const newFiles = Array.from(e.target.files);
 
     if (newFiles.length > 0) {
+      // Calculate current total size and new files size
+      const currentTotalSize = getTotalFileSize(selectedFiles);
+      const newFilesSize = getTotalFileSize(newFiles);
+      const wouldBeTotalSize = currentTotalSize + newFilesSize;
+
+      // 4MB limit = 4 * 1024 * 1024 bytes
+      const maxSize = 4 * 1024 * 1024; // 4MB in bytes
+
+      if (wouldBeTotalSize > maxSize) {
+        showError(
+          `Total image size would be ${formatBytes(
+            wouldBeTotalSize
+          )}, which exceeds the 4MB limit. ` +
+            `Current total: ${formatBytes(currentTotalSize)}. ` +
+            `Please remove some images first or select smaller files.`
+        );
+        // Clear file input value
+        e.target.value = null;
+        return;
+      }
+
       // 1. Create local URLs for new files
       const newPreviewUrls = newFiles.map((file) => URL.createObjectURL(file));
 
@@ -80,6 +119,12 @@ const ProductForm = ({
         ...prev,
         images: [...prev.images, ...newPreviewUrls],
       }));
+
+      // Show success message with size info
+      showSuccess(
+        `Added ${newFiles.length} image(s) (${formatBytes(newFilesSize)}). ` +
+          `Total size: ${formatBytes(wouldBeTotalSize)} / 4MB`
+      );
     }
     // Clear file input value to allow selecting the same file again
     e.target.value = null;
@@ -170,11 +215,11 @@ const ProductForm = ({
       setSelectedFiles([]);
       setPreviewImages([]);
 
-      showSuccess(
-        isEditing
-          ? "Product updated successfully!"
-          : "Product created successfully!"
-      );
+      // showSuccess(
+      //   isEditing
+      //     ? "Product updated successfully!"
+      //     : "Product created successfully!"
+      // );
     } catch (error) {
       console.error("❌ Error submitting form:", error);
       showError(`Failed to save product: ${error.message}`);
@@ -356,7 +401,7 @@ const ProductForm = ({
 
           <div className="mb-6 border p-4 rounded-xl space-y-4 bg-gray-50">
             <label className={labelClass}>
-              Upload Images (PNG, JPG, up to 10 files)
+              Upload Images (PNG, JPG, up to 10 files, max 4MB total)
             </label>
 
             <input
@@ -378,9 +423,74 @@ const ProductForm = ({
             </button>
 
             <div className="mt-4 pt-4 border-t border-gray-200">
-              <p className="text-sm font-medium text-gray-700 mb-2">
-                {previewImages.length} Image(s) Selected
-              </p>
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-sm font-medium text-gray-700">
+                  {previewImages.length} Image(s) Selected
+                </p>
+                <div className="text-sm text-gray-600">
+                  {(() => {
+                    const totalSize = getTotalFileSize(selectedFiles);
+                    const maxSize = 4 * 1024 * 1024; // 4MB
+                    const percentage = (totalSize / maxSize) * 100;
+                    const isNearLimit = percentage > 80;
+
+                    return (
+                      <span
+                        className={`font-medium ${
+                          isNearLimit
+                            ? "text-red-600"
+                            : totalSize > maxSize
+                            ? "text-red-700"
+                            : "text-gray-600"
+                        }`}
+                      >
+                        {formatBytes(totalSize)} / 4MB ({percentage.toFixed(1)}
+                        %)
+                      </span>
+                    );
+                  })()}
+                </div>
+              </div>
+
+              {/* Size warning bar */}
+              {(() => {
+                const totalSize = getTotalFileSize(selectedFiles);
+                const maxSize = 4 * 1024 * 1024;
+                const percentage = Math.min((totalSize / maxSize) * 100, 100);
+
+                if (totalSize === 0) return null;
+
+                return (
+                  <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                    <div
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        percentage > 90
+                          ? "bg-red-500"
+                          : percentage > 80
+                          ? "bg-yellow-500"
+                          : "bg-green-500"
+                      }`}
+                      style={{ width: `${percentage}%` }}
+                    />
+                  </div>
+                );
+              })()}
+
+              {(() => {
+                const totalSize = getTotalFileSize(selectedFiles);
+                const remainingSize = Math.max(0, 4 * 1024 * 1024 - totalSize);
+
+                if (remainingSize < 1024 * 1024) {
+                  // Less than 1MB remaining
+                  return (
+                    <p className="text-xs text-red-600 font-medium">
+                      ⚠️ Only {formatBytes(remainingSize)} remaining! Remove
+                      some images to add more.
+                    </p>
+                  );
+                }
+                return null;
+              })()}
 
               {/* Thumbnail Preview Gallery */}
               <div className="flex flex-wrap gap-4 p-2 bg-white rounded-lg border border-dashed border-gray-300 min-h-[100px]">

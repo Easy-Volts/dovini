@@ -84,6 +84,36 @@ const App = () => {
   useEffect(() => {
     trackSession();
   }, []);
+
+  const CATEGORY_IMAGES = [
+  "https://images.unsplash.com/photo-1574281813181-02b512471486?fm=jpg&w=3000",
+  "https://burst.shopifycdn.com/photos/black-microphone-set-against-a-pink-background.jpg?width=1000",
+  "https://lumecube.com/cdn/shop/files/Studio_Panel_Lighting_Kit_UCSD-09339-1160x1500.jpg",
+  "https://www.lighting-geek.com/wp-content/uploads/2023/05/14-3-1.png",
+  "https://freestockfootagearchive.com/wp-content/uploads/2019/08/Glitchy-Shapes-Strobe-Light-Overlay-Effect.jpeg",
+  "https://i.fbcd.co/products/resized-750-500/studio-lighting-black-bg.jpg",
+  "https://www.ulanzi.com/cdn/shop/files/2_2x-2.png",
+  ];
+  
+  const CATEGORY_ICONS = [
+  SunMedium,
+  Focus,
+  Cpu,
+  Zap,
+  Lightbulb,
+  BatteryCharging,
+  Package,
+  Video,
+  ];
+  
+  const getRandomImage = () => {
+  return CATEGORY_IMAGES[Math.floor(Math.random() * CATEGORY_IMAGES.length)];
+};
+
+const getRandomIcon = () => {
+  return CATEGORY_ICONS[Math.floor(Math.random() * CATEGORY_ICONS.length)];
+};
+
    
   const extraCategoryData = {
     1: {
@@ -127,26 +157,32 @@ const App = () => {
     },
   };
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await fetch("https://api.dovinigears.ng/categories");
-        if (!res.ok) {
-          throw new Error();
-        }
-        const data = await res.json();
-        const mergedCategories = data.data.map((cat) => ({
+ useEffect(() => {
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch("https://api.dovinigears.ng/categories");
+      if (!res.ok) throw new Error("Failed to fetch categories");
+
+      const data = await res.json();
+
+      const mergedCategories = data.data.map((cat) => {
+        return {
           ...cat,
-          image: extraCategoryData[cat.id]?.image, 
-          icon: extraCategoryData[cat.id]?.icon, 
-        }));
-        setCategories(mergedCategories);
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-    fetchCategories();
-  }, []);
+          image: extraCategoryData[cat.id]?.image || getRandomImage(),
+          icon: extraCategoryData[cat.id]?.icon || getRandomIcon(),
+        };
+      });
+
+      setCategories(mergedCategories);
+
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  fetchCategories();
+}, []);
+
 
   return (
     <AuthProvider>

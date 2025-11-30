@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package, ShoppingCart, Users ,LogOut,X} from "lucide-react";
+import { LayoutDashboard, Package, ShoppingCart, Users ,LogOut,X,Grid3X3} from "lucide-react";
 import { useAdmin } from "../../context/AdminContext";
 
 
@@ -8,12 +8,13 @@ const SideBar = ({ activeView, setActiveView, isMobileMenuOpen, setIsMobileMenuO
     { name: "Products", icon: Package, view: "products" },
     { name: "Orders", icon: ShoppingCart, view: "orders" },
     { name: "Customers", icon: Users, view: "customers" },
+    { name: "Categories", icon: Grid3X3, view: "categories" },
   ];
   const { logout } = useAdmin();
 
   const handleNavClick = (view) => {
     setActiveView(view);
-    setIsMobileMenuOpen(false); // Close mobile menu after navigation
+    setIsMobileMenuOpen(false); 
   };
 
   return (

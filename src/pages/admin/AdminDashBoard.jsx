@@ -24,7 +24,9 @@ import OrderList from "../../components/admin/OrderList";
 import SideBar from "../../components/admin/SideBar";
 import AdminLoadingSPinner from "../../components/admin/AdminLoadingSPinner";
 import ProductForm from "../../components/admin/ProductForm";
+import Categories from "../../components/admin/Categories";
 import { useToast } from "../../context/ToastContext";
+
 
 const getConversionRate = (orders, sessions) => {
   if (sessions === 0) return 0;
@@ -601,6 +603,7 @@ const App = ({ sessions, categories }) => {
     trendText: "→ 0% this week",
     trendUp: false,
   });
+  
 
   const token = localStorage.getItem("adminToken");
   React.useEffect(() => {
@@ -909,18 +912,14 @@ const App = ({ sessions, categories }) => {
       let response;
       let responseData;
 
-      for (let pair of formDataToSend.entries()) {
-  console.log(pair[0], pair[1]);
-}
+//       for (let pair of formDataToSend.entries()) {
+//   console.log(pair[0], pair[1]);
+// }
 
       if (isEditing) {
         // UPDATE existing product
         const productId = formDataToSend.get("id");
         console.log("Updating product with ID from FormData:", productId);
-        const updatePayload = {
-          ...formDataToSend,
-          id: productId
-        }
         response = await fetchWithTimeout(
           `https://api.dovinigears.ng/admin/product/update`,
           {
@@ -928,7 +927,7 @@ const App = ({ sessions, categories }) => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-            body: updatePayload,
+            body: formDataToSend,
           }
         );
 
@@ -970,10 +969,21 @@ const App = ({ sessions, categories }) => {
         responseData = await response.json();
         console.log(responseData);
         console.log("Product created successfully:", responseData);
-
-        // Add the new product to local state
-        if (responseData.success && responseData.data) {
-          setProducts([...products, responseData.data]);
+        const res = await fetch('https://api.dovinigears.ng/products', {
+          method: 'GET',
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        })
+        const data = await res.json()
+        const newProduct = data.data.find((product) => product.id === responseData.id)
+        if (responseData.success) {
+          setProducts([...products, newProduct]);
+          showSuccess(
+        isEditing
+          ? "Product updated successfully!"
+          : "Product created successfully!"
+      );
         }
       }
 
@@ -982,11 +992,7 @@ const App = ({ sessions, categories }) => {
       setActiveView("products");
 
       // Show success toast
-      showSuccess(
-        isEditing
-          ? "Product updated successfully!"
-          : "Product created successfully!"
-      );
+      
     } catch (error) {
       console.error("Error saving product:", error);
 
@@ -1036,6 +1042,8 @@ const App = ({ sessions, categories }) => {
         return <OrderList orders={orders} handleApprove={handleApproveOrder} />;
       case "customers":
         return <CustomerList customers={customers} />;
+      case "categories":
+        return <Categories categories={categories} products={products} />;
       case "productForm":
         return (
           <ProductForm
@@ -1047,7 +1055,6 @@ const App = ({ sessions, categories }) => {
         );
       case "dashboard":
       default: {
-        // Calculate metrics from real data
         const dashboardMetrics = calculateDashboardMetrics(
           products,
           orders,
@@ -1055,7 +1062,6 @@ const App = ({ sessions, categories }) => {
           customers
         );
 
-        // Comprehensive dashboard overview
         return (
           <div className="space-y-8">
             {/* Header */}
