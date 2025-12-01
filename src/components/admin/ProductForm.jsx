@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, UploadCloud, Save, Image } from "lucide-react";
 import { useToast } from "../../context/ToastContext";
 
@@ -27,11 +27,30 @@ const ProductForm = ({
   };
 
   const [formData, setFormData] = useState(() => {
+    // Always start with fresh initial data for new products
+    const baseData = {
+      name: "",
+      category: "",
+      price: "",
+      stock: "",
+      originalPrice: "",
+      discount: "",
+      images: [],
+      description: "",
+      isLimitedStock: false,
+      isFlashDeal: false,
+      reviews: 0,
+      rating: 0,
+      flashDealEnd: "",
+    };
+
+    // If editing, merge with editing product data
     if (editingProduct) {
       const categoryObj = categories.find(
         (c) => c.id === editingProduct.categoryId
       );
       return {
+        ...baseData,
         ...editingProduct,
         // Ensure proper data types for form inputs
         price: editingProduct.price?.toString() || "",
@@ -42,11 +61,53 @@ const ProductForm = ({
         rating: editingProduct.rating?.toString() || "0",
         isLimitedStock: Boolean(editingProduct.isLimitedStock),
         isFlashDeal: Boolean(editingProduct.isFlashDeal),
-        category: categoryObj.name,
+        category: categoryObj?.name || editingProduct.category || "",
       };
     }
-    return initialData;
+
+    // For new products, use fresh base data
+    return baseData;
   });
+
+  // Reset form data when editingProduct changes
+  useEffect(() => {
+    const baseData = {
+      name: "",
+      category: "",
+      price: "",
+      stock: "",
+      originalPrice: "",
+      discount: "",
+      images: [],
+      description: "",
+      isLimitedStock: false,
+      isFlashDeal: false,
+      reviews: 0,
+      rating: 0,
+      flashDealEnd: "",
+    };
+
+    if (editingProduct) {
+      const categoryObj = categories.find(
+        (c) => c.id === editingProduct.categoryId
+      );
+      setFormData({
+        ...baseData,
+        ...editingProduct,
+        price: editingProduct.price?.toString() || "",
+        originalPrice: editingProduct.originalPrice?.toString() || "",
+        discount: editingProduct.discount?.toString() || "",
+        stock: editingProduct.stock?.toString() || "",
+        reviews: editingProduct.reviews?.toString() || "0",
+        rating: editingProduct.rating?.toString() || "0",
+        isLimitedStock: Boolean(editingProduct.isLimitedStock),
+        isFlashDeal: Boolean(editingProduct.isFlashDeal),
+        category: categoryObj?.name || editingProduct.category || "",
+      });
+    } else {
+      setFormData(baseData);
+    }
+  }, [editingProduct, categories]);
   // Array to hold the selected file objects (for upload)
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -129,11 +190,10 @@ const ProductForm = ({
     );
 
     if (urlToRemove.startsWith("blob:")) {
-     
       setSelectedFiles((prev) =>
         prev.filter((_, index) => index !== indexToRemove)
       );
-      URL.revokeObjectURL(urlToRemove); 
+      URL.revokeObjectURL(urlToRemove);
     }
 
     setFormData((prev) => ({

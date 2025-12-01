@@ -1,13 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { X, Save } from "lucide-react";
+import {
+  X,
+  Save,
+  SunMedium,
+  Focus,
+  Cpu,
+  Lightbulb,
+  BatteryCharging,
+  Package,
+  Video,
+  Zap,
+} from "lucide-react";
 import { useToast } from "../../context/ToastContext";
 
 const CategoryForm = ({
   editingCategory,
-  handleSave,
   setActiveView,
   isModal,
   onClose,
+  setCategories,
 }) => {
   const { showSuccess, showError } = useToast();
   const isEditing = !!editingCategory;
@@ -40,36 +51,90 @@ const CategoryForm = ({
     }));
   };
 
+  const CATEGORY_IMAGES = [
+    "https://images.openai.com/thumbnails/url/WSbURnicu5meUVJSUGylr5-al1xUWVCSmqJbkpRnoJdeXJJYkpmsl5yfq5-Zm5ieWmxfaAuUsXL0S7F0Tw70cw1NrwoO8Y7MLAkrcNTNKAmszC1zS88xNbNIyc8Ny6kw9jLLTYuPd3VNVyu2NTQAAB6oJYw",
+
+    "https://images.unsplash.com/photo-1574281813181-02b512471486?fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=3000",
+    "https://burst.shopifycdn.com/photos/black-microphone-set-against-a-pink-background.jpg?exif=0&format=pjpg&iptc=0&width=1000",
+
+    "https://lumecube.com/cdn/shop/files/Studio_Panel_Lighting_Kit_UCSD-09339-1160x1500-64b44e5_1160x.jpg?v=1704215663",
+
+    "https://www.lighting-geek.com/wp-content/uploads/2023/05/14-3-1-e1689965711325.png",
+
+    "https://freestockfootagearchive.com/wp-content/uploads/2019/08/Glitchy-Shapes-Strobe-Light-Overlay-Effect.jpeg",
+
+    "https://i.fbcd.co/products/resized/resized-750-500/c-1000-designbundle-studio-lighting-isolated-on-black02-11-10-e852f1a4722511624c5d4d237891e5857f2abad0c0b13f9912f6708d40fc8dfd.jpg",
+    "https://www.ulanzi.com/cdn/shop/files/2_2x-2.png?v=1753167291",
+  ];
+
+  const CATEGORY_ICONS = [
+    SunMedium,
+    Focus,
+    Cpu,
+    Zap,
+    Lightbulb,
+    BatteryCharging,
+    Package,
+    Video,
+  ];
+
+  const getRandomImage = () => {
+    return CATEGORY_IMAGES[Math.floor(Math.random() * CATEGORY_IMAGES.length)];
+  };
+
+  const getRandomIcon = () => {
+    return CATEGORY_ICONS[Math.floor(Math.random() * CATEGORY_ICONS.length)];
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validate required fields
     if (!formData.name || !formData.description) {
       showError("Please fill in all required fields");
       return;
     }
 
     setIsSubmitting(true);
-
+    const token = localStorage.getItem("adminToken");
     try {
-      // Mock API call - replace with actual API integration
-      console.log("💾 Saving category to database...", {
-        ...formData,
-        id: editingCategory?.id || Date.now(), // Mock ID generation
-        createdAt: new Date().toISOString(),
-      });
-
-      // Simulate API delay
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Call the save function
-      await handleSave(
-        {
-          ...formData,
-          id: editingCategory?.id || Date.now(), // Mock ID generation
+      const url = isEditing
+        ? "https://api.dovinigears.ng/admin/category/update"
+        : "https://api.dovinigears.ng/admin/category/create";
+      const payload = isEditing
+        ? { id: editingCategory.id, ...formData }
+        : { ...formData };
+
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        isEditing
-      );
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`Update failed: ${res.status} - ${errorText}`);
+      }
+
+      const data = await res.json();
+      const newCategory = {
+        id: data.id,
+        name: data.name,
+        description: data.description,
+        image: getRandomImage(),
+        icon: getRandomIcon(),
+      };
+
+      if (!isEditing) {
+        setCategories((prev) => [...prev, newCategory]);
+      } else {
+        setCategories((prev) =>
+          prev.map((cat) => (cat.id === newCategory.id ? newCategory : cat))
+        );
+      }
 
       showSuccess(
         isEditing
@@ -107,7 +172,6 @@ const CategoryForm = ({
     "w-full p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-amber-500/50 focus:border-amber-500 transition duration-150";
   const labelClass = "block text-sm font-medium text-gray-700 mb-1";
 
-  // Full Page Layout (fallback)
   return (
     <div
       className={`fixed inset-0 bg-black/60 transition duration-300 bg-opacity-50 flex items-center justify-center z-50 p-4 ${

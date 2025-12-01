@@ -14,7 +14,7 @@ import {
 import CategoryForm from "./CategoryForm";
 
 
-const Categories = ({ handleDelete, categories ,products}) => {
+const Categories = ({ handleDelete, categories ,products,setCategories}) => {
   const [isModal, setIsModal] = useState()
   const [selectedCategory, setSelectedCategory] = useState(null)
 
@@ -131,7 +131,7 @@ const Categories = ({ handleDelete, categories ,products}) => {
          
         </div>
       </div>
-      <CategoryForm isModal={isModal} onClose={onClose} editingCategory={selectedCategory} />
+      <CategoryForm isModal={isModal} onClose={onClose} editingCategory={selectedCategory} setCategories={setCategories} />
     </div>
   );
 };

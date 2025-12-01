@@ -27,12 +27,12 @@ import ProductForm from "../../components/admin/ProductForm";
 import Categories from "../../components/admin/Categories";
 import { useToast } from "../../context/ToastContext";
 
-
 const getConversionRate = (orders, sessions) => {
   if (sessions === 0) return 0;
 
   return ((orders.length / sessions) * 100).toFixed(2);
 };
+
 
 const calculateDashboardMetrics = (products, orders, sessions, customers) => ({
   totalProducts: products.length,
@@ -573,7 +573,7 @@ const DollarSign = ({ className }) => (
   </svg>
 );
 
-const App = ({ sessions, categories }) => {
+const App = ({ sessions, categories,setCategories }) => {
   const { showSuccess, showError } = useToast();
   const [activeView, setActiveView] = useState("dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -591,7 +591,7 @@ const App = ({ sessions, categories }) => {
     trendText: "→ 0% vs last month",
     trendUp: false,
   });
-
+  console.log(orders)
   const [aovMetrics, setAovMetrics] = React.useState({
     aovThisMonth: 0,
     trendText: "→ 0% increase",
@@ -603,7 +603,6 @@ const App = ({ sessions, categories }) => {
     trendText: "→ 0% this week",
     trendUp: false,
   });
-  
 
   const token = localStorage.getItem("adminToken");
   React.useEffect(() => {
@@ -618,7 +617,6 @@ const App = ({ sessions, categories }) => {
           setCustomers(data.users);
           setLoading(false);
         }, 2000);
-        console.log(data);
       } catch (error) {
         console.log(error.message);
       }
@@ -884,46 +882,22 @@ const App = ({ sessions, categories }) => {
     setActiveView("productForm");
   };
 
-  // Helper function to create a fetch request with timeout
-  const fetchWithTimeout = async (url, options, timeoutMs = 15000) => {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-
-    try {
-      const response = await fetch(url, {
-        ...options,
-        signal: controller.signal,
-      });
-      clearTimeout(timeoutId);
-      return response;
-    } catch (error) {
-      clearTimeout(timeoutId);
-      if (error.name === "AbortError") {
-        throw new Error(
-          "Request timed out. Please check your internet connection and try again."
-        );
-      }
-      throw error;
-    }
-  };
-
   const handleSaveProduct = async (formDataToSend, isEditing) => {
     try {
       let response;
       let responseData;
 
-//       for (let pair of formDataToSend.entries()) {
-//   console.log(pair[0], pair[1]);
-// }
+            for (let pair of formDataToSend.entries()) {
+        console.log(pair[0], pair[1]);
+      }
 
       if (isEditing) {
-        // UPDATE existing product
         const productId = formDataToSend.get("id");
         console.log("Updating product with ID from FormData:", productId);
-        response = await fetchWithTimeout(
+        response = await fetch(
           `https://api.dovinigears.ng/admin/product/update`,
           {
-            method: "PUT",
+            method: "POST",
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -938,19 +912,40 @@ const App = ({ sessions, categories }) => {
 
         responseData = await response.json();
         console.log("Product updated successfully:", responseData);
-
-        // Update local state with the response data
-        if (responseData.success && responseData.data) {
-          setProducts(
-            products.map((p) =>
-              p.id === productId ? { ...p, ...responseData.data } : p
-            )
-          );
+        const updatedProduct = {
+          name: formDataToSend.get("name"),
+          categoryId: parseInt(formDataToSend.get("category_id")),
+          price: parseFloat(formDataToSend.get("price")),
+          originalPrice: parseFloat(formDataToSend.get("originalPrice")),
+          discount: parseFloat(formDataToSend.get("discount")),
+          stock: parseInt(formDataToSend.get("stock")),
+          reviews: 0,
+          rating: parseFloat(formDataToSend.get("rating")),
+          description: formDataToSend.get("description"),
+          isLimitedStock:
+            formDataToSend.get("isLimitedStock") === "true" ? true : false,
+          isFlashDeal:
+            formDataToSend.get("isFlashDeal") === "true" ? true : false,
+          images: []
+        }
+        
+        const foundIndex = products.findIndex((p) => {
+          return p.id === Number(productId);
+        });
+        setProducts((prev) => {
+          const newProducts = [...prev];
+          newProducts[foundIndex] = updatedProduct;
+          return newProducts;
+        });
+          
+        if (responseData.success) {
+          showSuccess('Product updated successfully')
+          
         }
       } else {
         // CREATE new product
         console.log("Creating new product");
-        response = await fetchWithTimeout(
+        response = await fetch(
           "https://api.dovinigears.ng/admin/product/create",
           {
             method: "POST",
@@ -967,23 +962,24 @@ const App = ({ sessions, categories }) => {
         }
 
         responseData = await response.json();
-        console.log(responseData);
         console.log("Product created successfully:", responseData);
-        const res = await fetch('https://api.dovinigears.ng/products', {
-          method: 'GET',
+        const res = await fetch("https://api.dovinigears.ng/products", {
+          method: "GET",
           headers: {
-            "Authorization": `Bearer ${token}`
-          }
-        })
-        const data = await res.json()
-        const newProduct = data.data.find((product) => product.id === responseData.id)
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await res.json();
+        const newProduct = data.data.find(
+          (product) => product.id === responseData.id
+        );
         if (responseData.success) {
-          setProducts([...products, newProduct]);
+          !isEditing && setProducts([...products, newProduct]);
           showSuccess(
-        isEditing
-          ? "Product updated successfully!"
-          : "Product created successfully!"
-      );
+            isEditing
+              ? "Product updated successfully!"
+              : "Product created successfully!"
+          );
         }
       }
 
@@ -992,7 +988,6 @@ const App = ({ sessions, categories }) => {
       setActiveView("products");
 
       // Show success toast
-      
     } catch (error) {
       console.error("Error saving product:", error);
 
@@ -1043,7 +1038,7 @@ const App = ({ sessions, categories }) => {
       case "customers":
         return <CustomerList customers={customers} />;
       case "categories":
-        return <Categories categories={categories} products={products} />;
+        return <Categories categories={categories} products={products} setCategories={ setCategories} />;
       case "productForm":
         return (
           <ProductForm
