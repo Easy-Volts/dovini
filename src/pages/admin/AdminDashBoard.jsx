@@ -1061,6 +1061,8 @@ const App = ({ sessions, categories,setCategories }) => {
     );
   };
 
+  const totalRevenue = orders.reduce((sum, order) => sum + (order.total || 0), 0)
+
   // --- View Renderer ---
 
   const renderContent = () => {
@@ -1099,34 +1101,7 @@ const App = ({ sessions, categories,setCategories }) => {
           customers
         );
 
-        // Show loading state if orders haven't been loaded yet
-        // if (!ordersLoaded) {
-        //   return (
-        //     <div className="space-y-8">
-        //       <div className="pb-4 border-b border-gray-200">
-        //         <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
-        //           Dashboard Overview
-        //         </h2>
-        //         <p className="text-gray-600 mt-1 sm:mt-2 text-sm sm:text-base">
-        //           Loading your dashboard data...
-        //         </p>
-        //       </div>
-        //       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        //         {[1, 2, 3, 4].map((i) => (
-        //           <div key={i} className="p-4 sm:p-6 rounded-2xl shadow-lg bg-gray-50 border border-gray-100 animate-pulse">
-        //             <div className="p-2 sm:p-3 rounded-full text-white w-min mb-3 sm:mb-4 bg-gray-300">
-        //               <div className="w-5 h-5 sm:w-6 sm:h-6"></div>
-        //             </div>
-        //             <p className="text-xs sm:text-sm font-medium text-gray-500">Loading...</p>
-        //             <p className="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-1">
-        //               <div className="h-8 bg-gray-300 rounded w-20"></div>
-        //             </p>
-        //           </div>
-        //         ))}
-        //       </div>
-        //     </div>
-        //   );
-        // }
+      
 
         return (
           <div className="space-y-8">
@@ -1230,7 +1205,7 @@ const App = ({ sessions, categories,setCategories }) => {
             </div>
 
             {/* Additional Analytics Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
               <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-xl border border-gray-100">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-base sm:text-lg font-semibold text-gray-800">
@@ -1254,6 +1229,28 @@ const App = ({ sessions, categories,setCategories }) => {
                   }`}
                 >
                   {aovMetrics.trendText}
+                </p>
+              </div>
+
+              <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-xl border border-gray-100">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-800">
+                    Total Revenue <span className="text-xs text-gray-600 font-medium">(All Time)</span>
+                  </h3>
+                  <DollarSign className="w-5 h-5 sm:w-6 sm:h-6 text-blue-500" />
+                </div>
+                <p className="text-2xl sm:text-3xl font-bold text-gray-900">
+                  {`${Number(totalRevenue).toLocaleString(
+                  "en-NG",
+                  {
+                    style: "currency",
+                    currency: "NGN",
+                    minimumFractionDigits: 2,
+                  }
+                )}`}
+                </p>
+                <p className="text-xs sm:text-sm text-blue-600 mt-2">
+                  ↗ 100%
                 </p>
               </div>
 
