@@ -82,7 +82,7 @@ const ConfirmationModal = ({ isOpen, title, message, onConfirm, onCancel }) => {
   );
 };
 
-// const ProductForm = ({
+
 //   editingProduct,
 //   handleSave,
 //   setActiveView,
@@ -605,6 +605,9 @@ const App = ({ sessions, categories,setCategories }) => {
   });
 
   const token = localStorage.getItem("adminToken");
+  
+  // Add state to track if orders have been loaded
+  const [ordersLoaded, setOrdersLoaded] = React.useState(false);
   React.useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -631,19 +634,32 @@ const App = ({ sessions, categories,setCategories }) => {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
-        setOrders(data.orders);
-        const metrics = calculateOrderTrend(data.orders);
+        console.log("🔍 Raw API response:", data);
+        console.log("📦 Orders data:", data.orders);
+        
+        // Debug: Check first few orders to see structure
+        if (data.orders && data.orders.length > 0) {
+          console.log("🧾 First order structure:", data.orders[0]);
+          console.log("💰 First order total:", data.orders[0]?.total);
+          console.log("📅 First order date:", data.orders[0]?.date);
+        }
+        
+        setOrders(data.orders || []);
+        setOrdersLoaded(true); // Mark orders as loaded
+        const metrics = calculateOrderTrend(data.orders || []);
         setOrderMetrics(metrics);
         const completedOrdersMetrics = calculateCompletedOrdersTrend(
-          data.orders
+          data.orders || []
         );
         setCompletedOrdersMetrics(completedOrdersMetrics);
-        const revenueMetrics = calculateRevenueTrend(data.orders);
+        const revenueMetrics = calculateRevenueTrend(data.orders || []);
         setRevenueMetrics(revenueMetrics);
-        const aovMetrics = calculateAOVTrend(data.orders);
+        const aovMetrics = calculateAOVTrend(data.orders || []);
         setAovMetrics(aovMetrics);
+        
+        console.log("💵 Calculated revenue metrics:", revenueMetrics);
       } catch (error) {
-        console.log(error.message);
+        console.log("❌ Error fetching orders:", error.message);
       }
     };
     fetchOrders();
@@ -712,26 +728,52 @@ const App = ({ sessions, categories,setCategories }) => {
 
   function calculateRevenueTrend(orders) {
     const now = new Date();
-    const parseDate = (dateStr) => new Date(dateStr.replace(" ", "T")); // reliable parsing
+    const parseDate = (dateStr) => {
+      if (!dateStr) return new Date(0); // Return epoch if no date
+      try {
+        return new Date(dateStr.replace(" ", "T")); // reliable parsing
+      } catch {
+        console.warn("Failed to parse date:", dateStr);
+        return new Date(0);
+      }
+    };
 
     // Define current month and last month
     const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0); // last day of previous month
 
+    console.log("📊 Calculating revenue trends...");
+    console.log("📅 This month starts:", startOfThisMonth);
+    console.log("📅 Last month range:", startOfLastMonth, "to", endOfLastMonth);
+    console.log("🛒 Processing", orders.length, "orders");
+
     // Sum revenue for this month
     const revenueThisMonth = orders
-      .filter((o) => parseDate(o.date) >= startOfThisMonth)
-      .reduce((sum, o) => sum + o.total, 0);
+      .filter((o) => {
+        const orderDate = parseDate(o.date);
+        const isThisMonth = orderDate >= startOfThisMonth;
+        if (o.date && !isThisMonth) {
+          console.log("📅 Order date excluded from this month:", o.date, orderDate);
+        }
+        return isThisMonth;
+      })
+      .reduce((sum, o) => {
+        const total = Number(o.total) || 0;
+        console.log("💰 Adding to this month revenue:", o.id, total);
+        return sum + total;
+      }, 0);
 
     // Sum revenue for last month
     const revenueLastMonth = orders
-      .filter(
-        (o) =>
-          parseDate(o.date) >= startOfLastMonth &&
-          parseDate(o.date) <= endOfLastMonth
-      )
-      .reduce((sum, o) => sum + o.total, 0);
+      .filter((o) => {
+        const orderDate = parseDate(o.date);
+        return orderDate >= startOfLastMonth && orderDate <= endOfLastMonth;
+      })
+      .reduce((sum, o) => sum + (Number(o.total) || 0), 0);
+
+    console.log("💵 This month revenue:", revenueThisMonth);
+    console.log("💵 Last month revenue:", revenueLastMonth);
 
     // Calculate trend
     let trendPercent = 0;
@@ -1057,6 +1099,35 @@ const App = ({ sessions, categories,setCategories }) => {
           customers
         );
 
+        // Show loading state if orders haven't been loaded yet
+        // if (!ordersLoaded) {
+        //   return (
+        //     <div className="space-y-8">
+        //       <div className="pb-4 border-b border-gray-200">
+        //         <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
+        //           Dashboard Overview
+        //         </h2>
+        //         <p className="text-gray-600 mt-1 sm:mt-2 text-sm sm:text-base">
+        //           Loading your dashboard data...
+        //         </p>
+        //       </div>
+        //       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        //         {[1, 2, 3, 4].map((i) => (
+        //           <div key={i} className="p-4 sm:p-6 rounded-2xl shadow-lg bg-gray-50 border border-gray-100 animate-pulse">
+        //             <div className="p-2 sm:p-3 rounded-full text-white w-min mb-3 sm:mb-4 bg-gray-300">
+        //               <div className="w-5 h-5 sm:w-6 sm:h-6"></div>
+        //             </div>
+        //             <p className="text-xs sm:text-sm font-medium text-gray-500">Loading...</p>
+        //             <p className="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-1">
+        //               <div className="h-8 bg-gray-300 rounded w-20"></div>
+        //             </p>
+        //           </div>
+        //         ))}
+        //       </div>
+        //     </div>
+        //   );
+        // }
+
         return (
           <div className="space-y-8">
             {/* Header */}
@@ -1106,7 +1177,7 @@ const App = ({ sessions, categories,setCategories }) => {
                 trendUp={true}
               />
               <DashboardCard
-                title="Total Revenue"
+                title="Monthly Revenue"
                 value={`${Number(revenueMetrics.monthlyRevenue).toLocaleString(
                   "en-NG",
                   {
@@ -1339,7 +1410,7 @@ const App = ({ sessions, categories,setCategories }) => {
     }
   };
 
-  if (loading) {
+  if (loading && !ordersLoaded) {
     return <AdminLoadingSPinner />;
   }
 
