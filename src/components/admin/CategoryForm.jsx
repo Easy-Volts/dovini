@@ -77,7 +77,6 @@ const CategoryForm = ({
           : "Category created successfully!"
       );
 
-      // Reset form and close
       setFormData({
         name: "",
         description: "",

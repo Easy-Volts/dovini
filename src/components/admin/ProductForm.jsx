@@ -84,12 +84,10 @@ const ProductForm = ({
     const newFiles = Array.from(e.target.files);
 
     if (newFiles.length > 0) {
-      // Calculate current total size and new files size
       const currentTotalSize = getTotalFileSize(selectedFiles);
       const newFilesSize = getTotalFileSize(newFiles);
       const wouldBeTotalSize = currentTotalSize + newFilesSize;
 
-      // 4MB limit = 4 * 1024 * 1024 bytes
       const maxSize = 4 * 1024 * 1024; // 4MB in bytes
 
       if (wouldBeTotalSize > maxSize) {
@@ -100,53 +98,42 @@ const ProductForm = ({
             `Current total: ${formatBytes(currentTotalSize)}. ` +
             `Please remove some images first or select smaller files.`
         );
-        // Clear file input value
         e.target.value = null;
         return;
       }
 
-      // 1. Create local URLs for new files
       const newPreviewUrls = newFiles.map((file) => URL.createObjectURL(file));
 
-      // 2. Add new files to the selection array
       setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
 
-      // 3. Add new URLs to the preview array
       setPreviewImages((prevUrls) => [...prevUrls, ...newPreviewUrls]);
 
-      // 4. Update formData's images array with the consolidated URL list
       setFormData((prev) => ({
         ...prev,
         images: [...prev.images, ...newPreviewUrls],
       }));
 
-      // Show success message with size info
       showSuccess(
         `Added ${newFiles.length} image(s) (${formatBytes(newFilesSize)}). ` +
           `Total size: ${formatBytes(wouldBeTotalSize)} / 4MB`
       );
     }
-    // Clear file input value to allow selecting the same file again
     e.target.value = null;
   };
 
   const handleRemoveImage = (indexToRemove) => {
     const urlToRemove = previewImages[indexToRemove];
 
-    // 1. Remove the image URL from the preview array
     setPreviewImages((prev) =>
       prev.filter((_, index) => index !== indexToRemove)
     );
 
-    // 2. Determine if the removed URL was a local object URL (blob:)
     if (urlToRemove.startsWith("blob:")) {
-      // If it was a local URL, find and remove the corresponding file object
-      // This is a simple index removal, which works because files and previews
-      // are added sequentially and maintained in parallel arrays.
+     
       setSelectedFiles((prev) =>
         prev.filter((_, index) => index !== indexToRemove)
       );
-      URL.revokeObjectURL(urlToRemove); // Clean up the temporary URL
+      URL.revokeObjectURL(urlToRemove); 
     }
 
     setFormData((prev) => ({
@@ -175,7 +162,6 @@ const ProductForm = ({
       // Prepare FormData instead of JSON
       const formDataToSend = new FormData();
 
-      // Add all product data fields
       formDataToSend.append("name", formData.name);
 
       const categoryObj = categories.find(
@@ -197,7 +183,6 @@ const ProductForm = ({
         formDataToSend.append("flashDealEnd", formData.flashDealEnd);
       }
 
-      // Add images with "file" key name as requested
       selectedFiles.forEach((file) => {
         formDataToSend.append("image", file);
       });
@@ -214,12 +199,6 @@ const ProductForm = ({
       // Reset form state after successful save
       setSelectedFiles([]);
       setPreviewImages([]);
-
-      // showSuccess(
-      //   isEditing
-      //     ? "Product updated successfully!"
-      //     : "Product created successfully!"
-      // );
     } catch (error) {
       console.error("❌ Error submitting form:", error);
       showError(`Failed to save product: ${error.message}`);
