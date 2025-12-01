@@ -64,109 +64,150 @@ const ProductList = ({
     const matchedCategory = categories.find((c) => c.id === product.categoryId);
 
     return (
-      <div className="bg-white rounded-xl shadow-lg p-4 mb-4 border border-gray-100">
-        <div className="flex items-start space-x-3 mb-3">
-          <img
-            src={
-              product.images && product.images.length > 0
-                ? product.images[0]
-                : product.image ||
-                  "https://placehold.co/60x60/94A3B8/white?text=P"
-            }
-            alt={product.name}
-            className="w-15 h-15 object-cover rounded-lg"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "https://placehold.co/60x60/94A3B8/white?text=P";
-            }}
-          />
-          <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-gray-900 truncate">
-              {product.name}
-            </h3>
-            <p className="text-sm text-gray-500 line-clamp-2 mt-1">
-              {product.description}
-            </p>
-            <div className="mt-2">
-              <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
-                {matchedCategory?.name}
-              </span>
+      <div className="bg-white rounded-xl shadow-lg border border-gray-200 mb-4 overflow-hidden">
+        {/* Header Section */}
+        <div className="p-4 pb-3">
+          <div className="flex items-start space-x-3">
+            <img
+              src={
+                product.images && product.images.length > 0
+                  ? product.images[0]
+                  : product.image ||
+                    "https://placehold.co/72x72/94A3B8/white?text=P"
+              }
+              alt={product.name}
+              className="w-18 h-18 object-cover rounded-lg shadow-sm"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src =
+                  "https://placehold.co/72x72/94A3B8/white?text=P";
+              }}
+            />
+            <div className="flex-1 min-w-0">
+              <div className="flex items-start justify-between">
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-gray-900 text-base leading-tight truncate pr-2">
+                    {product.name}
+                  </h3>
+                  <p className="text-sm text-gray-500 line-clamp-2 mt-1 leading-relaxed">
+                    {product.description}
+                  </p>
+                </div>
+                <span className="bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap ml-2">
+                  {matchedCategory?.name}
+                </span>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 mb-4 text-sm">
-          <div>
-            <span className="text-gray-500 block">Price</span>
-            <span className="font-semibold text-gray-900">
-              ₦{product.price?.toFixed(2)}
-            </span>
-            {product.originalPrice && (
-              <div className="text-xs text-gray-500">
-                <del>${product.originalPrice?.toFixed(2)}</del>
-                {product.discount && ` (${product.discount}% off)`}
-              </div>
-            )}
-          </div>
-
-          <div>
-            <span className="text-gray-500 block">Stock</span>
-            <span className={`font-medium ${getStockColor(product.stock)}`}>
-              {product.stock} units
-            </span>
-          </div>
-
-          <div>
-            <span className="text-gray-500 block">Rating</span>
-            <div className="flex items-center space-x-1">
-              <div className="flex items-center">
-                {renderStars(product.rating)}
-              </div>
-              <span className="text-xs text-gray-600">
-                ({product.reviews || 0})
-              </span>
-            </div>
-          </div>
-
-          <div>
-            <span className="text-gray-500 block">Status</span>
-            <div className="space-y-1">
-              <span
-                className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                  product.isLimitedStock
-                    ? "bg-red-100 text-red-800"
-                    : "bg-green-100 text-green-800"
-                }`}
-              >
-                {product.isLimitedStock ? "Limited" : "Normal"}
-              </span>
-              {product.isFlashDeal && (
-                <span className="text-red-600 font-semibold text-xs flex items-center">
-                  <Zap className="w-3 h-3 mr-1" />
-                  Flash Deal
+        {/* Pricing Section */}
+        <div className="px-4 pb-3">
+          <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-3 border border-green-100">
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-xs font-medium text-gray-600 uppercase tracking-wide">
+                  Current Price
                 </span>
+                <div className="text-xl font-bold text-gray-900">
+                  ₦{product.price?.toFixed(2)}
+                </div>
+              </div>
+              {product.originalPrice && (
+                <div className="text-right">
+                  <span className="text-xs font-medium text-gray-600 uppercase tracking-wide">
+                    Was
+                  </span>
+                  <div className="text-sm text-gray-500 line-through">
+                    ${product.originalPrice?.toFixed(2)}
+                  </div>
+                  {product.discount && (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 mt-1">
+                      {product.discount}% OFF
+                    </span>
+                  )}
+                </div>
               )}
             </div>
           </div>
         </div>
 
-        <div className="flex space-x-2">
-          <button
-            onClick={() => startEdit(product)}
-            className="flex-1 flex items-center justify-center px-3 py-2 text-sm font-medium text-orange-600 bg-orange-50 rounded-lg hover:bg-orange-100 transition"
-            title="Modify Product"
-          >
-            <Edit2 className="w-4 h-4 mr-1" />
-            Edit
-          </button>
-          <button
-            onClick={() => handleDelete(product.id)}
-            className="flex-1 flex items-center justify-center px-3 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition"
-            title="Delete Product"
-          >
-            <Trash2 className="w-4 h-4 mr-1" />
-            Delete
-          </button>
+        {/* Details Grid */}
+        <div className="px-4 pb-3">
+          <div className="grid grid-cols-2 gap-3">
+            {/* Stock Status */}
+            <div className="bg-gray-50 rounded-lg p-3">
+              <span className="text-xs font-medium text-gray-600 uppercase tracking-wide block mb-1">
+                Stock Level
+              </span>
+              <span className={`text-sm font-semibold ${getStockColor(product.stock)}`}>
+                {product.stock} units
+              </span>
+            </div>
+
+            {/* Rating */}
+            <div className="bg-gray-50 rounded-lg p-3">
+              <span className="text-xs font-medium text-gray-600 uppercase tracking-wide block mb-1">
+                Rating
+              </span>
+              <div className="flex items-center space-x-1.5">
+                <div className="flex items-center">
+                  {renderStars(product.rating)}
+                </div>
+                <span className="text-sm font-medium text-gray-700">
+                  ({product.reviews || 0})
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Status Indicators */}
+        <div className="px-4 pb-3">
+          <div className="flex items-center space-x-2">
+            <span
+              className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold ${
+                product.isLimitedStock
+                  ? "bg-red-100 text-red-800"
+                  : "bg-green-100 text-green-800"
+              }`}
+            >
+              <div
+                className={`w-2 h-2 rounded-full mr-2 ${
+                  product.isLimitedStock ? "bg-red-400" : "bg-green-400"
+                }`}
+              />
+              {product.isLimitedStock ? "Limited Stock" : "In Stock"}
+            </span>
+            {product.isFlashDeal && (
+              <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-orange-100 text-orange-800">
+                <Zap className="w-3 h-3 mr-1.5" />
+                Flash Deal
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="px-4 pb-4">
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              onClick={() => startEdit(product)}
+              className="flex items-center justify-center px-4 py-3 text-sm font-semibold text-orange-700 bg-orange-50 border border-orange-200 rounded-lg hover:bg-orange-100 hover:border-orange-300 transition-colors"
+              title="Modify Product"
+            >
+              <Edit2 className="w-4 h-4 mr-2" />
+              Edit Product
+            </button>
+            <button
+              onClick={() => handleDelete(product.id)}
+              className="flex items-center justify-center px-4 py-3 text-sm font-semibold text-red-700 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 hover:border-red-300 transition-colors"
+              title="Delete Product"
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              Delete
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -242,7 +283,7 @@ const ProductList = ({
               aria-label="Pagination"
             >
               <button
-                onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                onClick={() => (handlePageChange(Math.max(1, currentPage - 1)), mobileRef.current.scrollIntoView({ behavior: "smooth" }))}
                 disabled={currentPage === 1}
                 className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -253,7 +294,7 @@ const ProductList = ({
                 <button
                   key={index}
                   onClick={() =>
-                    typeof page === "number" && handlePageChange(page)
+                  (typeof page === "number" && (handlePageChange(page), mobileRef.current.scrollIntoView({ behavior: "smooth" })))
                   }
                   disabled={page === "..."}
                   className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${
@@ -269,7 +310,7 @@ const ProductList = ({
               ))}
               <button
                 onClick={() =>
-                  handlePageChange(Math.min(totalPages, currentPage + 1))
+                (handlePageChange(Math.min(totalPages, currentPage + 1)), mobileRef.current.scrollIntoView({ behavior: "smooth" }))
                 }
                 disabled={currentPage === totalPages}
                 className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed"
