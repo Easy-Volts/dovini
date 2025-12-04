@@ -15,7 +15,7 @@ import Profile from "./pages/Profile";
 import AccountSettingsPage from "./pages/AccountSettingsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ShowReactivation from "./components/ShowReactivation";
-import AdminDashBoard from "./pages/admin/AdminDashBoard";
+// import AdminDashBoard from "./pages/admin/AdminDashBoard";
 import AdminLogin from "./pages/admin/AdminLogin";
 import Privacy from "./pages/Privacy";
 import { ProductProvider } from "./context/ProductContext";
@@ -230,14 +230,14 @@ const getRandomIcon = () => {
                           />
                           <Route path="/login" element={<Login />} />
                           <Route path="/signup" element={<Signup />} />
-                          <Route
+                          {/* <Route
                             path="/app/admin/dashboard"
                             element={
                               <ProtectedAdmin>
                                 <AdminDashBoard sessions={sessions} categories={categories} setCategories={setCategories} />
                               </ProtectedAdmin>
                             }
-                          />
+                          /> */}
                           <Route path="/app/admin/login" element={<AdminLogin />} />
                           <Route
                             path="/my-account"
