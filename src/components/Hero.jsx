@@ -178,7 +178,7 @@ const Hero = ({categories}) => {
                 Shop Categories
               </h2>
               <ul className="space-y-1">
-                {categories.map((category) => (
+                {categories.slice(0, 8).reverse().map((category) => (
                   <Link
                     to={`/products?cat=${category.id}`}
                     key={category.id}
