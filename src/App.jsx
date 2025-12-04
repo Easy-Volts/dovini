@@ -16,6 +16,11 @@ import AccountSettingsPage from "./pages/AccountSettingsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ShowReactivation from "./components/ShowReactivation";
 // import AdminDashBoard from "./pages/admin/AdminDashBoard";
+<<<<<<< HEAD
+=======
+import AdminDashBoard from "./pages/admin/AdminDashBoard.jsx";
+
+>>>>>>> f279c2bf5aa72ec1469dc10a7a8db132aabeb3be
 import AdminLogin from "./pages/admin/AdminLogin";
 import Privacy from "./pages/Privacy";
 import { ProductProvider } from "./context/ProductContext";
