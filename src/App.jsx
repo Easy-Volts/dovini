@@ -15,7 +15,9 @@ import Profile from "./pages/Profile";
 import AccountSettingsPage from "./pages/AccountSettingsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ShowReactivation from "./components/ShowReactivation";
-import AdminDashBoard from "./pages/admin/AdminDashBoard";
+// import AdminDashBoard from "./pages/admin/AdminDashBoard";
+import AdminDashBoard from "./pages/admin/AdminDashBoard.jsx";
+
 import AdminLogin from "./pages/admin/AdminLogin";
 import Privacy from "./pages/Privacy";
 import { ProductProvider } from "./context/ProductContext";
