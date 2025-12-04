@@ -39,7 +39,7 @@ const Header = () => {
   const { wishlistCount } = useWishlist();
   const { user, logout, isLoading } = useAuth();
   const navigate = useNavigate();
-  const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+  const cartCount = cart!=null ?cart.reduce((total, item) => total + item.quantity, 0):0;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
