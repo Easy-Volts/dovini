@@ -15,12 +15,7 @@ import Profile from "./pages/Profile";
 import AccountSettingsPage from "./pages/AccountSettingsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ShowReactivation from "./components/ShowReactivation";
-// import AdminDashBoard from "./pages/admin/AdminDashBoard";
-<<<<<<< HEAD
-=======
 import AdminDashBoard from "./pages/admin/AdminDashBoard.jsx";
-
->>>>>>> f279c2bf5aa72ec1469dc10a7a8db132aabeb3be
 import AdminLogin from "./pages/admin/AdminLogin";
 import Privacy from "./pages/Privacy";
 import { ProductProvider } from "./context/ProductContext";
@@ -55,19 +50,22 @@ import {
 } from "lucide-react";
 import { useLocation } from "react-router-dom";
 
-
 const App = () => {
   const [categories, setCategories] = useState([]);
   const [showReactivationModal, setShowReactivationModal] = useState(false);
   const location = useLocation();
-  const hideHeaderOn = ["/my-account", "/myaccount/settings", "/app/admin/login", "/app/admin/dashboard"];
+  const hideHeaderOn = [
+    "/my-account",
+    "/myaccount/settings",
+    "/app/admin/login",
+    "/app/admin/dashboard",
+  ];
   const shouldShowHeader = !hideHeaderOn.includes(location.pathname);
   const hideFooterOn = ["/app/admin/login", "/app/admin/dashboard"];
   const shouldShowFooter = !hideFooterOn.includes(location.pathname);
   const [sessions, setSessions] = useState(0);
 
-  
-   const trackSession = () => {
+  const trackSession = () => {
     const today = new Date().toDateString();
     const lastSession = localStorage.getItem("lastSessionDate");
 
@@ -92,40 +90,39 @@ const App = () => {
 
   const CATEGORY_IMAGES = [
     "https://images.openai.com/thumbnails/url/WSbURnicu5meUVJSUGylr5-al1xUWVCSmqJbkpRnoJdeXJJYkpmsl5yfq5-Zm5ieWmxfaAuUsXL0S7F0Tw70cw1NrwoO8Y7MLAkrcNTNKAmszC1zS88xNbNIyc8Ny6kw9jLLTYuPd3VNVyu2NTQAAB6oJYw",
-    
-  "https://images.unsplash.com/photo-1574281813181-02b512471486?fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=3000",
+
+    "https://images.unsplash.com/photo-1574281813181-02b512471486?fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=3000",
     "https://burst.shopifycdn.com/photos/black-microphone-set-against-a-pink-background.jpg?exif=0&format=pjpg&iptc=0&width=1000",
-  
+
     "https://lumecube.com/cdn/shop/files/Studio_Panel_Lighting_Kit_UCSD-09339-1160x1500-64b44e5_1160x.jpg?v=1704215663",
-  
+
     "https://www.lighting-geek.com/wp-content/uploads/2023/05/14-3-1-e1689965711325.png",
-  
+
     "https://freestockfootagearchive.com/wp-content/uploads/2019/08/Glitchy-Shapes-Strobe-Light-Overlay-Effect.jpeg",
-  
+
     "https://i.fbcd.co/products/resized/resized-750-500/c-1000-designbundle-studio-lighting-isolated-on-black02-11-10-e852f1a4722511624c5d4d237891e5857f2abad0c0b13f9912f6708d40fc8dfd.jpg",
-  "https://www.ulanzi.com/cdn/shop/files/2_2x-2.png?v=1753167291"
+    "https://www.ulanzi.com/cdn/shop/files/2_2x-2.png?v=1753167291",
   ];
-  
+
   const CATEGORY_ICONS = [
-  SunMedium,
-  Focus,
-  Cpu,
-  Zap,
-  Lightbulb,
-  BatteryCharging,
-  Package,
-  Video,
+    SunMedium,
+    Focus,
+    Cpu,
+    Zap,
+    Lightbulb,
+    BatteryCharging,
+    Package,
+    Video,
   ];
-  
+
   const getRandomImage = () => {
-  return CATEGORY_IMAGES[Math.floor(Math.random() * CATEGORY_IMAGES.length)];
-};
+    return CATEGORY_IMAGES[Math.floor(Math.random() * CATEGORY_IMAGES.length)];
+  };
 
-const getRandomIcon = () => {
-  return CATEGORY_ICONS[Math.floor(Math.random() * CATEGORY_ICONS.length)];
-};
+  const getRandomIcon = () => {
+    return CATEGORY_ICONS[Math.floor(Math.random() * CATEGORY_ICONS.length)];
+  };
 
-   
   const extraCategoryData = {
     1: {
       image:
@@ -168,32 +165,30 @@ const getRandomIcon = () => {
     },
   };
 
- useEffect(() => {
-  const fetchCategories = async () => {
-    try {
-      const res = await fetch("https://api.dovinigears.ng/categories");
-      if (!res.ok) throw new Error("Failed to fetch categories");
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("https://api.dovinigears.ng/categories");
+        if (!res.ok) throw new Error("Failed to fetch categories");
 
-      const data = await res.json();
+        const data = await res.json();
 
-      const mergedCategories = data.data.map((cat) => {
-        return {
-          ...cat,
-          image: extraCategoryData[cat.id]?.image || getRandomImage(),
-          icon: extraCategoryData[cat.id]?.icon || getRandomIcon(),
-        };
-      });
+        const mergedCategories = data.data.map((cat) => {
+          return {
+            ...cat,
+            image: extraCategoryData[cat.id]?.image || getRandomImage(),
+            icon: extraCategoryData[cat.id]?.icon || getRandomIcon(),
+          };
+        });
 
-      setCategories(mergedCategories);
+        setCategories(mergedCategories);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
 
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  fetchCategories();
-}, []);
-
+    fetchCategories();
+  }, []);
 
   return (
     <AuthProvider>
@@ -204,100 +199,109 @@ const getRandomIcon = () => {
               <CartProvider>
                 <ProductProvider>
                   <OrdersProvider>
-                  <AdminProvider>
-                    <div className="min-h-screen flex flex-col">
-                      {shouldShowHeader && <Header />}
-                      <ShowReactivation
-                        showReactivationModal={showReactivationModal}
-                        setShowReactivationModal={setShowReactivationModal}
-                      />
-                      <main className="flex-grow lg:pb-0">
-                        <Routes>
-                          <Route
-                            path="/"
-                            element={<Home categories={categories} />}
-                          />
-                          <Route path="/category/:id" element={<Category />} />
-                          <Route path="/products" element={<Products />} />
-                          <Route
-                            path="/product/:id"
-                            element={<ProductDetails />}
-                          />
-                          <Route path="/wishlist" element={<Wishlist />} />
-                          <Route path="/cart" element={<Cart />} />
-                          <Route
-                            path="/checkout"
-                            element={
-                              <ProtectedRoute>
-                                <Checkout />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route path="/login" element={<Login />} />
-                          <Route path="/signup" element={<Signup />} />
-                          {/* <Route
+                    <AdminProvider>
+                      <div className="min-h-screen flex flex-col">
+                        {shouldShowHeader && <Header />}
+                        <ShowReactivation
+                          showReactivationModal={showReactivationModal}
+                          setShowReactivationModal={setShowReactivationModal}
+                        />
+                        <main className="flex-grow lg:pb-0">
+                          <Routes>
+                            <Route
+                              path="/"
+                              element={<Home categories={categories} />}
+                            />
+                            <Route
+                              path="/category/:id"
+                              element={<Category />}
+                            />
+                            <Route path="/products" element={<Products />} />
+                            <Route
+                              path="/product/:id"
+                              element={<ProductDetails />}
+                            />
+                            <Route path="/wishlist" element={<Wishlist />} />
+                            <Route path="/cart" element={<Cart />} />
+                            <Route
+                              path="/checkout"
+                              element={
+                                <ProtectedRoute>
+                                  <Checkout />
+                                </ProtectedRoute>
+                              }
+                            />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/signup" element={<Signup />} />
+                            <Route
                             path="/app/admin/dashboard"
                             element={
                               <ProtectedAdmin>
                                 <AdminDashBoard sessions={sessions} categories={categories} setCategories={setCategories} />
                               </ProtectedAdmin>
                             }
-                          /> */}
-                          <Route path="/app/admin/login" element={<AdminLogin />} />
-                          <Route
-                            path="/my-account"
-                            element={
-                              <ProtectedRoute>
-                                <Profile />
-                              </ProtectedRoute>
-                            }
                           />
-                          <Route
-                            path="/myaccount/settings"
-                            element={
-                              <ProtectedRoute>
-                                <AccountSettingsPage
-                                  setShowReactivationModal={
-                                    setShowReactivationModal
-                                  }
-                                />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/forgot-password"
-                            element={<ForgotPassword />}
-                          />
-                          
-                          <Route
-                            path="/privacy-policies"
-                            element={<Privacy />}
-                          />
-                          <Route path="/terms" element={<Terms />} />
-                          <Route
-                            path="/account-activation"
-                            element={<AccountActivation />}
-                          />
-                          <Route
-                            path="/orders"
-                            element={
-                              <ProtectedRoute>
-                                <Orders />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route path="/flash-deals" element={<FlashDeals />} />
-                          <Route path="/about" element={<About />} />
-                          <Route path="/contact" element={<Contact />} />
-                          <Route path="*" element={<NotFound />} />
-                        </Routes>
-                      </main>
-                      {shouldShowFooter && <Footer />}
+                            <Route
+                              path="/app/admin/login"
+                              element={<AdminLogin />}
+                            />
+                            <Route
+                              path="/my-account"
+                              element={
+                                <ProtectedRoute>
+                                  <Profile />
+                                </ProtectedRoute>
+                              }
+                            />
+                            <Route
+                              path="/myaccount/settings"
+                              element={
+                                <ProtectedRoute>
+                                  <AccountSettingsPage
+                                    setShowReactivationModal={
+                                      setShowReactivationModal
+                                    }
+                                  />
+                                </ProtectedRoute>
+                              }
+                            />
+                            <Route
+                              path="/forgot-password"
+                              element={<ForgotPassword />}
+                            />
 
-                      <CookieConsent />
-                      <ScrollToTop />
+                            <Route
+                              path="/privacy-policies"
+                              element={<Privacy />}
+                            />
+                            <Route path="/terms" element={<Terms />} />
+                            <Route
+                              path="/account-activation"
+                              element={<AccountActivation />}
+                            />
+                            <Route
+                              path="/orders"
+                              element={
+                                <ProtectedRoute>
+                                  <Orders />
+                                </ProtectedRoute>
+                              }
+                            />
+                            <Route
+                              path="/flash-deals"
+                              element={<FlashDeals />}
+                            />
+                            <Route path="/about" element={<About />} />
+                            <Route path="/contact" element={<Contact />} />
+                            <Route path="*" element={<NotFound />} />
+                          </Routes>
+                        </main>
+                        {shouldShowFooter && <Footer />}
+
+                        <CookieConsent />
+                        <ScrollToTop />
                       </div>
-                      </AdminProvider>
+                    </AdminProvider>
                   </OrdersProvider>
                 </ProductProvider>
               </CartProvider>

@@ -573,7 +573,7 @@ const DollarSign = ({ className }) => (
   </svg>
 );
 
-const App = ({ sessions, categories,setCategories }) => {
+const AdminDashBoard = ({ sessions, categories,setCategories }) => {
   const { showSuccess, showError } = useToast();
   const [activeView, setActiveView] = useState("dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -1478,4 +1478,4 @@ const App = ({ sessions, categories,setCategories }) => {
   );
 };
 
-export default App;
+export default AdminDashBoard;
