@@ -235,10 +235,10 @@ const getRandomIcon = () => {
                             element={
                               <ProtectedAdmin>
                                 <AdminDashBoard sessions={sessions} categories={categories} setCategories={setCategories} />
-                             </ProtectedAdmin>
+                              </ProtectedAdmin>
                             }
-                            />
-                            <Route path='/app/admin/login' element={<AdminLogin/>} />
+                          />
+                          <Route path="/app/admin/login" element={<AdminLogin />} />
                           <Route
                             path="/my-account"
                             element={

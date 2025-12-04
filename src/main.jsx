@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
 import { CartProvider } from './context/CartContext.jsx'
+import ErrorBoundary from './components/ErrorBoundary.jsx'
 
 // Register service worker for caching
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
@@ -34,7 +35,9 @@ root.render(
   <StrictMode>
     <BrowserRouter>
       <CartProvider>
-        <App />
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
       </CartProvider>
     </BrowserRouter>
   </StrictMode>
