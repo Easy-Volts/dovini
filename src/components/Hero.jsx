@@ -20,7 +20,6 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-
 const slides = [
   {
     title: "CAPTURE THE MOMENT",
@@ -70,34 +69,34 @@ const promoTiles = [
   {
     title: "Gear Deals",
     subtitle: "Flash Savings",
-    backgroundImage: "https://images.unsplash.com/photo-1512025316832-8658f04f8a83?q=80&w=871&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    backgroundImage:
+      "https://images.unsplash.com/photo-1512025316832-8658f04f8a83?q=80&w=871&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     overlayColor: "rgba(239, 68, 68, 0.8)", // red-500 with opacity
     textColor: "text-white",
-    
   },
   {
     title: "Clearance",
     subtitle: "Up to 70% Off",
-    backgroundImage: "https://images.unsplash.com/photo-1552168324-d612d77725e3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
+    backgroundImage:
+      "https://images.unsplash.com/photo-1552168324-d612d77725e3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
     overlayColor: "rgba(107, 114, 128, 0.6)", // gray-500 with opacity
     textColor: "text-white",
-  
   },
   {
     title: "Dovini Pro",
     subtitle: "Exclusive Service",
-    backgroundImage: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
+    backgroundImage:
+      "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
     overlayColor: "rgba(0, 0, 0, 0.7)", // black with opacity
     textColor: "text-white",
-  
   },
   {
     title: "Videography Gear Setup",
     subtitle: "Quick Offer",
-    backgroundImage: "https://barkingsquirrelmedia.com/wp-content/uploads/2023/04/kushagra-kevat-9ESAufvpgjI-unsplash.jpg",
+    backgroundImage:
+      "https://barkingsquirrelmedia.com/wp-content/uploads/2023/04/kushagra-kevat-9ESAufvpgjI-unsplash.jpg",
     overlayColor: "rgba(234, 179, 8, 0.7)", // yellow-500 with opacity
     textColor: "text-white",
-
   },
   {
     title: "Trade-Up Bonus",
@@ -105,7 +104,6 @@ const promoTiles = [
     backgroundImage: "https://i.ibb.co/BHJDHcDp/9.jpg",
     overlayColor: "rgba(34, 197, 94, 0.7)", // green-500 with opacity
     textColor: "text-white",
-
   },
   {
     title: "New Arrivals",
@@ -113,22 +111,22 @@ const promoTiles = [
     backgroundImage: "https://i.ibb.co/rGt66zm5/10.jpg",
     overlayColor: "rgba(99, 102, 241, 0.7)", // indigo-500 with opacity
     textColor: "text-white",
-
   },
   {
-  title: "Camera Accessories",
-  subtitle: "Lenses, Tripods & More",
-  backgroundImage: "https://cdn.mos.cms.futurecdn.net/91b9e1fed3cc797650b42eefd0df94e5.jpg", 
-  overlayColor: "rgba(249, 115, 22, 0.7)", // orange-500 with opacity
-  textColor: "text-white",
-},
+    title: "Camera Accessories",
+    subtitle: "Lenses, Tripods & More",
+    backgroundImage:
+      "https://cdn.mos.cms.futurecdn.net/91b9e1fed3cc797650b42eefd0df94e5.jpg",
+    overlayColor: "rgba(249, 115, 22, 0.7)", // orange-500 with opacity
+    textColor: "text-white",
+  },
   {
     title: "Support",
     subtitle: "24/7 Experts",
-    backgroundImage: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
+    backgroundImage:
+      "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
     overlayColor: "rgba(236, 72, 153, 0.7)", // pink-500 with opacity
     textColor: "text-white",
-    
   },
 ];
 
@@ -143,15 +141,14 @@ const InfoButton = ({ title, description, Icon }) => (
   </div>
 );
 
-
-const Hero = ({categories}) => {
+const Hero = ({ categories }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const totalSlides = 3; 
+  const totalSlides = 3;
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setCurrentSlide((prevIndex) => (prevIndex + 1) % totalSlides);
-    }, 5000); 
+    }, 5000);
     return () => clearTimeout(timer);
   }, [currentSlide, totalSlides]);
 
@@ -160,7 +157,7 @@ const Hero = ({categories}) => {
   const scrollContainer = (direction) => {
     const container = document.getElementById("promo-scroll-container");
     if (container) {
-      const scrollAmount = container.clientWidth * 0.8; 
+      const scrollAmount = container.clientWidth * 0.8;
       container.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
@@ -178,16 +175,27 @@ const Hero = ({categories}) => {
                 Shop Categories
               </h2>
               <ul className="space-y-1">
-                {categories.slice(0, 8).reverse().map((category) => (
-                  <Link
-                    to={`/products?cat=${category.id}`}
-                    key={category.id}
-                    className="flex items-center text-sm text-gray-700 p-2 rounded-lg transition duration-150 hover:bg-red-50 hover:text-red-600 cursor-pointer"
-                  >
-                    <category.icon className="w-4 h-4 mr-3 opacity-70" />
-                    {category.name}
-                  </Link>
-                ))}
+                {categories
+                  .slice(0, 8)
+                  .reverse()
+                  .map((category) => {
+                    // Safe icon rendering with fallback
+                    const IconComponent = category.icon;
+                    return (
+                      <Link
+                        to={`/products?cat=${category.id}`}
+                        key={category.id}
+                        className="flex items-center text-sm text-gray-700 p-2 rounded-lg transition duration-150 hover:bg-red-50 hover:text-red-600 cursor-pointer"
+                      >
+                        {IconComponent ? (
+                          <IconComponent className="w-4 h-4 mr-3 opacity-70" />
+                        ) : (
+                          <Package className="w-4 h-4 mr-3 opacity-70" />
+                        )}
+                        {category.name}
+                      </Link>
+                    );
+                  })}
               </ul>
             </div>
           </div>
@@ -200,9 +208,9 @@ const Hero = ({categories}) => {
                 className="relative overflow-hidden h-[300px] sm:h-[400px] lg:h-[450px] rounded-xl shadow-2xl flex items-center justify-between p-6 md:p-12 transition-all duration-500 ease-in-out"
                 style={{
                   backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${slide.backgroundImage})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat'
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
                 }}
               >
                 {/* Decorative Tag */}
@@ -256,7 +264,10 @@ const Hero = ({categories}) => {
 
             {/* Mobile Horizontal Scroll */}
             <div className="sm:hidden">
-              <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              <div
+                className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide"
+                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              >
                 <style>{`
                   .scrollbar-hide::-webkit-scrollbar {
                     display: none;
@@ -268,9 +279,9 @@ const Hero = ({categories}) => {
                     className="flex-shrink-0 w-72 h-48 rounded-xl shadow-2xl relative overflow-hidden flex items-center justify-between p-4 transition-all duration-300 hover:shadow-3xl"
                     style={{
                       backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${slide.backgroundImage})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      backgroundRepeat: 'no-repeat'
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
                     }}
                   >
                     {/* Decorative Tag */}
@@ -284,7 +295,8 @@ const Hero = ({categories}) => {
                     {/* Text Content */}
                     <div className="z-10 max-w-xs">
                       <h1 className="text-lg font-extrabold leading-tight text-white mb-1 drop-shadow-lg">
-                        <span className="text-red-400">DOVINI</span> {slide.title}
+                        <span className="text-red-400">DOVINI</span>{" "}
+                        {slide.title}
                       </h1>
                       <p className="text-xs font-light text-gray-100 drop-shadow-md">
                         {slide.subtitle}
@@ -367,18 +379,22 @@ const Hero = ({categories}) => {
                   className="relative h-32 w-full rounded-xl overflow-hidden shadow-lg transition-transform duration-300 group-hover:scale-[1.02] border-4 border-white"
                   style={{
                     backgroundImage: `linear-gradient(${tile.overlayColor}, ${tile.overlayColor}), url(${tile.backgroundImage})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat'
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
                   }}
                 >
                   {/* Overlay Content */}
                   <div className="absolute inset-0 flex items-center justify-center p-2">
                     <div className="text-center">
-                      <div className={`text-lg sm:text-xl font-bold ${tile.textColor} drop-shadow-lg`}>
+                      <div
+                        className={`text-lg sm:text-xl font-bold ${tile.textColor} drop-shadow-lg`}
+                      >
                         {tile.title}
                       </div>
-                      <div className={`text-xs sm:text-sm ${tile.textColor} opacity-90 drop-shadow-md mt-1`}>
+                      <div
+                        className={`text-xs sm:text-sm ${tile.textColor} opacity-90 drop-shadow-md mt-1`}
+                      >
                         {tile.subtitle}
                       </div>
                     </div>

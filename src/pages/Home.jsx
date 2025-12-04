@@ -403,13 +403,14 @@ const Home = ({categories}) => {
   const { showSuccess } = useToast();
   const { products, loading } = useProducts()
 
-
-  const featuredProducts = products; 
-  const flashDeals = products
-    .filter((product) => product.isFlashDeal)
+  // Safe array handling with fallbacks
+  const safeProducts = Array.isArray(products) ? products : [];
+  const featuredProducts = safeProducts; 
+  const flashDeals = safeProducts
+    .filter((product) => product && product.isFlashDeal)
     .slice(0, 6);
-  const limitedStock = products
-    .filter((product) => product.isLimitedStock)
+  const limitedStock = safeProducts
+    .filter((product) => product && product.isLimitedStock)
     .slice(0, 6);
 
   useEffect(() => {
