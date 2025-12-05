@@ -33,16 +33,13 @@ const cartReducer = (state, action) => {
   }
 };
 
-// Generate user-specific storage key
 const getUserCartKey = (user) => {
   if (!user || !user.id) return 'dovini_guest_cart';
   return `dovini_cart_user_${user.id}`;
 };
 
-// Generate guest cart key
 const getGuestCartKey = () => 'dovini_guest_cart';
 
-// Merge guest cart with user cart
 const mergeCarts = (guestCart, userCart) => {
   const merged = [...userCart];
   guestCart.forEach(guestItem => {
@@ -56,7 +53,6 @@ const mergeCarts = (guestCart, userCart) => {
   return merged;
 };
 
-// Load cart from localStorage
 const loadCartFromStorage = (key) => {
   try {
     const localData = localStorage.getItem(key);
@@ -67,7 +63,6 @@ const loadCartFromStorage = (key) => {
   }
 };
 
-// Save cart to localStorage
 const saveCartToStorage = (key, cartData) => {
   try {
     localStorage.setItem(key, JSON.stringify(cartData));
@@ -79,42 +74,33 @@ const saveCartToStorage = (key, cartData) => {
 export const CartProvider = ({ children }) => {
   const { user, isAuthenticated } = useAuth();
   
-  // Generate current user's cart key
   const currentCartKey = isAuthenticated && user ? getUserCartKey(user) : getGuestCartKey();
   
-  // Load initial cart
   const initialCart = loadCartFromStorage(currentCartKey);
   
   const [cart, dispatch] = useReducer(cartReducer, initialCart);
 
-  // Handle user authentication changes
   useEffect(() => {
     if (isAuthenticated && user) {
-      // User just logged in
       const userCartKey = getUserCartKey(user);
       const currentUserCart = loadCartFromStorage(userCartKey);
       const guestCart = loadCartFromStorage(getGuestCartKey());
       
       if (guestCart.length > 0) {
-        // Merge guest cart with user cart
         const mergedCart = mergeCarts(guestCart, currentUserCart);
         dispatch({ type: 'SET_CART', payload: mergedCart });
         saveCartToStorage(userCartKey, mergedCart);
         
-        // Clear guest cart
         localStorage.removeItem(getGuestCartKey());
       } else if (currentUserCart.length > 0) {
-        // Load existing user cart
         dispatch({ type: 'SET_CART', payload: currentUserCart });
       }
     } else if (!isAuthenticated && user === null) {
-      // User just logged out - save to guest cart
       const guestCartKey = getGuestCartKey();
       saveCartToStorage(guestCartKey, cart);
     }
   }, [isAuthenticated, user]);
 
-  // Save cart changes to appropriate storage location
   useEffect(() => {
     const storageKey = isAuthenticated && user ? getUserCartKey(user) : getGuestCartKey();
     saveCartToStorage(storageKey, cart);
@@ -139,7 +125,6 @@ export const CartProvider = ({ children }) => {
   const clearCart = () => {
     dispatch({ type: 'CLEAR_CART' });
     
-    // Also clear from storage
     const storageKey = isAuthenticated && user ? getUserCartKey(user) : getGuestCartKey();
     localStorage.removeItem(storageKey);
   };
@@ -170,12 +155,10 @@ export const CartProvider = ({ children }) => {
     };
   };
 
-  // Get user's cart key (useful for debugging or showing cart info)
   const getCurrentUserCartKey = () => {
     return currentCartKey;
   };
 
-  // Clear all user carts (useful for admin or cleanup)
   const clearAllUserCarts = () => {
     const keys = Object.keys(localStorage);
     keys.forEach(key => {
@@ -185,7 +168,6 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  // Get all saved user cart keys (for admin purposes)
   const getAllUserCartKeys = () => {
     const keys = Object.keys(localStorage);
     return keys.filter(key => key.startsWith('dovini_cart_user_'));

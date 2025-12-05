@@ -18,22 +18,20 @@ export const ProductProvider = ({ children }) => {
 
       const data = await res.json();
 
-      // Validate data structure before processing
       if (!data || !data.data || !Array.isArray(data.data)) {
         throw new Error("Invalid API response structure");
       }
 
       const transformedProducts = data.data
-        .filter((item) => item && typeof item === "object") // Filter out null/undefined items
+        .filter((item) => item && typeof item === "object")
         .map(transformProduct)
-        .filter((product) => product && product.id); // Filter out invalid products
+        .filter((product) => product && product.id);
 
       setProducts(transformedProducts);
     } catch (err) {
       console.warn("Failed to fetch products:", err.message);
       setError(err.message);
 
-      // Set empty array as fallback instead of leaving products undefined
       if (products.length === 0) {
         setProducts([]);
       }

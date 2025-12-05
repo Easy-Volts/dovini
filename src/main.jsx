@@ -6,7 +6,6 @@ import App from "./App.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
 
-// Register service worker for caching with cache busting
 if ("serviceWorker" in navigator && import.meta.env.PROD) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
@@ -14,7 +13,6 @@ if ("serviceWorker" in navigator && import.meta.env.PROD) {
       .then((registration) => {
         console.log("SW registered: ", registration);
 
-        // Handle service worker updates
         registration.addEventListener("updatefound", () => {
           const newWorker = registration.installing;
           newWorker.addEventListener("statechange", () => {
@@ -22,7 +20,6 @@ if ("serviceWorker" in navigator && import.meta.env.PROD) {
               newWorker.state === "installed" &&
               navigator.serviceWorker.controller
             ) {
-              // New service worker is available, prompt user to reload
               if (confirm("A new version is available! Reload to update?")) {
                 window.location.reload();
               }
@@ -30,7 +27,6 @@ if ("serviceWorker" in navigator && import.meta.env.PROD) {
           });
         });
 
-        // Listen for service worker messages
         navigator.serviceWorker.addEventListener("message", (event) => {
           if (event.data.type === "SW_UPDATED") {
             console.log("Service Worker updated successfully");
@@ -43,10 +39,7 @@ if ("serviceWorker" in navigator && import.meta.env.PROD) {
   });
 }
 
-// Performance optimizations
 const root = createRoot(document.getElementById("root"));
-
-// Preload critical resources
 if (import.meta.env.PROD) {
   const linkPreload = document.createElement("link");
   linkPreload.rel = "preload";

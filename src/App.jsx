@@ -76,9 +76,8 @@ const App = () => {
       localStorage.setItem("sessions", count);
       localStorage.setItem("lastSessionDate", today);
 
-      setSessions(count); // update React state
+      setSessions(count);
     } else {
-      // load the existing value into state
       const current = JSON.parse(localStorage.getItem("sessions") || "0");
       setSessions(current);
     }
