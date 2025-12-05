@@ -682,7 +682,9 @@ const AdminDashBoard = ({ sessions, categories,setCategories }) => {
   }, []);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCategoryModalOpen, setCategoryIsModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
 
   function calculateOrderTrend(orders) {
     const now = new Date();
@@ -899,14 +901,30 @@ const AdminDashBoard = ({ sessions, categories,setCategories }) => {
   }
 
   // --- Product CRUD Handlers ---
+  const handleCategoryDelete=(id)=>{
+    const updatedCategories = categories.filter(category=>category.id !== id);
+    if(updatedCategories.length !== categories.length){
+      setCategoryToDelete(updatedCategories);
+      setCategoryIsModalOpen(true);
+    }
+  }
 
-  const handleDeleteProduct = async (id) => {
-    const category = categories.find((p) => p.id === id);
-    if(category){
-      try {
+  const handleDeleteProduct = (id) => {
+    const product = products.find((p) => p.id === id);
+    if (product) {
+      setProductToDelete(product);
+      setIsModalOpen(true);
+    }
+  };
+
+const confirmCategoryDelete = async () => {
+  if (!categoryToDelete) return;
+
+  try {
+    // Call your API
   
      const  res = await fetch(
-          `https://api.dovinigears.ng/admin/category/delete?id=${category.id}`,
+          `https://api.dovinigears.ng/admin/category/delete?id=${categoryToDelete.id}`,
           {
             method: "DELETE",
             headers: {
@@ -919,17 +937,18 @@ const AdminDashBoard = ({ sessions, categories,setCategories }) => {
       throw new Error("Failed to delete category");
     }
 
-    setProductToDelete(category);
-      setIsModalOpen(true);
+    // Update local state only after successful delete
+    setCategories(categories.filter((p) => p.id !== categoryToDelete.id));
+    showSuccess('Category deleted successfully');
   } catch (error) {
     console.error(error);
+    // Optionally show error message to the user
   } finally {
     // Close modal and clean up
-     setProductToDelete(null);
-      setIsModalOpen(false);
+    setCategoryIsModalOpen(false);
+    setCategoryToDelete(null);
   }
-}
-  };
+};
 
 const confirmDelete = async () => {
   if (!productToDelete) return;
@@ -1133,7 +1152,7 @@ const confirmDelete = async () => {
       case "customers":
         return <CustomerList customers={customers} />;
       case "categories":
-        return <Categories categories={categories} products={products} setCategories={ setCategories} />;
+        return <Categories handleDelete={handleCategoryDelete} categories={categories} products={products} setCategories={ setCategories} />;
       case "productForm":
         return (
           <ProductForm
@@ -1471,6 +1490,13 @@ const confirmDelete = async () => {
           title="Confirm Deletion"
           message={`Are you sure you want to delete product "${productToDelete?.name}"? This action cannot be undone.`}
           onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
+         <ConfirmationModal
+          isOpen={isCategoryModalOpen}
+          title="Confirm Deletion"
+          message={`Are you sure you want to delete category "${categoryToDelete?.name}"? This action cannot be undone.`}
+          onConfirm={confirmCategoryDelete}
           onCancel={cancelDelete}
         />
 
