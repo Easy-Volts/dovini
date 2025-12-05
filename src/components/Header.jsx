@@ -4,7 +4,6 @@ import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
 import HeaderAds from "./HeaderAds";
-import { motion } from 'framer-motion'
 import { useOrders } from "../context/OrdersContext";
 import {
   Home,
