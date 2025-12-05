@@ -5,6 +5,7 @@ import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
 import HeaderAds from "./HeaderAds";
 import { useOrders } from "../context/OrdersContext";
+import {motion} from 'framer-motion';
 import {
   Home,
   Grid3X3,

@@ -5,6 +5,7 @@ import CategoryCard from "../components/CategoryCard";
 import ProCard from "../components/ProCard";
 import NewsletterSignup from "../components/NewsletterSignup";
 import { useProducts } from "../context/ProductContext";
+import {motion} from 'framer-motion'
 import {
   Phone,
   Trophy,
