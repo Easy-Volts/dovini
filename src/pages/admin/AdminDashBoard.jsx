@@ -900,12 +900,35 @@ const AdminDashBoard = ({ sessions, categories,setCategories }) => {
 
   // --- Product CRUD Handlers ---
 
-  const handleDeleteProduct = (id) => {
-    const product = products.find((p) => p.id === id);
-    if (product) {
-      setProductToDelete(product);
-      setIsModalOpen(true);
+  const handleDeleteProduct = async (id) => {
+    const category = products.find((p) => p.id === id);
+    if(category){
+      try {
+  
+     const  res = await fetch(
+          `https://api.dovinigears.ng/admin/category/delete?id=${category.id}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+    if (!res.ok) {
+      throw new Error("Failed to delete category");
     }
+
+    setProductToDelete(category);
+      setIsModalOpen(true);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    // Close modal and clean up
+     setProductToDelete(null);
+      setIsModalOpen(false);
+  }
+}
   };
 
 const confirmDelete = async () => {
