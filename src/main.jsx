@@ -41,9 +41,9 @@ root.render(
     <BrowserRouter>
       <AuthProvider>
         <CartProvider>
-          <ErrorBoundary>
+          {/* <ErrorBoundary> */}
             <App />
-          </ErrorBoundary>
+          {/* </ErrorBoundary> */}
         </CartProvider>
       </AuthProvider>
     </BrowserRouter>
