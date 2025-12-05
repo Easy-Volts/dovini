@@ -913,9 +913,16 @@ const confirmDelete = async () => {
 
   try {
     // Call your API
-    const res = await fetch(`/api/products/delete?id=${productToDelete.id}`, {
-      method: "GET",
-    });
+  
+     const  res = await fetch(
+          `https://api.dovinigears.ng/admin/product/delete?id=${productToDelete.id}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
     if (!res.ok) {
       throw new Error("Failed to delete product");
