@@ -901,7 +901,7 @@ const AdminDashBoard = ({ sessions, categories,setCategories }) => {
   // --- Product CRUD Handlers ---
 
   const handleDeleteProduct = async (id) => {
-    const category = products.find((p) => p.id === id);
+    const category = categories.find((p) => p.id === id);
     if(category){
       try {
   
