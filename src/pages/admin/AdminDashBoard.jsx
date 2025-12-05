@@ -908,11 +908,39 @@ const AdminDashBoard = ({ sessions, categories,setCategories }) => {
     }
   };
 
-  const confirmDelete = () => {
+const confirmDelete = async () => {
+  if (!productToDelete) return;
+
+  try {
+    // Call your API
+  
+     const  res = await fetch(
+          `https://api.dovinigears.ng/admin/product/delete?id=${productToDelete.id}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+    if (!res.ok) {
+      throw new Error("Failed to delete product");
+    }
+
+    // Update local state only after successful delete
     setProducts(products.filter((p) => p.id !== productToDelete.id));
+    showSuccess('Product deleted successfully');
+  } catch (error) {
+    console.error(error);
+    // Optionally show error message to the user
+  } finally {
+    // Close modal and clean up
     setIsModalOpen(false);
     setProductToDelete(null);
-  };
+  }
+};
+
 
   const cancelDelete = () => {
     setIsModalOpen(false);

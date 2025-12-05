@@ -75,8 +75,9 @@ export const AuthProvider = ({ children }) => {
   const [countdownTime, setCountdownTime] = useState(30);
 
   const refreshUserData = async (userData, token) => {
-    if (!userData || !userData.id) {
-      console.log("No user ID available for profile refresh");
+    const userId = userData?.user?.id || userData?.id;
+    if (!userId) {
+      console.log("No user ID found, skipping refresh");
       return userData;
     }
 
@@ -204,14 +205,14 @@ export const AuthProvider = ({ children }) => {
         }
         return { success: false, error: data.error || "Login failed" };
       }
-        
+
       if (data.data && data.data.user.role === "admin") {
         return {
           success: false,
           error: "Admin can't login here. Please use the admin portal.",
         };
       }
-       console.log(data)
+      console.log(data);
       if (data.data && data.data.is_active === false) {
         return {
           success: false,
@@ -854,7 +855,9 @@ export const AuthProvider = ({ children }) => {
         isOpen={showInactivityModal}
         countdownTime={countdownTime}
         onCancel={cancelLogout}
-        userName={user?.name?.split(" ")[0] || "User"}
+        userName={
+          typeof user?.name === "string" ? user.name.split(" ")[0] : "User"
+        }
       />
     </AuthContext.Provider>
   );
