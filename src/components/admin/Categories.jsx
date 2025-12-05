@@ -17,10 +17,41 @@ import CategoryForm from "./CategoryForm";
 const Categories = ({ handleDelete, categories ,products,setCategories}) => {
   const [isModal, setIsModal] = useState()
   const [selectedCategory, setSelectedCategory] = useState(null)
+  const token = localStorage.getItem("adminToken");
 
-  const handleEdit = (category) => {
-    setIsModal(true)
-    setSelectedCategory(category)
+
+  const handleEdit = async (category) => {
+   
+     
+
+      try {
+    // Call your API
+  
+     const  res = await fetch(
+          `https://api.dovinigears.ng/admin/category/delete?id=${category.id}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+    if (!res.ok) {
+      throw new Error("Failed to delete category");
+    }
+
+    // Update local state only after successful delete
+   setIsModal(true)
+   setSelectedCategory(category)
+  } catch (error) {
+    console.error(error);
+    // Optionally show error message to the user
+  } finally {
+    // Close modal and clean up
+    setIsModal(false)
+    setSelectedCategory(null)
+  }
   }
 
   const onClose = () => {
