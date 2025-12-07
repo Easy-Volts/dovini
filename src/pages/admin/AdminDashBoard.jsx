@@ -1131,7 +1131,7 @@ const confirmDelete = async () => {
       
         console.log("Updating product with ID from FormData:", id);
         response = await fetch(
-          `https://api.dovinigears.ng/admin/product/process`,
+          `https://api.dovinigears.ng/admin/orders/process`,
           {
             method: "PUT",
             headers: {
