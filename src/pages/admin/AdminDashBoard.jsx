@@ -935,10 +935,16 @@ const confirmCategoryDelete = async () => {
     if (!res.ok) {
       throw new Error("Failed to delete category");
     }
+        const data = await res.json();
+if(data.success){ 
 
     // Update local state only after successful delete
     setCategories(categories.filter((p) => p.id !== categoryToDelete.id));
     showSuccess('Category deleted successfully');
+}else{
+  showError('Failed to delete category');
+
+}
   } catch (error) {
     console.error(error);
     // Optionally show error message to the user
@@ -969,9 +975,14 @@ const confirmDelete = async () => {
       throw new Error("Failed to delete product");
     }
 
-    // Update local state only after successful delete
+        const data = await res.json();
+if(data.success){ 
     setProducts(products.filter((p) => p.id !== productToDelete.id));
     showSuccess('Product deleted successfully');
+}
+else{
+  showError('Failed to delete product');
+}
   } catch (error) {
     console.error(error);
     // Optionally show error message to the user
@@ -1146,8 +1157,7 @@ const confirmDelete = async () => {
           throw new Error(`Update failed: ${response.status} - ${errorText}`);
         }
        const data = await response.json();
-alert(data.success);
-if(data.success==true){ 
+if(data.success){ 
            setOrders(
       orders.map((order) =>
         order.id === id ? { ...order, status: data.orders.orders } : order
