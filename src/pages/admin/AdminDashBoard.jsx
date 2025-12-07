@@ -1145,6 +1145,7 @@ const confirmDelete = async () => {
           const errorText = await response.text();
           throw new Error(`Update failed: ${response.status} - ${errorText}`);
         }
+        alert(JSON.stringify(response.json()))
            setOrders(
       orders.map((order) =>
         order.id === id ? { ...order, status: "approved" } : order
