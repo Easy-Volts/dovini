@@ -902,6 +902,7 @@ const AdminDashBoard = ({ sessions, categories,setCategories }) => {
 
   // --- Product CRUD Handlers ---
   const handleCategoryDelete=(id)=>{
+    console.log(id)
     const updatedCategories = categories.filter(category=>category.id !== id);
     if(updatedCategories.length !== categories.length){
       setCategoryToDelete(updatedCategories);
