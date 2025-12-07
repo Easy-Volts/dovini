@@ -1122,12 +1122,40 @@ const confirmDelete = async () => {
 
   // --- Order Management Handlers (Updated for backend API) ---
 
-  const handleApproveOrder = (id) => {
-    setOrders(
+  const handleApproveOrder = async (id) => {
+ 
+
+       try {
+      let response;
+
+      
+        console.log("Updating product with ID from FormData:", id);
+        response = await fetch(
+          `https://api.dovinigears.ng/admin/product/process`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ orderId: id, status: "approved" }),
+          }
+        );
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Update failed: ${response.status} - ${errorText}`);
+        }
+           setOrders(
       orders.map((order) =>
         order.id === id ? { ...order, status: "approved" } : order
       )
     );
+
+      }catch (error) {
+        showError("Error approving order:", error);
+
+      }
+
   };
 
   const totalRevenue = orders.reduce((sum, order) => sum + (order.total || 0), 0)
