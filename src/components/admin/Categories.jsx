@@ -100,7 +100,7 @@ const Categories = ({ handleDelete, categories ,products,setCategories}) => {
                       <Edit2 className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => handleDelete(category.id)}
+                      onClick={() => handleDelete(category)}
                       className="text-red-600 hover:text-red-800 p-2 rounded-full hover:bg-red-50 transition"
                       title="Delete Category"
                     >

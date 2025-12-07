@@ -901,12 +901,10 @@ const AdminDashBoard = ({ sessions, categories,setCategories }) => {
   }
 
   // --- Product CRUD Handlers ---
-  const handleCategoryDelete=(id)=>{
-    console.log(id)
+  const handleCategoryDelete=(category)=>{
+    console.log(category)
     console.log(categories)
-    const updatedCategories = categories.filter(category=>category.id !== id);
-    if(updatedCategories.length !== categories.length){
-      setCategoryToDelete(updatedCategories);
+      setCategoryToDelete(category);
       setCategoryIsModalOpen(true);
     }
   }
