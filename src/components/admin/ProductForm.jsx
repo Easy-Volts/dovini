@@ -240,7 +240,7 @@ const ProductForm = ({
       );
       formDataToSend.append("isFlashDeal", formData.isFlashDeal.toString());
       if (formData.flashDealEnd) {
-        formDataToSend.append("flashDealEnd", formData.flashDealEnd);
+        formDataToSend.append("flashDealEnd", formData.flashDealEnd.toString());
       }
 
       selectedFiles.forEach((file) => {
