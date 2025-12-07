@@ -906,7 +906,6 @@ const AdminDashBoard = ({ sessions, categories,setCategories }) => {
     console.log(categories)
       setCategoryToDelete(category);
       setCategoryIsModalOpen(true);
-    }
   }
 
   const handleDeleteProduct = (id) => {
