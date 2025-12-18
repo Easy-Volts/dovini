@@ -34,10 +34,10 @@ const CategoryForm = ({
     const [selectedFiles, setSelectedFiles] = useState([]);
     // Array to hold the local URLs or existing remote URLs (for preview)
     const [previewImages, setPreviewImages] = useState(() => {
-      if (editingCategory && editingCategory.images) {
-        return editingCategory.images;
+      if (editingCategory && editingCategory.image) {
+        return editingCategory.image;
       }
-      return initialData.images;
+      return initialData.image;
     });
   
 
@@ -125,7 +125,6 @@ const CategoryForm = ({
       const res = await fetch(url, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: formDataToSend,
@@ -229,7 +228,7 @@ const CategoryForm = ({
 
       setFormData((prev) => ({
         ...prev,
-        images: [...prev.images, ...newPreviewUrls],
+        image: [...prev.image, ...newPreviewUrls],
       }));
 
       showSuccess(
@@ -256,7 +255,7 @@ const CategoryForm = ({
 
     setFormData((prev) => ({
       ...prev,
-      images: prev.images.filter((_, index) => index !== indexToRemove),
+      image: prev.image.filter((_, index) => index !== indexToRemove),
     }));
   };
 
