@@ -176,8 +176,8 @@ const [previewImage, setPreviewImage] = useState(null);
   };
 
    // Helper function to calculate total file size in bytes
-  const getTotalFileSize = (files) => {
-    return files.reduce((total, file) => total + file.size, 0);
+  const getTotalFileSize = (file) => {
+    return file ? file.size : 0;
   };
 
   // Helper function to format bytes to human readable format
