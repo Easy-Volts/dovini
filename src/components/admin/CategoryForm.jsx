@@ -22,24 +22,15 @@ const CategoryForm = ({
 }) => {
   const { showSuccess, showError } = useToast();
   const isEditing = !!editingCategory;
-   const initialData = editingCategory || {
-    name: "",
-    image: null,
-    description: ""
 
-  };
   
   
     // Array to hold the selected file objects (for upload)
-    const [selectedFiles, setSelectedFiles] = useState([]);
-    // Array to hold the local URLs or existing remote URLs (for preview)
-    const [previewImages, setPreviewImages] = useState(() => {
-      if (editingCategory && editingCategory.image) {
-        return editingCategory.image;
-      }
-      return initialData.image;
-    });
-  
+    const [selectedFile, setSelectedFile] = useState(null);
+const [previewImage, setPreviewImage] = useState(null);
+
+
+
 
   const [formData, setFormData] = useState({
     name: "",
@@ -198,66 +189,43 @@ const CategoryForm = ({
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
-  const handleFileChange = (e) => {
-    const newFiles = Array.from(e.target.files);
+const handleFileChange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
 
-    if (newFiles.length > 0) {
-      const currentTotalSize = getTotalFileSize(selectedFiles);
-      const newFilesSize = getTotalFileSize(newFiles);
-      const wouldBeTotalSize = currentTotalSize + newFilesSize;
+  const maxSize = 4 * 1024 * 1024; // 4MB
 
-      const maxSize = 4 * 1024 * 1024; // 4MB in bytes
-
-      if (wouldBeTotalSize > maxSize) {
-        showError(
-          `Total image size would be ${formatBytes(
-            wouldBeTotalSize
-          )}, which exceeds the 4MB limit. ` +
-            `Current total: ${formatBytes(currentTotalSize)}. ` +
-            `Please remove some images first or select smaller files.`
-        );
-        e.target.value = null;
-        return;
-      }
-
-      const newPreviewUrls = newFiles.map((file) => URL.createObjectURL(file));
-
-      setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
-
-      setPreviewImages((prevUrls) => [...prevUrls, ...newPreviewUrls]);
-
-      setFormData((prev) => ({
-        ...prev,
-        image: [...prev.image, ...newPreviewUrls],
-      }));
-
-      showSuccess(
-        `Added ${newFiles.length} image(s) (${formatBytes(newFilesSize)}). ` +
-          `Total size: ${formatBytes(wouldBeTotalSize)} / 4MB`
-      );
-    }
+  if (file.size > maxSize) {
+    showError("Image size must be less than 4MB");
     e.target.value = null;
-  };
+    return;
+  }
 
-  const handleRemoveImage = (indexToRemove) => {
-    const urlToRemove = previewImages[indexToRemove];
+  const previewUrl = URL.createObjectURL(file);
 
-    setPreviewImages((prev) =>
-      prev.filter((_, index) => index !== indexToRemove)
-    );
+  setSelectedFile(file);
+  setPreviewImage(previewUrl);
 
-    if (urlToRemove.startsWith("blob:")) {
-      setSelectedFiles((prev) =>
-        prev.filter((_, index) => index !== indexToRemove)
-      );
-      URL.revokeObjectURL(urlToRemove);
-    }
+  setFormData((prev) => ({
+    ...prev,
+    image: file,
+  }));
+};
 
-    setFormData((prev) => ({
-      ...prev,
-      image: prev.image.filter((_, index) => index !== indexToRemove),
-    }));
-  };
+ const handleRemoveImage = () => {
+  if (previewImage?.startsWith("blob:")) {
+    URL.revokeObjectURL(previewImage);
+  }
+
+  setSelectedFile(null);
+  setPreviewImage(null);
+
+  setFormData((prev) => ({
+    ...prev,
+    image: null,
+  }));
+};
+
 
   const inputClass =
     "w-full p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-amber-500/50 focus:border-amber-500 transition duration-150";
@@ -341,12 +309,10 @@ const CategoryForm = ({
 
             <div className="mt-4 pt-4 border-t border-gray-200">
               <div className="flex items-center justify-between mb-2">
-                <p className="text-sm font-medium text-gray-700">
-                  {previewImages.length} Image(s) Selected
-                </p>
+                
                 <div className="text-sm text-gray-600">
                   {(() => {
-                    const totalSize = getTotalFileSize(selectedFiles);
+                    const totalSize = getTotalFileSize(selectedFile);
                     const maxSize = 4 * 1024 * 1024; // 4MB
                     const percentage = (totalSize / maxSize) * 100;
                     const isNearLimit = percentage > 80;
@@ -371,7 +337,7 @@ const CategoryForm = ({
 
               {/* Size warning bar */}
               {(() => {
-                const totalSize = getTotalFileSize(selectedFiles);
+                const totalSize = getTotalFileSize(selectedFile);
                 const maxSize = 4 * 1024 * 1024;
                 const percentage = Math.min((totalSize / maxSize) * 100, 100);
 
@@ -394,7 +360,7 @@ const CategoryForm = ({
               })()}
 
               {(() => {
-                const totalSize = getTotalFileSize(selectedFiles);
+                const totalSize = getTotalFileSize(selectedFile);
                 const remainingSize = Math.max(0, 4 * 1024 * 1024 - totalSize);
 
                 if (remainingSize < 1024 * 1024) {
@@ -410,36 +376,30 @@ const CategoryForm = ({
               })()}
 
               {/* Thumbnail Preview Gallery */}
-              <div className="flex flex-wrap gap-4 p-2 bg-white rounded-lg border border-dashed border-gray-300 min-h-[100px]">
-                {previewImages.length === 0 ? (
-                  <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
-                    <Image className="w-5 h-5 mr-2" /> No images uploaded yet.
-                  </div>
-                ) : (
-                  previewImages.map((url, index) => (
-                    <div key={index} className="relative w-20 h-20 group">
-                      <img
-                        src={url}
-                        alt={`Product image ${index + 1}`}
-                        className="w-full h-full object-cover rounded-md border-2 border-gray-200 transition group-hover:border-red-400"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src =
-                            "https://placehold.co/80x80/94A3B8/white?text=Error";
-                        }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveImage(index)}
-                        className="absolute -top-2 -right-2 bg-red-600 text-white p-1 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
-                        title="Remove Image"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    </div>
-                  ))
-                )}
-              </div>
+             <div className="mt-4 p-4 bg-white rounded-lg border border-dashed border-gray-300 min-h-[100px] flex items-center justify-center">
+  {!previewImage ? (
+    <div className="text-gray-400 text-sm flex items-center">
+      <Image className="w-5 h-5 mr-2" />
+      No image uploaded
+    </div>
+  ) : (
+    <div className="relative w-32 h-32">
+      <img
+        src={previewImage}
+        alt="Category preview"
+        className="w-full h-full object-cover rounded-md border"
+      />
+      <button
+        type="button"
+        onClick={handleRemoveImage}
+        className="absolute -top-2 -right-2 bg-red-600 text-white p-1 rounded-full"
+      >
+        <X className="w-3 h-3" />
+      </button>
+    </div>
+  )}
+</div>
+
             </div>
           </div>
 
