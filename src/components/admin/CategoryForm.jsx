@@ -22,10 +22,30 @@ const CategoryForm = ({
 }) => {
   const { showSuccess, showError } = useToast();
   const isEditing = !!editingCategory;
+   const initialData = editingCategory || {
+    name: "",
+    images: [],
+    description: ""
+
+  };
+  
+  
+    // Array to hold the selected file objects (for upload)
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    // Array to hold the local URLs or existing remote URLs (for preview)
+    const [previewImages, setPreviewImages] = useState(() => {
+      if (editingCategory && editingCategory.images) {
+        return editingCategory.images;
+      }
+      return initialData.images;
+    });
+  
 
   const [formData, setFormData] = useState({
     name: "",
     description: "",
+            images: [],
+
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -86,6 +106,8 @@ const CategoryForm = ({
     return CATEGORY_ICONS[Math.floor(Math.random() * CATEGORY_ICONS.length)];
   };
 
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.description) {
@@ -101,9 +123,18 @@ const CategoryForm = ({
       const url = isEditing
         ? "https://api.dovinigears.ng/admin/category/update"
         : "https://api.dovinigears.ng/admin/category/create";
-      const payload = isEditing
-        ? { id: editingCategory.id, ...formData }
-        : { ...formData };
+    
+
+         const formDataToSend = new FormData();
+
+      formDataToSend.append("name", formData.name);
+      formDataToSend.append("description", formData.description);
+      formDataToSend.append("image", formData.image);
+      
+
+      if(isEditing){
+        formDataToSend.append("id", editingCategory.id);
+      }
 
       const res = await fetch(url, {
         method: "POST",
@@ -111,7 +142,7 @@ const CategoryForm = ({
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(payload),
+        body: formDataToSend,
       });
 
       if (!res.ok) {
@@ -168,10 +199,85 @@ const CategoryForm = ({
     }
   };
 
+   // Helper function to calculate total file size in bytes
+  const getTotalFileSize = (files) => {
+    return files.reduce((total, file) => total + file.size, 0);
+  };
+
+  // Helper function to format bytes to human readable format
+  const formatBytes = (bytes) => {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+  };
+
+  const handleFileChange = (e) => {
+    const newFiles = Array.from(e.target.files);
+
+    if (newFiles.length > 0) {
+      const currentTotalSize = getTotalFileSize(selectedFiles);
+      const newFilesSize = getTotalFileSize(newFiles);
+      const wouldBeTotalSize = currentTotalSize + newFilesSize;
+
+      const maxSize = 4 * 1024 * 1024; // 4MB in bytes
+
+      if (wouldBeTotalSize > maxSize) {
+        showError(
+          `Total image size would be ${formatBytes(
+            wouldBeTotalSize
+          )}, which exceeds the 4MB limit. ` +
+            `Current total: ${formatBytes(currentTotalSize)}. ` +
+            `Please remove some images first or select smaller files.`
+        );
+        e.target.value = null;
+        return;
+      }
+
+      const newPreviewUrls = newFiles.map((file) => URL.createObjectURL(file));
+
+      setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
+
+      setPreviewImages((prevUrls) => [...prevUrls, ...newPreviewUrls]);
+
+      setFormData((prev) => ({
+        ...prev,
+        images: [...prev.images, ...newPreviewUrls],
+      }));
+
+      showSuccess(
+        `Added ${newFiles.length} image(s) (${formatBytes(newFilesSize)}). ` +
+          `Total size: ${formatBytes(wouldBeTotalSize)} / 4MB`
+      );
+    }
+    e.target.value = null;
+  };
+
+  const handleRemoveImage = (indexToRemove) => {
+    const urlToRemove = previewImages[indexToRemove];
+
+    setPreviewImages((prev) =>
+      prev.filter((_, index) => index !== indexToRemove)
+    );
+
+    if (urlToRemove.startsWith("blob:")) {
+      setSelectedFiles((prev) =>
+        prev.filter((_, index) => index !== indexToRemove)
+      );
+      URL.revokeObjectURL(urlToRemove);
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, index) => index !== indexToRemove),
+    }));
+  };
+
   const inputClass =
     "w-full p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-amber-500/50 focus:border-amber-500 transition duration-150";
   const labelClass = "block text-sm font-medium text-gray-700 mb-1";
-
+  const fileInputRef = React.useRef(null);
   return (
     <div
       className={`fixed inset-0 bg-black/60 transition duration-300 bg-opacity-50 flex items-center justify-center z-50 p-4 ${
@@ -221,6 +327,188 @@ const CategoryForm = ({
               placeholder="Brief description of the category..."
             />
           </div>
+
+            {/* --- Multi-File Upload/Preview Section --- */}
+        <section>
+          
+
+          <div className="mb-6 border p-4 rounded-xl space-y-4 bg-gray-50">
+            <label className={labelClass}>
+              Upload Image (PNG, JPG, up to 10 files, max 4MB total)
+            </label>
+
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept="image/*"
+              className="hidden"
+            />
+
+            <button
+              type="button"
+              onClick={() => fileInputRef.current.click()}
+              className="flex items-center px-4 py-2 rounded-lg font-semibold text-white transition duration-200 shadow-md bg-indigo-500 hover:bg-indigo-600"
+            >
+              <UploadCloud className="w-5 h-5 mr-2" />
+              Select Files
+            </button>
+
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-sm font-medium text-gray-700">
+                  {previewImages.length} Image(s) Selected
+                </p>
+                <div className="text-sm text-gray-600">
+                  {(() => {
+                    const totalSize = getTotalFileSize(selectedFiles);
+                    const maxSize = 4 * 1024 * 1024; // 4MB
+                    const percentage = (totalSize / maxSize) * 100;
+                    const isNearLimit = percentage > 80;
+
+                    return (
+                      <span
+                        className={`font-medium ${
+                          isNearLimit
+                            ? "text-red-600"
+                            : totalSize > maxSize
+                            ? "text-red-700"
+                            : "text-gray-600"
+                        }`}
+                      >
+                        {formatBytes(totalSize)} / 4MB ({percentage.toFixed(1)}
+                        %)
+                      </span>
+                    );
+                  })()}
+                </div>
+              </div>
+
+              {/* Size warning bar */}
+              {(() => {
+                const totalSize = getTotalFileSize(selectedFiles);
+                const maxSize = 4 * 1024 * 1024;
+                const percentage = Math.min((totalSize / maxSize) * 100, 100);
+
+                if (totalSize === 0) return null;
+
+                return (
+                  <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                    <div
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        percentage > 90
+                          ? "bg-red-500"
+                          : percentage > 80
+                          ? "bg-yellow-500"
+                          : "bg-green-500"
+                      }`}
+                      style={{ width: `${percentage}%` }}
+                    />
+                  </div>
+                );
+              })()}
+
+              {(() => {
+                const totalSize = getTotalFileSize(selectedFiles);
+                const remainingSize = Math.max(0, 4 * 1024 * 1024 - totalSize);
+
+                if (remainingSize < 1024 * 1024) {
+                  // Less than 1MB remaining
+                  return (
+                    <p className="text-xs text-red-600 font-medium">
+                      ⚠️ Only {formatBytes(remainingSize)} remaining! Remove
+                      some images to add more.
+                    </p>
+                  );
+                }
+                return null;
+              })()}
+
+              {/* Thumbnail Preview Gallery */}
+              <div className="flex flex-wrap gap-4 p-2 bg-white rounded-lg border border-dashed border-gray-300 min-h-[100px]">
+                {previewImages.length === 0 ? (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
+                    <Image className="w-5 h-5 mr-2" /> No images uploaded yet.
+                  </div>
+                ) : (
+                  previewImages.map((url, index) => (
+                    <div key={index} className="relative w-20 h-20 group">
+                      <img
+                        src={url}
+                        alt={`Product image ${index + 1}`}
+                        className="w-full h-full object-cover rounded-md border-2 border-gray-200 transition group-hover:border-red-400"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src =
+                            "https://placehold.co/80x80/94A3B8/white?text=Error";
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveImage(index)}
+                        className="absolute -top-2 -right-2 bg-red-600 text-white p-1 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+                        title="Remove Image"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Flash Deal Section */}
+          <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
+            <div className="flex items-center space-x-4">
+              <input
+                type="checkbox"
+                id="isFlashDeal"
+                name="isFlashDeal"
+                checked={formData.isFlashDeal}
+                onChange={handleChange}
+                className="w-5 h-5 text-amber-500 rounded border-gray-300 focus:ring-amber-500"
+              />
+              <label
+                htmlFor="isFlashDeal"
+                className="text-base font-medium text-gray-900"
+              >
+                Enable Flash Deal
+              </label>
+            </div>
+
+            <div className="flex items-center space-x-4">
+              <input
+                type="checkbox"
+                id="isLimitedStock"
+                name="isLimitedStock"
+                checked={formData.isLimitedStock}
+                onChange={handleChange}
+                className="w-5 h-5 text-red-500 rounded border-gray-300 focus:ring-red-500"
+              />
+              <label
+                htmlFor="isLimitedStock"
+                className="text-base font-medium text-gray-900"
+              >
+                Limited Stock Item
+              </label>
+            </div>
+
+            {formData.isFlashDeal && (
+              <div className="mt-4">
+                <label className={labelClass}>Flash Deal End Date/Time</label>
+                <input
+                  type="datetime-local"
+                  name="flashDealEnd"
+                  value={formData.flashDealEnd}
+                  onChange={handleChange}
+                  required={formData.isFlashDeal}
+                  className={inputClass}
+                />
+              </div>
+            )}
+          </div>
+        </section>
 
           {/* Actions */}
           <div className="flex space-x-4 pt-4">
