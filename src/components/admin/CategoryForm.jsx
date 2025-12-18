@@ -24,7 +24,7 @@ const CategoryForm = ({
   const isEditing = !!editingCategory;
    const initialData = editingCategory || {
     name: "",
-    images: [],
+    image: null,
     description: ""
 
   };
@@ -44,7 +44,7 @@ const CategoryForm = ({
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-            images: [],
+    image: null,
 
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -54,11 +54,14 @@ const CategoryForm = ({
       setFormData({
         name: editingCategory.name || "",
         description: editingCategory.description || "",
+        image: editingCategory.image || null,
       });
     } else {
       setFormData({
         name: "",
         description: "",
+
+        image: null,
       });
     }
   }, [editingCategory]);
@@ -71,21 +74,6 @@ const CategoryForm = ({
     }));
   };
 
-  const CATEGORY_IMAGES = [
-    "https://images.openai.com/thumbnails/url/WSbURnicu5meUVJSUGylr5-al1xUWVCSmqJbkpRnoJdeXJJYkpmsl5yfq5-Zm5ieWmxfaAuUsXL0S7F0Tw70cw1NrwoO8Y7MLAkrcNTNKAmszC1zS88xNbNIyc8Ny6kw9jLLTYuPd3VNVyu2NTQAAB6oJYw",
-
-    "https://images.unsplash.com/photo-1574281813181-02b512471486?fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=3000",
-    "https://burst.shopifycdn.com/photos/black-microphone-set-against-a-pink-background.jpg?exif=0&format=pjpg&iptc=0&width=1000",
-
-    "https://lumecube.com/cdn/shop/files/Studio_Panel_Lighting_Kit_UCSD-09339-1160x1500-64b44e5_1160x.jpg?v=1704215663",
-
-    "https://www.lighting-geek.com/wp-content/uploads/2023/05/14-3-1-e1689965711325.png",
-
-    "https://freestockfootagearchive.com/wp-content/uploads/2019/08/Glitchy-Shapes-Strobe-Light-Overlay-Effect.jpeg",
-
-    "https://i.fbcd.co/products/resized/resized-750-500/c-1000-designbundle-studio-lighting-isolated-on-black02-11-10-e852f1a4722511624c5d4d237891e5857f2abad0c0b13f9912f6708d40fc8dfd.jpg",
-    "https://www.ulanzi.com/cdn/shop/files/2_2x-2.png?v=1753167291",
-  ];
 
   const CATEGORY_ICONS = [
     SunMedium,
@@ -98,9 +86,7 @@ const CategoryForm = ({
     Video,
   ];
 
-  const getRandomImage = () => {
-    return CATEGORY_IMAGES[Math.floor(Math.random() * CATEGORY_IMAGES.length)];
-  };
+
 
   const getRandomIcon = () => {
     return CATEGORY_ICONS[Math.floor(Math.random() * CATEGORY_ICONS.length)];
@@ -155,7 +141,7 @@ const CategoryForm = ({
         id: data.id,
         name: data.name,
         description: data.description,
-        image: getRandomImage(),
+        image: data.image,
         icon: getRandomIcon(),
       };
 
