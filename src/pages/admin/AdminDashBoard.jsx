@@ -1172,6 +1172,45 @@ if(data.success){
 
   };
 
+   const handleShipedOrder = async (id) => {
+ 
+
+       try {
+      let response;
+
+      
+        console.log("Updating product with ID from FormData:", id);
+        response = await fetch(
+          `https://api.dovinigears.ng/admin/orders/process`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ orderId: id, status: "shipped" }),
+          }
+        );
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Update failed: ${response.status} - ${errorText}`);
+        }
+       const data = await response.json();
+if(data.success){ 
+           setOrders(
+      orders.map((order) =>
+        order.id === id ? { ...order, status: data.orders.orders } : order
+      )
+    );
+  }
+
+      }catch (error) {
+        showError("Error approving order:", error);
+
+      }
+
+  };
+
   const totalRevenue = orders.reduce((sum, order) => sum + (order.total || 0), 0)
 
   // --- View Renderer ---
@@ -1189,7 +1228,7 @@ if(data.success){
           />
         );
       case "orders":
-        return <OrderList orders={orders} handleApprove={handleApproveOrder} />;
+        return <OrderList orders={orders} handleApprove={handleApproveOrder} handleShiped={handleShipedOrder} />;
       case "customers":
         return <CustomerList customers={customers} />;
       case "categories":

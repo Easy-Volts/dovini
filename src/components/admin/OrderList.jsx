@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import { useState, useMemo,useRef } from "react";
 
-const OrderList = ({ orders, handleApprove, itemsPerPage = 10 }) => {
+const OrderList = ({ orders, handleApprove,handleShiped, itemsPerPage = 10 }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const transformedOrders = useMemo(
@@ -89,7 +89,33 @@ const OrderList = ({ orders, handleApprove, itemsPerPage = 10 }) => {
         </button>
       );
     }
+     else if (order.rawStatus === "shipped") {
+      return (
+        <button
+          onClick={() => handleShiped(order.orderId)}
+          className="text-green-600 hover:text-green-800 flex items-center px-3 py-1.5 rounded-lg hover:bg-green-50 transition text-sm font-medium"
+          title="Shipped Order"
+        >
+          <CheckCircle className="w-4 h-4 mr-1" /> Shipped
+        </button>
+      );
+    }
     return <span className="text-gray-400 text-sm">Processed</span>;
+  };
+
+    const getActionButton2 = (order) => {
+  
+      if (order.rawStatus === "shipped") {
+      return (
+        <button
+          onClick={() => handleShiped(order.orderId)}
+          className="text-green-600 hover:text-green-800 flex items-center px-3 py-1.5 rounded-lg hover:bg-green-50 transition text-sm font-medium"
+          title="Shipped Order"
+        >
+          <CheckCircle className="w-4 h-4 mr-1" /> Shipped
+        </button>
+      );
+    }
   };
 
   const handlePageChange = (page) => {
@@ -399,6 +425,9 @@ const OrderList = ({ orders, handleApprove, itemsPerPage = 10 }) => {
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
                       {getActionButton(order)}
+                      &nbsp;
+                      {getActionButton2(order)}
+
                     </td>
                   </tr>
                 ))
