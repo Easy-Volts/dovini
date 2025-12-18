@@ -9,10 +9,9 @@ import {
   BatteryCharging,
   Package,
   Video,
-  Zap,
+  Zap, UploadCloud, Image ,
 } from "lucide-react";
 import { useToast } from "../../context/ToastContext";
-import {  UploadCloud, Image } from "lucide-react";
 
 const CategoryForm = ({
   editingCategory,
