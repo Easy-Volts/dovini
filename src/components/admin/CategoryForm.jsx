@@ -403,56 +403,7 @@ const handleFileChange = (e) => {
             </div>
           </div>
 
-          {/* Flash Deal Section */}
-          <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
-            <div className="flex items-center space-x-4">
-              <input
-                type="checkbox"
-                id="isFlashDeal"
-                name="isFlashDeal"
-                checked={formData.isFlashDeal}
-                onChange={handleChange}
-                className="w-5 h-5 text-amber-500 rounded border-gray-300 focus:ring-amber-500"
-              />
-              <label
-                htmlFor="isFlashDeal"
-                className="text-base font-medium text-gray-900"
-              >
-                Enable Flash Deal
-              </label>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <input
-                type="checkbox"
-                id="isLimitedStock"
-                name="isLimitedStock"
-                checked={formData.isLimitedStock}
-                onChange={handleChange}
-                className="w-5 h-5 text-red-500 rounded border-gray-300 focus:ring-red-500"
-              />
-              <label
-                htmlFor="isLimitedStock"
-                className="text-base font-medium text-gray-900"
-              >
-                Limited Stock Item
-              </label>
-            </div>
-
-            {formData.isFlashDeal && (
-              <div className="mt-4">
-                <label className={labelClass}>Flash Deal End Date/Time</label>
-                <input
-                  type="datetime-local"
-                  name="flashDealEnd"
-                  value={formData.flashDealEnd}
-                  onChange={handleChange}
-                  required={formData.isFlashDeal}
-                  className={inputClass}
-                />
-              </div>
-            )}
-          </div>
+      
         </section>
 
           {/* Actions */}
