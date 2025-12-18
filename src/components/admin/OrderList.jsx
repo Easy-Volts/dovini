@@ -206,6 +206,8 @@ const OrderList = ({ orders, handleApprove,handleShiped, itemsPerPage = 10 }) =>
 
         <div className="pt-2 border-t border-gray-100">
           {getActionButton(order)}
+          &nbsp;
+          {getActionButton2(order)}
         </div>
       </div>
     );
