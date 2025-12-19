@@ -151,10 +151,10 @@ const App = () => {
                         />
                         <main className="flex-grow lg:pb-0">
                           <Routes>
-                            <Route
+                            {/* <Route
                               path="/"
                               element={<Home categories={categories} />}
-                            />
+                            /> */}
                             <Route
                               path="/category/:id"
                               element={<Category />}
@@ -174,20 +174,20 @@ const App = () => {
                                 </ProtectedRoute>
                               }
                             />
-                            <Route path="/login" element={<Login />} />
-                            <Route path="/signup" element={<Signup />} />
-                            <Route
+                            {/* <Route path="/login" element={<Login />} />
+                            <Route path="/signup" element={<Signup />} /> */}
+                            {/* <Route
                             path="/app/admin/dashboard"
                             element={
                               <ProtectedAdmin>
                                 <AdminDashBoard sessions={sessions} categories={categories} setCategories={setCategories} />
                               </ProtectedAdmin>
                             }
-                          />
-                            <Route
+                          /> */}
+                            {/* <Route
                               path="/app/admin/login"
                               element={<AdminLogin />}
-                            />
+                            /> */}
                             <Route
                               path="/my-account"
                               element={
