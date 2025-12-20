@@ -98,18 +98,21 @@ const ProductDetails = () => {
       }));
       setReviews(mockReviews);
     } else {
-          alert("=====");
-      fetch(`https://api.dovinigears.ng/product?id=${id}`)
-        .then(res => {
-          if (!res.ok) {
-            throw new Error('Product not found');
-          }
+     fetch(`https://api.dovinigears.ng/product?id=${id}`)
+  .then((res) => {
+    if (!res.ok) {
+      throw new Error("Product not found");
+    }
+    return res.json(); // 👈 return the promise
+  })
+  .then((response) => {
+    alert(JSON.stringify(response.data));
+    setProduct(response.data);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
 
-          var response = res.json();
-          alert(JSON.stringify(response.data));
-          setProduct(response.data)
-          
-        })
     }
   }, [id, navigate]);
 
