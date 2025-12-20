@@ -456,55 +456,7 @@ const Cart = () => {
               </motion.div>
             )}
 
-            {/* Recently Viewed */}
-            <RecentlyViewedSection limit={6} />
-
-            {/* Cross-sell Recommendations */}
-            <motion.div
-              className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl shadow-xl p-6 border border-blue-100"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-            >
-              <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center space-x-2">
-                <Zap className="w-5 h-5 text-blue-600" />
-                <span>You Might Also Like</span>
-              </h3>
-
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-                {recommendations.map((product) => (
-                  <motion.div
-                    key={product.id}
-                    className="bg-white rounded-lg p-3 shadow-md hover:shadow-lg transition-all duration-300 group cursor-pointer"
-                    whileHover={{ y: -5 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                    <Link to={`/product/${product.id}`}>
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-20 object-cover rounded mb-2"
-                      />
-                      <h4 className="text-sm font-semibold text-gray-800 line-clamp-2 group-hover:text-red-600 transition-colors">
-                        {product.name}
-                      </h4>
-                      <p className="text-red-600 font-bold text-sm">₦{product.price.toLocaleString()}</p>
-                      <div className="flex items-center mt-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-3 h-3 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
-                          />
-                        ))}
-                      </div>
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Order Summary Sidebar */}
+              {/* Order Summary Sidebar */}
           <div className="space-y-4 sm:space-y-6">
             {/* Order Summary */}
             <motion.div
@@ -555,9 +507,8 @@ const Cart = () => {
                 <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">Shipping Method</h3>
                 <div className="space-y-2">
                   {[
-                    { id: 'free', name: 'Free Shipping', cost: 0, time: '5-7 business days', icon: Truck },
-                    { id: 'standard', name: 'Standard Delivery', cost: 2500, time: '2-3 business days', icon: Package },
-                    { id: 'express', name: 'Express Delivery', cost: 5000, time: 'Next business day', icon: Zap }
+                    { id: 'standard', name: 'Standard Delivery', cost: 2500, time: '1-3 business days within Port Harcourt', icon: Package },
+                    { id: 'standardX', name: 'Express Delivery', cost: 5000, time: '1-6 business days outside Port Harcourt', icon: Zap }
                   ].map((option) => (
                     <motion.div
                       key={option.id}
@@ -580,7 +531,7 @@ const Cart = () => {
                         </div>
                         <div className="text-left sm:text-right">
                           <div className="font-bold text-gray-800 text-sm sm:text-base">
-                            {option.cost === 0 ? 'FREE' : `₦${option.cost.toLocaleString()}`}
+                            {`₦${option.cost.toLocaleString()}`}
                           </div>
                         </div>
                       </div>
@@ -706,6 +657,56 @@ const Cart = () => {
               </div>
             </motion.div>
           </div>
+
+            {/* Recently Viewed */}
+            <RecentlyViewedSection limit={6} />
+
+            {/* Cross-sell Recommendations */}
+            <motion.div
+              className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl shadow-xl p-6 border border-blue-100"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
+              <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center space-x-2">
+                <Zap className="w-5 h-5 text-blue-600" />
+                <span>You Might Also Like</span>
+              </h3>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+                {recommendations.map((product) => (
+                  <motion.div
+                    key={product.id}
+                    className="bg-white rounded-lg p-3 shadow-md hover:shadow-lg transition-all duration-300 group cursor-pointer"
+                    whileHover={{ y: -5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <Link to={`/product/${product.id}`}>
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-20 object-cover rounded mb-2"
+                      />
+                      <h4 className="text-sm font-semibold text-gray-800 line-clamp-2 group-hover:text-red-600 transition-colors">
+                        {product.name}
+                      </h4>
+                      <p className="text-red-600 font-bold text-sm">₦{product.price.toLocaleString()}</p>
+                      <div className="flex items-center mt-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-3 h-3 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+                          />
+                        ))}
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+
+        
         </div>
       </div>
     </div>

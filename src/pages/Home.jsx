@@ -441,7 +441,7 @@ const Home = ({categories}) => {
   };
 
   const handleQuickView = (product) => {
-    window.location.href=`/product/${product.id}`;
+    navigate(`/product/${product.id}`);
   };
 
   return (

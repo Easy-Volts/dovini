@@ -91,9 +91,7 @@ const Products = () => {
           if (foundCategory) {
             setBackendCategoryInfo({
               name: foundCategory.name,
-              description:
-                foundCategory.description ||
-                `Premium ${foundCategory.name.toLowerCase()} equipment from our collection`,
+              description: foundCategory.description || `Premium ${foundCategory.name.toLowerCase()} equipment from our collection`,
             });
           }
         }
