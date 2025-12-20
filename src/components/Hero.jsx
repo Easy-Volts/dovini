@@ -224,7 +224,7 @@ const Hero = ({ categories }) => {
                 {/* Text Content */}
                 <div className="z-10 max-w-md">
                   <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight text-white mb-2 drop-shadow-lg">
-                    <span className="text-red-400">DOVINI</span> {slide.title}
+                  {slide.title}
                   </h1>
                   <p className="text-sm sm:text-base md:text-lg lg:text-xl font-light text-gray-100 mb-4 sm:mb-6 drop-shadow-md">
                     {slide.subtitle}
@@ -295,7 +295,7 @@ const Hero = ({ categories }) => {
                     {/* Text Content */}
                     <div className="z-10 max-w-xs">
                       <h1 className="text-lg font-extrabold leading-tight text-white mb-1 drop-shadow-lg">
-                        <span className="text-red-400">DOVINI</span>{" "}
+                      
                         {slide.title}
                       </h1>
                       <p className="text-xs font-light text-gray-100 drop-shadow-md">

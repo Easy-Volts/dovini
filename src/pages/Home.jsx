@@ -38,7 +38,6 @@ import { useWishlist } from "../context/WishlistContext";
 import { useToast } from "../context/ToastContext";
 import Hero from "../components/Hero";
 import CurvedDivider from "../components/CurvedDivider";
-import { useAuth } from "../context/AuthContext";
 
 const PhoneIcon = (props) => (
   <svg
