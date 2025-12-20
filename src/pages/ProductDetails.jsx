@@ -108,7 +108,7 @@ const ProductDetails = () => {
 
           var response = res.json();
           console.log(response);
-          setProduct(response.data.data)
+          setProduct(response.data)
           
         })
     }
