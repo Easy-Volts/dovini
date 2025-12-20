@@ -49,7 +49,6 @@ const ProductDetails = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isImageZoomed, setIsImageZoomed] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('description');
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -98,13 +97,12 @@ const ProductDetails = () => {
       }));
       setReviews(mockReviews);
     } else {
-      setLoading(false)
       fetch(`https://api.dovinigears.ng/product?id=${id}`)
         .then(res => {
           if (!res.ok) {
             throw new Error('Product not found');
           }
-                setLoading(true)
+                console.log(res)
 
           var response = res.json();
           console.log(response);
