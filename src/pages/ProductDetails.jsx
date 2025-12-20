@@ -408,20 +408,20 @@ const ProductDetails = () => {
                 <Truck className="w-6 h-6 text-green-600" />
                 <div>
                   <div className="font-medium text-gray-900">Free Shipping</div>
-                  <div className="text-sm text-gray-600">On orders over ₦50,000</div>
+                  <div className="text-sm text-gray-600">On orders over ₦100,000</div>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
                 <Shield className="w-6 h-6 text-blue-600" />
                 <div>
                   <div className="font-medium text-gray-900">2 Year Warranty</div>
-                  <div className="text-sm text-gray-600">Full coverage included</div>
+                  <div className="text-sm text-gray-600">Warranty can't be on all products</div>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
                 <RotateCcw className="w-6 h-6 text-purple-600" />
                 <div>
-                  <div className="font-medium text-gray-900">30-Day Returns</div>
+                  <div className="font-medium text-gray-900">3-Day Returns</div>
                   <div className="text-sm text-gray-600">Easy returns policy</div>
                 </div>
               </div>

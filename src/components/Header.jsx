@@ -94,7 +94,7 @@ const Header = () => {
                 whileHover={{ scale: 1.05 }}
               >
                 <Truck className="w-4 h-4" />
-                <span>Free shipping on orders over ₦50,000</span>
+                <span>Free shipping on orders over ₦100,000</span>
               </motion.div>
             </div>
             <div className="flex items-center space-x-4">

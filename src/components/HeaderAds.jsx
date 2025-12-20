@@ -29,7 +29,7 @@ const HeaderAd = () => {
       id: 2,
       type: "free-shipping",
       title: "🚚 FREE SHIPPING",
-      message: "Free Delivery on Orders Over ₦50,000",
+      message: "Free Delivery on Orders Over ₦100,000",
       subtitle: "No Hidden Charges • Fast Delivery",
       cta: "Start Shopping",
       link: "/products",

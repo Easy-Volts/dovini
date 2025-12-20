@@ -1038,7 +1038,7 @@ const Home = ({categories}) => {
               transition={{ delay: 0.6, duration: 0.8 }}
               viewport={{ once: true }}
             >
-              Quickly jump to the best deals across all our main departments.
+              Quickly jump to the best deals across all our popular categories.
             </motion.p>
           </motion.div>
 
