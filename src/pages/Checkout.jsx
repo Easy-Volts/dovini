@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { AnimatePresence } from "framer-motion";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
+import {  AnimatePresence, motion } from 'framer-motion';
+
 import { useToast } from "../context/ToastContext";
 import {
   CreditCard,
