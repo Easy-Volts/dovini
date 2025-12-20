@@ -98,6 +98,7 @@ const ProductDetails = () => {
       }));
       setReviews(mockReviews);
     } else {
+          console.log("=====");
       fetch(`https://api.dovinigears.ng/product?id=${id}`)
         .then(res => {
           if (!res.ok) {
