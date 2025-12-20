@@ -98,16 +98,15 @@ const ProductDetails = () => {
       }));
       setReviews(mockReviews);
     } else {
-          console.log("=====");
+          alert("=====");
       fetch(`https://api.dovinigears.ng/product?id=${id}`)
         .then(res => {
           if (!res.ok) {
             throw new Error('Product not found');
           }
-                console.log(res)
 
           var response = res.json();
-          console.log(response);
+          alert(JSON.stringify(response));
           setProduct(response.data)
           
         })
