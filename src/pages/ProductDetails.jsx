@@ -49,6 +49,7 @@ const ProductDetails = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isImageZoomed, setIsImageZoomed] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('description');
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -97,7 +98,19 @@ const ProductDetails = () => {
       }));
       setReviews(mockReviews);
     } else {
-      navigate('/404');
+      setLoading(false)
+      fetch(`https://api.dovinigears.ng/product?id=${id}`)
+        .then(res => {
+          if (!res.ok) {
+            throw new Error('Product not found');
+          }
+                setLoading(true)
+
+          var response = res.json();
+          console.log(response);
+          setProduct(response.data.data)
+          
+        })
     }
   }, [id, navigate]);
 
@@ -195,6 +208,7 @@ const ProductDetails = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8">
+        {product && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Product Images */}
           <div className="space-y-4">
@@ -214,7 +228,7 @@ const ProductDetails = () => {
                 </div>
 
                 {/* Navigation Arrows */}
-                {product.images && product.images.length > 1 && (
+                { product.images && product.images.length > 1 && (
                   <>
                     <button
                       onClick={(e) => { e.stopPropagation(); prevImage(); }}
@@ -437,8 +451,9 @@ const ProductDetails = () => {
             </div>
           </div>
         </div>
+        )}
 
-        {/* Product Details Tabs */}
+        {product && (
         <div className="mt-12 bg-white rounded-2xl shadow-lg overflow-hidden">
           <div className="flex gap-2 sm:gap-4 overflow-x-auto px-4 py-2">
             {['description', 'specifications', 'reviews', 'faq'].map((tab) => (
@@ -671,6 +686,7 @@ const ProductDetails = () => {
             )}
           </div>
         </div>
+           )}
 
         {relatedProducts.length > 0 && (
           <motion.div
