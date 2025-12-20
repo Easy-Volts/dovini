@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
@@ -670,6 +670,38 @@ const [searchParams] = useSearchParams();
                     </div>
                   </div>
 
+  {/* Instructions */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 sm:p-6 mb-6"
+                  >
+                    <div className="flex items-start space-x-3">
+                      <div className="w-6 h-6 sm:w-8 sm:h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-gray-800 mb-2 text-sm sm:text-base">
+                          Important Instructions:
+                        </h4>
+                        <ul className="space-y-2 text-xs sm:text-sm text-gray-700">
+                          <li className="flex items-start space-x-2">
+                            <span className="text-yellow-600 font-bold flex-shrink-0">1.</span>
+                            <span>Transfer the exact amount shown above</span>
+                          </li>
+                          <li className="flex items-start space-x-2">
+                            <span className="text-yellow-600 font-bold flex-shrink-0">2.</span>
+                            <span>Keep your payment receipt/screenshot for confirmation</span>
+                          </li>
+                          <li className="flex items-start space-x-2">
+                            <span className="text-yellow-600 font-bold flex-shrink-0">3.</span>
+                            <span>Click "Next Step" after completing the transfer</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </motion.div>
                   {/* Bank Transfer Details */}
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -761,38 +793,7 @@ const [searchParams] = useSearchParams();
                     </motion.div>
                   </motion.div>
 
-                  {/* Instructions */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 sm:p-6 mb-6"
-                  >
-                    <div className="flex items-start space-x-3">
-                      <div className="w-6 h-6 sm:w-8 sm:h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-600" />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-gray-800 mb-2 text-sm sm:text-base">
-                          Important Instructions:
-                        </h4>
-                        <ul className="space-y-2 text-xs sm:text-sm text-gray-700">
-                          <li className="flex items-start space-x-2">
-                            <span className="text-yellow-600 font-bold flex-shrink-0">1.</span>
-                            <span>Transfer the exact amount shown above</span>
-                          </li>
-                          <li className="flex items-start space-x-2">
-                            <span className="text-yellow-600 font-bold flex-shrink-0">2.</span>
-                            <span>Keep your payment receipt/screenshot for confirmation</span>
-                          </li>
-                          <li className="flex items-start space-x-2">
-                            <span className="text-yellow-600 font-bold flex-shrink-0">3.</span>
-                            <span>Click "Next Step" after completing the transfer</span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </motion.div>
+                
 
                   {/* Confirmation Message */}
                   <motion.div
