@@ -150,7 +150,7 @@ const Header = () => {
                 className="hover:opacity-90 transition-opacity relative -left-10"
               >
                 <img
-                  src="https://i.ibb.co/ZRrLbMy2/logo-2.png"
+                  src="https://api.dovinigears.ng/logo.png"
                   alt="logo"
                   className="md:w-45 md:h-45 w-30 h-30 drop-shadow-sm "
                 />

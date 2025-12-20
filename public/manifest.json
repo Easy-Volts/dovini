@@ -6,5 +6,5 @@
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#dc2626",
-  "icons": [{ "src": "https://i.ibb.co/ZRrLbMy2/logo-2.png", "sizes": "any", "type": "image/png" }]
+  "icons": [{ "src": "https://api.dovinigears.ng/logo.png", "sizes": "any", "type": "image/png" }]
 }

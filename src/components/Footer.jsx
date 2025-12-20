@@ -21,7 +21,7 @@ const Footer = () => {
             viewport={{ once: true }}
           >
             <div className="flex items-center space-x-3">
-              <img src='https://i.ibb.co/ZRrLbMy2/logo-2.png' alt="Dovini Logo" className='w-16 h-16 lg:w-30 lg:h-30 object-contain flex-shrink-0' />
+              <img src='https://api.dovinigears.ng/logo.png' alt="Dovini Logo" className='w-16 h-16 lg:w-30 lg:h-30 object-contain flex-shrink-0' />
             </div>
 
             <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
