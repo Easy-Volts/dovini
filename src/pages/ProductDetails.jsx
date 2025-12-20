@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import {  AnimatePresence } from 'framer-motion';
+import {  AnimatePresence, motion } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useToast } from '../context/ToastContext';
 import { useRecentlyViewed } from '../context/RecentlyViewedContext';
 import { useProducts } from '../context/ProductContext';
+
 import {
   Star,
   Heart,
