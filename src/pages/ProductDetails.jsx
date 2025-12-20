@@ -106,7 +106,7 @@ const ProductDetails = () => {
           }
 
           var response = res.json();
-          alert(JSON.stringify(response));
+          alert(JSON.stringify(response.data));
           setProduct(response.data)
           
         })
