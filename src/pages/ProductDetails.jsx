@@ -103,10 +103,9 @@ const ProductDetails = () => {
     if (!res.ok) {
       throw new Error("Product not found");
     }
-    return res.json(); // 👈 return the promise
+    return res.json();
   })
   .then((response) => {
-    alert(JSON.stringify(response.data));
     setProduct(response.data);
   })
   .catch((error) => {
