@@ -243,9 +243,14 @@ const ProductForm = ({
         formDataToSend.append("flashDealEnd", formData.flashDealEnd.toString());
       }
 
-      selectedFiles.forEach((file) => {
-        formDataToSend.append("image", file);
-      });
+   
+      // main image = first file only
+formDataToSend.append("image", selectedFiles[0]);
+
+selectedFiles.forEach((file) => {
+  formDataToSend.append("images[]", file);
+});
+
 
       // For editing mode, include the product ID
       if (isEditing && formData.id) {
