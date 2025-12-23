@@ -134,6 +134,8 @@ const App = () => {
   }, []);
 
   return (
+    <></>
+    /** 
     <AuthProvider>
       <ReviewsProvider>
         <ToastProvider>
@@ -253,6 +255,8 @@ const App = () => {
         </ToastProvider>
       </ReviewsProvider>
     </AuthProvider>
+
+    **/
   );
 };
 
