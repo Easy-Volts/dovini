@@ -242,11 +242,13 @@ const ProductForm = ({
       if (formData.flashDealEnd) {
         formDataToSend.append("flashDealEnd", formData.flashDealEnd.toString());
       }
+// send existing images (URLs) when editing
 
    
       // main image = first file only
 formDataToSend.append("image", selectedFiles[0]);
 
+// gallery images = all files
 selectedFiles.forEach((file) => {
   formDataToSend.append("images[]", file);
 });
@@ -255,6 +257,11 @@ selectedFiles.forEach((file) => {
       // For editing mode, include the product ID
       if (isEditing && formData.id) {
         formDataToSend.append("id", formData.id);
+          formData.images.forEach((img) => {
+    if (!img.startsWith("blob:")) {
+      formDataToSend.append("existing_images[]", img);
+    }
+  });
       }
 
       // Call the save function
