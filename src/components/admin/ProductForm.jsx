@@ -257,11 +257,12 @@ selectedFiles.forEach((file) => {
       // For editing mode, include the product ID
       if (isEditing && formData.id) {
         formDataToSend.append("id", formData.id);
-          formData.images.forEach((img) => {
+         formData.images.forEach((img) => {
     if (!img.startsWith("blob:")) {
       formDataToSend.append("existing_images[]", img);
     }
   });
+
       }
 
       // Call the save function
