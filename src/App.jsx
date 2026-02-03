@@ -135,10 +135,7 @@ const App = () => {
 
   return (
     <>
-    {/* <center>
-      <h1 style={{fontSize:"50px",fontWeight:"bold"}}>The site subscription is due we cannot proceed until it is renue</h1>
-      </center></> */}
-    
+
     <AuthProvider>
       <ReviewsProvider>
         <ToastProvider>
@@ -258,7 +255,7 @@ const App = () => {
         </ToastProvider>
       </ReviewsProvider>
     </AuthProvider>
-
+</>
    
   );
 };
