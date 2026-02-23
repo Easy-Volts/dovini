@@ -53,7 +53,7 @@ const Cart = () => {
   const recommendations = products.filter(p => !cart.some(item => item.id === p.id)).slice(0, 4);
 
   const subtotal = getTotal();
-  const shippingCost = selectedShipping === 'express' ? 5000 : selectedShipping === 'standard' ? 2500 : 0;
+  const shippingCost = selectedShipping === 'standardx' ? 5000 : selectedShipping === 'standard' ? 2500 : 0;
   const discount = appliedDiscount;
   const total = subtotal + shippingCost - discount;
 
